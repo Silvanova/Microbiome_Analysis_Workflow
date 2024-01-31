@@ -1,0 +1,47 @@
+project:
+  type: website
+
+execute:
+  freeze: auto
+
+format:
+  html:
+    toc: true
+    toc-expand: 1
+    toc-depth: 4
+    link-external-newwindow: true
+
+website:
+  title: "SilvaNova_microbiome"
+  page-navigation: true
+  sidebar:
+    tools:
+      - icon: twitter
+        href: https://twitter.com/SilvaNova_NNF
+      - icon: github
+        href: https://github.com/Silvanova/Common_scripts
+    logo: images/Silva Nova logo.jpg
+    collapse-level: 3
+    style: "docked"
+    align: left
+    contents:
+      - file: index.qmd
+        text: "About"
+      - file: install.qmd
+        text: "Installation"
+      - file: data.prep.qmd
+        text: "Data preparation"
+      - file: filter.rare.qmd
+        text: "Global filtering"
+      - file: taxonomy.qmd
+        text: "Taxonomy filtering"
+      - file: control.qmd
+        text: "Negative controls"
+      - file: normalize.qmd
+        text: "Normalization and rarefaction"
+      - file: alpha.div.qmd
+        text: "Alpha diversity"
+      - file: beta.div.qmd
+        text: "Beta diversity"
+      - file: diff.abund.qmd
+        text: "Differential abundance"

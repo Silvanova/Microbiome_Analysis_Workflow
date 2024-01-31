@@ -1,0 +1,18 @@
+{
+  "hash": "d198c56fc7db662a941b6b80555c742e",
+  "result": {
+    "markdown": "---\ntitle: \"Alpha diversity\"\nformat: html\neditor: visual\n---\n\n\n\n\nDownload the script `010_alpha_diversity.R`, or copy the codes below into your own script.\n\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n::: {.cell-output-display}\n```{=html}\n<button class=\"btn btn-success\" onclick=\"fetch(&#39;data:text/plain;base64,&#39;).then(res =&gt; res.blob()).then(blob =&gt; {&#10;      const downloadURL = window.URL.createObjectURL(blob);&#10;      const a = document.createElement(&#39;a&#39;);&#10;      a.style.display = &#39;none&#39;; // Hide the link&#10;      document.body.appendChild(a);&#10;      a.href = downloadURL;&#10;      a.download = &#39;010_alpha_diversity.R&#39;;&#10;      a.click();&#10;      window.URL.revokeObjectURL(downloadURL);&#10;      document.body.removeChild(a);&#10;      return false;&#10;    });\"><i class=\"fa fa-save\"></i> Download script</button>\n```\n:::\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {
+      "include-in-header": [
+        "<script src=\"site_libs/font-awesome-5.13.0/js/script.js\"></script>\r\n"
+      ]
+    },
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

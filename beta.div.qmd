@@ -1,0 +1,28 @@
+---
+title: "Beta diversity"
+format: html
+editor: visual
+---
+
+Scripts used to calcualte a distance matrix to be used in further analyses. Several matrices can be calculated with different distance metrics, based on the research question. The distance can be e.g. giving more weight to the common or rare species, or finding a bit more balance, or it could be better suited for presence-absence data if one wants to use that.
+
+Download the script `020_beta_diversity.R`, or copy the codes below into your own script.
+
+```{r}
+#| echo: false
+#| output: false
+library(downloadthis)
+```
+
+```{r}
+#| echo: false
+download_file(
+  path = "scripts/020_beta_diversity.R",
+  output_name = "020_beta_diversity",
+  button_label = "Download script",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```

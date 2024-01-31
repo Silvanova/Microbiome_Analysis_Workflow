@@ -1,0 +1,28 @@
+---
+title: "Alpha diversity"
+format: html
+editor: visual
+---
+
+
+
+Download the script `010_alpha_diversity.R`, or copy the codes below into your own script.
+
+```{r}
+#| echo: false
+#| output: false
+library(downloadthis)
+```
+
+```{r}
+#| echo: false
+download_file(
+  path = "scripts/010_alpha_diversity.R",
+  output_name = "010_alpha_diversity",
+  button_label = "Download script",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```

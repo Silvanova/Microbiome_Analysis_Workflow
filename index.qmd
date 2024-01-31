@@ -1,0 +1,76 @@
+---
+title: "Microbiome analyses workflow"
+editor: visual
+format:
+  html:
+    toc: false
+author:
+  - name: Karelle Rheault
+    orcid: 0000-0002-4888-7232
+  - name: Davide Barsotti
+    orcid: 0000-0002-7367-8571
+csl: apa-numeric-superscript-brackets.csl
+---
+
+This workflow was created for microbiome analyses within the Silva Nova project, to ensure that all publications related to the Silva Nova project use the same data processing, and avoid inconsistencies between sub-projects. This workflow should also make microbial analyses more accessible and streamlined.
+
+Decisions for each step of the workflow are supported by literature and R scripts, which aim to answer the following questions:
+
+1.  Should rare and scarce species be removed? If so, what are the thresholds?
+
+2.  After taxonomy assignation, which taxa should be kept or removed? What are the quality threshold for species identification with BLAST?
+
+3.  When should we rarefy? What other normalization methods should be used?
+
+4.  Which diversity metrics (alpha and beta) can be used with microbiome data?
+
+## Structure
+
+In the sidebar menu of this webpage, you will find each step of the workflow:
+
+-   [**Install R and required packages**](install.qmd): get started with RStudio and install the packages required for the analyses in this workflow
+
+-   [**Data preparation**](data.prep.qmd): prepare OTU tables, manage metadata, and convert raw files to .RData
+
+-   [**Global filtering**](filter.rare.qmd): filter out scarce and rare OTUs
+
+-   [**Taxonomy filtering**](taxonomy.qmd): filter OTUs based on taxonomy and BLAST quality thresholds
+
+-   [**Controls**](control.qmd): deal with OTUs found in negative controls
+
+-   [**Normalization and rarefaction**](normalize.qmd): normalize or rarefy data to control for variable sequencing depth
+
+-   [**Alpha diversity**](alpha.div.qmd): choose the best alpha diversity metrics to answer your hypothesis
+
+-   [**Beta diversity**](beta.div.qmd): choose the right transformation and the right distance matrix for beta diversity analyses
+
+-   [**Differential abundance**](diff.abund.qmd): perform statistical tests to find differential abundance of taxa
+
+## Download all scripts
+
+Click on the button below to download all pre-made scripts, or copy codes from each page of this website.
+
+```{r}
+#| echo: false
+#| output: false
+library(downloadthis)
+```
+
+```{r}
+#| echo: false
+download_dir(
+  path = "scripts",
+  output_name = "Silva Nova microbiome anlayses R scripts",
+  button_label = "Download scripts",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```
+
+## Acknowledgements
+
+This workflow development was supported by the Silva Nova project funded by the NOVO Nordisk Foundation (grant no. NNF20OC0059948).
+
+[![](images/Novo%20Nordisk%20fonden%20logo.png){fig-align="center" width="128"}](https://novonordiskfonden.dk/en/)

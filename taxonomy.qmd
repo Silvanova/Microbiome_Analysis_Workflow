@@ -1,0 +1,78 @@
+---
+title: "Taxonomy filtering"
+format: html
+editor: visual
+---
+
+Scripts used to filter away the otus with unsatisfactory BLAST results. In this script, users can find the thresholds chosen to select OTUs at different taxonomic levels. A first step in analyses should be subsetting to the Kingdom one wants to analyse (e.g. Fungi for ITS). Here one can also filter away the taxonomic groups that are not likely to be found in european forests (e.g. Gorillas and starfishes) (See below for values of % identity and )
+
+Download the script `004_taxonomy_filter.R`, or copy the codes below into your own script.
+
+```{r}
+#| echo: false
+#| output: false
+library(downloadthis)
+```
+
+```{r}
+#| echo: false
+download_file(
+  path = "scripts/004_taxonomy_filter.R",
+  output_name = "004_taxonomy_filter",
+  button_label = "Download script",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```
+
+### Threshold for BLAST quality check
+
+\% identification:
+
+-   Kingdom:
+
+-   Phylum:
+
+-   Class:
+
+-   Order:
+
+-   Family:
+
+-   Genus:
+
+-   Species:
+
+q cov:
+
+-   Kingdom:
+
+-   Phylum:
+
+-   Class:
+
+-   Order:
+
+-   Family:
+
+-   Genus:
+
+-   Species:
+
+### List of taxa to be included by analyses
+
+**Attention** within mainly terrestrial phyla, there can be classes or other lower taxonomic groups that belong to the sea. we should check at least the class level (e.g. Pycnogonida or Polychaeta).
+
+#### Taxa to include: CO1 analyses for arthropoda
+
+Phylum: Anellida, **Arthropoda**, **Nematoda**, Platyhelmynthes, Tardigrada, Rotifera, Mollusca Class: Hexapoda, Chelicerata/Aracnida, Gastropoda,
+
+#### Taxa to include: ITS analyses for fungi
+
+this one is hard!
+
+#### Taxa to include: 16S analyses for bacteria
+
+is this even possible?

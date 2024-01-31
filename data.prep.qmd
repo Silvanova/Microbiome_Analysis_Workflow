@@ -1,0 +1,34 @@
+---
+title: "Data preparation"
+format: html
+editor: visual
+---
+
+To get started with the data analysis, you must first ensure that the raw data is in the right format. For example, OTU tables come with several accessory columns of metadata which are not used for analyses. This script prepares the raw data, taking the metadata into account, and produces the .RData files used in the next steps.
+
+Download the script `002_data_preparation.R`, or copy the codes below into your own script.
+
+```{r}
+#| echo: false
+#| output: false
+library(downloadthis)
+```
+
+```{r}
+#| echo: false
+download_file(
+  path = "scripts/002_data_preparation.R",
+  output_name = "002_data_preparation",
+  button_label = "Download script",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```
+
+### Import raw data into R
+
+### Format the data
+
+### Save as RData

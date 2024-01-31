@@ -1,0 +1,51 @@
+---
+title: "Normalization and rarefaction"
+format: html
+editor: visual
+---
+
+```{r}
+#| echo: false
+#| output: false
+library(downloadthis)
+```
+
+Scripts used to perform data transformation. This is an alternative to thinning which preserves all the data. Rather than removing information, this method recognised the compositional nature of the data and transforms it in the logarithm of the ratio of counts within each sample. The data changes but the transformation allows comparability between samples. The script includes both the transformation and extra checks.
+
+Scripts used to perform data thinning. That is, randomly resampling a subset of the data so that all samples have the same sampling/sequencing depth. This "ensures" comparability between samples but also causes a significant loss of data. Included are notes on how to evaluate thinning threshold and how to assess the effects of the data loss.
+
+Download the scripts `006_normalization.R` and `007_rarefaction.R`, or copy the codes below into your own script.
+
+```{r}
+#| layout: [[-10,40,-5,35,-10]]
+#| echo: false
+download_file(
+  path = "scripts/006_normalization.R",
+  output_name = "006_normalization",
+  button_label = "Download normalization script",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+download_file(
+  path = "scripts/007_rarefaction.R",
+  output_name = "007_rarefaction",
+  button_label = "Download rarefaction script",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```
+
+#### how to decide if the data is suitable for thinning
+
+The rarefaction curve reaches a plateau.
+
+#### how to decide on the threshold
+
+Set a threshold that gets as close as possible to the plateau, removing max N samples
+
+15th percentile of mean sequencing depth (Karelle's previous lab)

@@ -1,0 +1,26 @@
+---
+title: "Differential abundance"
+format: html
+editor: visual
+---
+
+Download the script `030_diff_abund.R`, or copy the codes below into your own script.
+
+```{r}
+#| echo: false
+#| output: false
+library(downloadthis)
+```
+
+```{r}
+#| echo: false
+download_file(
+  path = "scripts/030_diff_abund.R",
+  output_name = "030_diff_abund",
+  button_label = "Download script",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```

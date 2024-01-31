@@ -1,0 +1,61 @@
+---
+title: "Install R and required packages"
+editor: visual
+format: 
+  html: 
+    toc: false
+---
+
+## R and RStudio
+
+To work in R, you'll need to install R and RStudio. Both programs are free and easy to download. For an easy step by step, follow the procedure described [here](https://rstudio-education.github.io/hopr/starting.html#using-r).
+
+::: callout-tip
+### Set working directory
+
+In each of your script, always start with setting the working directory to avoid issues with folder structure and ensure that your RData is saved in the proper location.
+
+```{r}
+#| eval: false
+setwd("some_folder/my_working_directory")
+```
+:::
+
+## Required packages
+
+Some packages from the CRAN are required to run the examples on this website.
+
+Download the script `001_required_packages.R`, or copy the codes below into your own script.
+
+```{r}
+#| echo: false
+#| output: false
+library(downloadthis)
+```
+
+```{r}
+#| echo: false
+download_file(
+  path = "scripts/001_required_packages.R",
+  output_name = "001_required_packages",
+  button_label = "Download script",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```
+
+```{r}
+#| eval: false
+# Install packages
+install.packages("openxlsx")
+install.packages("dplyr")
+```
+
+```{r}
+#| eval: false
+# Load packages
+library(openxlsx)
+library(dplyr)
+```

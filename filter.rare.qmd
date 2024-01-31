@@ -1,0 +1,30 @@
+---
+title: "Global filtering"
+format: html
+editor: visual
+---
+
+Scripts used to do a preliminary filtering to remove the less abundant OTUs, which are most often artifacts. These also usually coincide with the OTUs with lowest BLAST accuracy.
+
+Before any other step, we should remove the features that have too low frequency. To do this, we sum the reads for all features, obtaining the total read count for each one. We then calculate the average feature frequency, and only select the OTUs with a frequency larger than 0.05% of the average frequency.
+
+Download the script `003_global_filter.R`, or copy the codes below into your own script.
+
+```{r}
+#| echo: false
+#| output: false
+library(downloadthis)
+```
+
+```{r}
+#| echo: false
+download_file(
+  path = "scripts/003_global_filter.R",
+  output_name = "003_global_filter",
+  button_label = "Download script",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```
