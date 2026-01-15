@@ -19,7 +19,7 @@ library(downloadthis)
 ```{r}
 #| echo: false
 download_file(
-  path = "scripts/003_global_filter.R",
+  path = "../scripts/003_global_filter.R",
   output_name = "003_global_filter",
   button_label = "Download script",
   button_type = "success",

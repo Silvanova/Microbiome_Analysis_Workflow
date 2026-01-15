@@ -30,13 +30,13 @@ In the sidebar menu of this webpage, you will find each step of the workflow:
 
 -   [**Data preparation**](data.prep.qmd): prepare OTU tables, manage metadata, and convert raw files to .RData
 
--   [**Normalization and rarefaction**](normalize.qmd): normalize or rarefy data to control for variable sequencing depth
+-   [**Controls**](control.qmd): deal with OTUs found in negative and positive controls
 
 -   [**Global filtering**](filter.rare.qmd): filter out singletons and rare OTUs
 
--   [**Taxonomy filtering**](taxonomy.qmd): filter OTUs based on taxonomy and BLAST quality thresholds
+-   [**Taxonomy filtering**](pages/taxonomy.qmd): filter OTUs based on taxonomy and BLAST quality thresholds
 
--   [**Controls**](control.qmd): deal with OTUs found in negative controls
+-   [**Normalization and rarefaction**](normalize.qmd): normalize or rarefy data to control for variable sequencing depth
 
 -   [**Alpha diversity**](alpha.div.qmd): choose the best alpha diversity metrics to answer your hypothesis
 

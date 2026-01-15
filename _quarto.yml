@@ -1,8 +1,12 @@
 project:
   type: website
+  render:
+    - index.qmd
+    - pages/**/*.qmd
 
 format:
   html:
+    theme: minty
     toc: true
     toc-expand: 1
     toc-depth: 4
@@ -10,36 +14,63 @@ format:
     link-external-filter: '^(?:http:|https:)\/\/(?:www\.)*(silvanova\.github\.io)\/.*$'
 
 website:
-  title: "SilvaNova_microbiome"
+  title: "Silva Nova MAW"
   page-navigation: true
-  sidebar:
+  navbar:
+    background: primary
+    search: true
     tools:
       - icon: twitter
         href: https://twitter.com/SilvaNova_NNF
       - icon: github
         href: https://github.com/Silvanova/Common_scripts
-    logo: images/Silva Nova logo.jpg
-    collapse-level: 3
-    style: "docked"
-    align: left
-    contents:
-      - file: index.qmd
-        text: "About"
-      - file: install.qmd
-        text: "Installation"
-      - file: data.prep.qmd
-        text: "Data preparation"
-      - file: control.qmd
-        text: "Negative controls"
-      - file: filter.rare.qmd
-        text: "Global filtering"
-      - file: taxonomy.qmd
-        text: "Taxonomy filtering"
-      - file: normalize.qmd
-        text: "Normalization and rarefaction"
-      - file: alpha.div.qmd
-        text: "Alpha diversity"
-      - file: beta.div.qmd
-        text: "Beta diversity"
-      - file: diff.abund.qmd
-        text: "Differential abundance"
+    left:
+      - text: "Install R and packages"
+        href: pages/install.qmd
+      - text: "Handling OTU tables"
+        href: pages/OTU.tables.qmd
+      - text: "Statistical Analyses"
+        href: pages/stats.qmd
+
+  sidebar:
+    - title: "Handling OTU tables"
+      style: "docked"
+      background: light
+      logo: images/Silva Nova logo.png
+      collapse-level: 3
+      align: left
+      contents:
+        - file: pages/OTU.tables.qmd
+          text: "Handling OTU tables"
+        - file: pages/data.prep.qmd
+          text: "Data preparation"
+        - file: pages/control.qmd
+          text: "Controls"
+        - file: pages/filter.rare.qmd
+          text: "Global filtering"
+        - href: pages/taxonomy.qmd
+          text: "Taxonomy filtering"
+        - file: pages/normalize.qmd
+          text: "Normalization and rarefaction"
+
+
+    - title: "Silva Nova MAW"
+      contents:
+        - file: index.qmd
+          text: " "
+
+    - title: "Install R and packages"
+      contents:
+        - file: pages/install.qmd
+          text: " "
+
+    - title: "Statistical Analyses"
+      contents:
+        - file: pages/stats.qmd
+          text: "Statistical Analyses"
+        - file: pages/alpha.div.qmd
+          text: "Alpha diversity"
+        - file: pages/beta.div.qmd
+          text: "Beta diversity"
+        - file: pages/diff.abund.qmd
+          text: "Differential abundance"

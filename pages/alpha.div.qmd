@@ -1,10 +1,10 @@
 ---
-title: "Differential abundance"
+title: "Alpha diversity"
 format: html
 editor: visual
 ---
 
-Download the script `030_diff_abund.R`, or copy the codes below into your own script.
+Download the script `010_alpha_diversity.R`, or copy the codes below into your own script.
 
 ```{r}
 #| echo: false
@@ -15,8 +15,8 @@ library(downloadthis)
 ```{r}
 #| echo: false
 download_file(
-  path = "scripts/030_diff_abund.R",
-  output_name = "030_diff_abund",
+  path = "../scripts/010_alpha_diversity.R",
+  output_name = "010_alpha_diversity",
   button_label = "Download script",
   button_type = "success",
   has_icon = TRUE,

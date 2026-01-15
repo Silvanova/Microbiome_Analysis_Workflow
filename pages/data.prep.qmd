@@ -17,7 +17,7 @@ library(downloadthis)
 ```{r}
 #| echo: false
 download_file(
-  path = "scripts/002_data_preparation.R",
+  path = "../scripts/002_data_preparation.R",
   output_name = "002_data_preparation",
   button_label = "Download script",
   button_type = "success",

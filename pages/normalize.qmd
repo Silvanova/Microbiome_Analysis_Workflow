@@ -20,7 +20,7 @@ Download the scripts `006_normalization.R` and `007_rarefaction.R`, or copy the 
 #| layout: [[-10,40,-5,35,-10]]
 #| echo: false
 download_file(
-  path = "scripts/006_normalization.R",
+  path = "../scripts/006_normalization.R",
   output_name = "006_normalization",
   button_label = "Download normalization script",
   button_type = "success",
@@ -30,7 +30,7 @@ download_file(
 )
 
 download_file(
-  path = "scripts/007_rarefaction.R",
+  path = "../scripts/007_rarefaction.R",
   output_name = "007_rarefaction",
   button_label = "Download rarefaction script",
   button_type = "success",
