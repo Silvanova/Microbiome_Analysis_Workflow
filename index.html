@@ -135,6 +135,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./control.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Negative controls</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./filter.rare.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Global filtering</span></a>
   </div>
@@ -143,12 +149,6 @@ ul.task-list li input[type="checkbox"] {
   <div class="sidebar-item-container"> 
   <a href="./taxonomy.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Taxonomy filtering</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./control.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Negative controls</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -225,10 +225,10 @@ ul.task-list li input[type="checkbox"] {
 <ul>
 <li><p><a href="./install.html"><strong>Install R and required packages</strong></a>: get started with RStudio and install the packages required for the analyses in this workflow</p></li>
 <li><p><a href="./data.prep.html"><strong>Data preparation</strong></a>: prepare OTU tables, manage metadata, and convert raw files to .RData</p></li>
-<li><p><a href="./filter.rare.html"><strong>Global filtering</strong></a>: filter out scarce and rare OTUs</p></li>
+<li><p><a href="./normalize.html"><strong>Normalization and rarefaction</strong></a>: normalize or rarefy data to control for variable sequencing depth</p></li>
+<li><p><a href="./filter.rare.html"><strong>Global filtering</strong></a>: filter out singletons and rare OTUs</p></li>
 <li><p><a href="./taxonomy.html"><strong>Taxonomy filtering</strong></a>: filter OTUs based on taxonomy and BLAST quality thresholds</p></li>
 <li><p><a href="./control.html"><strong>Controls</strong></a>: deal with OTUs found in negative controls</p></li>
-<li><p><a href="./normalize.html"><strong>Normalization and rarefaction</strong></a>: normalize or rarefy data to control for variable sequencing depth</p></li>
 <li><p><a href="./alpha.div.html"><strong>Alpha diversity</strong></a>: choose the best alpha diversity metrics to answer your hypothesis</p></li>
 <li><p><a href="./beta.div.html"><strong>Beta diversity</strong></a>: choose the right transformation and the right distance matrix for beta diversity analyses</p></li>
 <li><p><a href="./diff.abund.html"><strong>Differential abundance</strong></a>: perform statistical tests to find differential abundance of taxa</p></li>
@@ -243,7 +243,7 @@ ul.task-list li input[type="checkbox"] {
     async function downloadFile(event) {
       event.preventDefault();
       try {
-        const response = await fetch('data:application/zip;base64,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');
+        const response = await fetch('data:application/zip;base64,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');
         if (!response.ok) throw new Error('Network response failed');
         const blob = await response.blob();
         const blobUrl = window.URL.createObjectURL(blob);
