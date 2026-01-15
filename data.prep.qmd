@@ -4,7 +4,7 @@ format: html
 editor: visual
 ---
 
-To get started with the data analysis, you must first ensure that the raw data is in the right format. For example, OTU tables come with several accessory columns of metadata which are not used for analyses. This script prepares the raw data, taking the metadata into account, and produces the .RData files used in the next steps.
+To get started with the data analysis, you must first ensure that the raw data is in the right format. This script prepares the raw data into a `phyloseq` object and produces the .RData files used in the next steps.
 
 Download the script `002_data_preparation.R`, or copy the codes below into your own script.
 
@@ -27,8 +27,40 @@ download_file(
 )
 ```
 
-### Import raw data into R
+::: callout-tip
+### Source another script {.callout-tip}
+
+In this workflow, the first script is used to install and load R packages. To make sure that all packages are installed and loaded, one should run that script before every other script. A quick and easy way to do so is to source the script at the beginning of every other script:
+
+```{r}
+#| eval: false
+# Load packages
+source("001_required_packages.R")
+```
+:::
+
+### Auxiliary file
+
+The auxiliary file contains data about samples, which is used to filter samples in the `phyloseq` object. This file could be, for example, an Excel sheet, a .txt file or a .csv file.
+
+```{r}
+#| eval: false
+# Load an Excel sheet (.xlsx)
+
+
+# Load a text file (.txt or .csv)
+
+
+```
+
+### Taxonomy table
+
+The taxonomy table was generated
+
+### OTU table
 
 ### Format the data
 
 ### Save as RData
+
+### 

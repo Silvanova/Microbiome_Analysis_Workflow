@@ -1,0 +1,18 @@
+{
+  "hash": "f5331c64725c6b4a3f7af17ef0388f9b",
+  "result": {
+    "markdown": "---\ntitle: \"Normalization and rarefaction\"\nformat: html\neditor: visual\n---\n\n::: {.cell}\n\n:::\n\n\nScripts used to perform data transformation. This is an alternative to thinning which preserves all the data. Rather than removing information, this method recognised the compositional nature of the data and transforms it in the logarithm of the ratio of counts within each sample. The data changes but the transformation allows comparability between samples. The script includes both the transformation and extra checks.\n\nScripts used to perform data thinning. That is, randomly resampling a subset of the data so that all samples have the same sampling/sequencing depth. This \"ensures\" comparability between samples but also causes a significant loss of data. Included are notes on how to evaluate thinning threshold and how to assess the effects of the data loss.\n\nDownload the scripts `006_normalization.R` and `007_rarefaction.R`, or copy the codes below into your own script.\n\n\n::: {.cell layout=\"[[-10,40,-5,35,-10]]\"}\n::: {.cell-output-display}\n```{=html}\n<button class=\"btn btn-success\" onclick=\"fetch(&#39;data:text/plain;base64,&#39;).then(res =&gt; res.blob()).then(blob =&gt; {&#10;      const downloadURL = window.URL.createObjectURL(blob);&#10;      const a = document.createElement(&#39;a&#39;);&#10;      a.style.display = &#39;none&#39;; // Hide the link&#10;      document.body.appendChild(a);&#10;      a.href = downloadURL;&#10;      a.download = &#39;006_normalization.R&#39;;&#10;      a.click();&#10;      window.URL.revokeObjectURL(downloadURL);&#10;      document.body.removeChild(a);&#10;      return false;&#10;    });\"><i class=\"fa fa-save\"></i> Download normalization script</button>\n```\n:::\n\n::: {.cell-output-display}\n```{=html}\n<button class=\"btn btn-success\" onclick=\"fetch(&#39;data:text/plain;base64,&#39;).then(res =&gt; res.blob()).then(blob =&gt; {&#10;      const downloadURL = window.URL.createObjectURL(blob);&#10;      const a = document.createElement(&#39;a&#39;);&#10;      a.style.display = &#39;none&#39;; // Hide the link&#10;      document.body.appendChild(a);&#10;      a.href = downloadURL;&#10;      a.download = &#39;007_rarefaction.R&#39;;&#10;      a.click();&#10;      window.URL.revokeObjectURL(downloadURL);&#10;      document.body.removeChild(a);&#10;      return false;&#10;    });\"><i class=\"fa fa-save\"></i> Download rarefaction script</button>\n```\n:::\n:::\n\n\n#### how to decide if the data is suitable for thinning\n\nThe rarefaction curve reaches a plateau.\n\n#### how to decide on the threshold\n\nSet a threshold that gets as close as possible to the plateau, removing max N samples\n\n15th percentile of mean sequencing depth (Karelle's previous lab)\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {
+      "include-in-header": [
+        "<script src=\"site_libs/font-awesome-5.13.0/js/script.js\"></script>\r\n"
+      ]
+    },
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

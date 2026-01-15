@@ -1,5 +1,5 @@
 ---
-title: "Microbiome analyses workflow"
+title: "Microbiome analysis workflow"
 editor: visual
 format:
   html:
@@ -16,13 +16,11 @@ This workflow was created for microbiome analyses within the Silva Nova project,
 
 Decisions for each step of the workflow are supported by literature and R scripts, which aim to answer the following questions:
 
-1.  Should rare and scarce species be removed? If so, what are the thresholds?
-
-2.  After taxonomy assignation, which taxa should be kept or removed? What are the quality threshold for species identification with BLAST?
-
-3.  When should we rarefy? What other normalization methods should be used?
-
-4.  Which diversity metrics (alpha and beta) can be used with microbiome data?
+1.  How to handle negative and positive controls?
+2.  Should rare and scarce species be removed? If so, what are the thresholds?
+3.  After taxonomy assignation, which taxa should be kept or removed? What are the quality threshold for species identification with BLAST?
+4.  When should we rarefy? What other normalization methods should be used?
+5.  Which diversity metrics (alpha and beta) can be used with microbiome data?
 
 ## Structure
 
