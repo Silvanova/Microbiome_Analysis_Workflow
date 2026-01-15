@@ -1,1 +1,1 @@
-Sitemap: https://github.com/Silvanova/Microbiome_Analysis_Workflow/sitemap.xml
+Sitemap: https://Silvanova.github.io/Microbiome_Analysis_Workflow/sitemap.xml
