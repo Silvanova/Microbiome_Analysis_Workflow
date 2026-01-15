@@ -27,40 +27,28 @@ download_file(
 )
 ```
 
-::: callout-tip
-### Source another script {.callout-tip}
-
-In this workflow, the first script is used to install and load R packages. To make sure that all packages are installed and loaded, one should run that script before every other script. A quick and easy way to do so is to source the script at the beginning of every other script:
-
-```{r}
-#| eval: false
-# Load packages
-source("001_required_packages.R")
-```
-:::
-
-### Auxiliary file
+### Load auxiliary data {#auxfile}
 
 The auxiliary file contains data about samples, which is used to filter samples in the `phyloseq` object. This file could be, for example, an Excel sheet, a .txt file or a .csv file.
 
 ```{r}
 #| eval: false
 # Load an Excel sheet (.xlsx)
-
+aux <- read.xlsx("aux_data.xlsx")
 
 # Load a text file (.txt or .csv)
-
+aux <- read.csv("aux_data.csv")
 
 ```
 
-### Taxonomy table
+### Construct a phyloseq object from BLAST results {#phyloseq}
+
+#### Taxonomy table
 
 The taxonomy table was generated
 
-### OTU table
+#### OTU table
 
-### Format the data
+#### Format the data
 
-### Save as RData
-
-### 
+### Save as .RData {#save}

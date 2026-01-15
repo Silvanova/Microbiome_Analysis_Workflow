@@ -1,0 +1,263 @@
+---
+title: "Install R and required packages"
+editor: visual
+format: html
+---
+
+## R and RStudio
+
+To work in R, you'll need to install R and RStudio. Both programs are free and easy to download. For an easy step by step, follow the procedure described [here](https://rstudio-education.github.io/hopr/starting.html#using-r).
+
+::: callout-tip
+### Set working directory
+
+In each of your script, always start with setting the working directory to avoid issues with folder structure and ensure that your RData is saved in the proper location.
+
+```{r}
+#| eval: false
+setwd("some_folder/my_working_directory")
+```
+:::
+
+## Required packages
+
+Some packages from the CRAN are required to run the examples on this website.
+
+Download the script `001_required_packages.R`, or copy the codes below into your own script.
+
+```{r}
+#| echo: false
+#| output: false
+library(downloadthis)
+```
+
+```{r}
+#| echo: false
+download_file(
+  path = "../scripts/001_required_packages.R",
+  output_name = "001_required_packages",
+  button_label = "Download script",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```
+
+#### Install packages
+
+```{r}
+#| eval: false
+# Install packages
+# installed from BiocManager ---------------------------------------------------
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+# decontam
+if (!require("decontam", quietly = TRUE))
+  BiocManager::install("decontam")
+
+# phyloseq
+if (!require("phyloseq", quietly = TRUE))
+  BiocManager::install("phyloseq")
+
+# CRAN packages ----------------------------------------------------------------
+
+if (!require("ggplot2", quietly = TRUE))
+  install.packages("ggplot2")
+
+if (!require("ggpubr", quietly = TRUE))
+  install.packages("ggpubr")
+
+if (!require("vegan", quietly = TRUE))
+  install.packages("vegan")
+
+if (!require("openxlsx", quietly = TRUE))
+  install.packages("openxlsx")
+
+if (!require("plyr", quietly = TRUE))
+  install.packages("plyr")
+
+if (!require("dplyr", quietly = TRUE))
+  install.packages("dplyr")
+```
+
+#### Load packages
+
+```{r}
+#| eval: false
+# Load packages
+library(decontam)
+library(phyloseq)
+library(ggplot2)
+library(ggpubr)
+library(vegan)
+library(openxlsx)
+library(plyr)
+library(dplyr) # always load dplyr last to avoid conflicts between packages
+```
+
+#### Homemade functions
+
+Some additional functions used in this workflow are not part of any R package. These functions are listed below. Make sure to add them to your scripts!
+
+```{r}
+#| eval: false
+# Homemade functions -----------------------------------------------------------
+
+# Remove taxa from phyloseq objects
+remove_taxa <- function(badTaxa, physeq){
+  allTaxa <- taxa_names(physeq)
+  cleanTaxa <- allTaxa[!(allTaxa %in% badTaxa)]
+  return(prune_taxa(cleanTaxa, physeq))
+}
+
+# Merge 10 best hits
+mergeHits <- function(BLAST10, sp = 98.7, ge = 94.5, fa = 86.5, or = 82,
+                      cl = 78.5, ph = 75, ki = 70){
+  
+  BLAST10_merge <- BLAST10 %>%
+    # Replace NA with character string "NA"
+    mutate(across(phylum:species, function(x) if_else(is.na(x), "NA", x))) %>% 
+    # Split into a list of data frames
+    group_split(OTU)
+  
+  # Loop through the list of data frames
+  for (i in 1:length(BLAST10_merge)){
+    
+    # Assign NULL to variables without binding
+    best.species <- best.genus <- best.family <- best.order <- 
+      best.class <- best.phylum <- NULL
+    
+    # Frequency of species
+    species <- as.data.frame(table(BLAST10_merge[[i]]$species)) %>%
+      `colnames<-`(c("species", "freq")) %>% 
+      mutate(species = as.character(species))
+    
+    sp.lim <- sp/100*nrow(BLAST10_merge[[i]])
+    
+    if(max(species$freq) >= sp.lim){
+      best.species <- species$species[[which(species$freq >= sp.lim)]]
+    }
+    if(isTRUE(best.species != "NA")){
+      BLAST10_merge[[i]] <- BLAST10_merge[[i]] %>%
+        filter(species == best.species) %>%
+        arrange(desc(pident)) %>% .[1,]
+    } else {
+      
+      # Frequency of genus
+      genus <- as.data.frame(table(BLAST10_merge[[i]]$genus)) %>%
+        `colnames<-`(c("genus", "freq")) %>% 
+        mutate(genus = as.character(genus))
+      
+      ge.lim <- ge/100*nrow(BLAST10_merge[[i]])
+      
+      if(max(genus$freq) >= ge.lim){
+        best.genus <- genus$genus[[which(genus$freq >= ge.lim)]]
+      }
+      if(isTRUE(best.genus != "NA")){
+        BLAST10_merge[[i]] <- BLAST10_merge[[i]] %>%
+          filter(genus == best.genus) %>%
+          arrange(desc(pident)) %>% .[1,] %>%
+          mutate(species = NA)
+      } else {
+        
+        # Frequency of family
+        family <- as.data.frame(table(BLAST10_merge[[i]]$family)) %>%
+          `colnames<-`(c("family", "freq")) %>% 
+          mutate(family = as.character(family))
+        
+        fa.lim <- fa/100*nrow(BLAST10_merge[[i]])
+        
+        if(max(family$freq) >= fa.lim){
+          best.family <- family$family[[which(family$freq >= fa.lim)]]
+        }
+        if(isTRUE(best.family != "NA")){
+          BLAST10_merge[[i]] <- BLAST10_merge[[i]] %>%
+            filter(family == best.family) %>%
+            arrange(desc(pident)) %>% .[1,] %>%
+            mutate(species = NA, genus = NA)
+        } else {
+          
+          # Frequency of order
+          order <- as.data.frame(table(BLAST10_merge[[i]]$order)) %>%
+            `colnames<-`(c("order", "freq")) %>% 
+            mutate(order = as.character(order))
+          
+          or.lim <- or/100*nrow(BLAST10_merge[[i]])
+          
+          if(max(order$freq) >= or.lim){
+            best.order <- order$order[[which(order$freq >= or.lim)]]
+          }
+          if(isTRUE(best.order != "NA")){
+            BLAST10_merge[[i]] <- BLAST10_merge[[i]] %>%
+              filter(order == best.order) %>%
+              arrange(desc(pident)) %>% .[1,] %>%
+              mutate(species = NA, genus = NA, family = NA)
+          } else {
+            
+            # Frequency of class
+            class <- as.data.frame(table(BLAST10_merge[[i]]$class)) %>%
+              `colnames<-`(c("class", "freq")) %>% 
+              mutate(class = as.character(class))
+            
+            cl.lim <- cl/100*nrow(BLAST10_merge[[i]])
+            
+            if(max(class$freq) >= cl.lim){
+              best.class <- class$class[[which(class$freq >= cl.lim)]]
+            }
+            if(isTRUE(best.class != "NA")){
+              BLAST10_merge[[i]] <- BLAST10_merge[[i]] %>%
+                filter(class == best.class) %>%
+                arrange(desc(pident)) %>% .[1,] %>%
+                mutate(species = NA, genus = NA, family = NA, order = NA)
+            } else {
+              
+              # Frequency of phylum
+              phylum <- as.data.frame(table(BLAST10_merge[[i]]$phylum)) %>%
+                `colnames<-`(c("phylum", "freq")) %>% 
+                mutate(phylum = as.character(phylum))
+              
+              ph.lim <- ph/100*nrow(BLAST10_merge[[i]])
+              
+              if(max(phylum$freq) >= ph.lim){
+                best.phylum <- phylum$phylum[[which(phylum$freq >= ph.lim)]]
+              }
+              if(isTRUE(best.phylum != "NA")){
+                BLAST10_merge[[i]] <- BLAST10_merge[[i]] %>%
+                  filter(phylum == best.phylum) %>%
+                  arrange(desc(pident)) %>% .[1,] %>%
+                  mutate(species = NA, genus = NA, family = NA, order = NA, class = NA)
+              } else {
+                
+                # Frequency of kingdom
+                kingdom <- as.data.frame(table(BLAST10_merge[[i]]$kingdom)) %>%
+                  `colnames<-`(c("kingdom", "freq")) %>% 
+                  mutate(kingdom = as.character(kingdom))
+                
+                ki.lim <- ki/100*nrow(BLAST10_merge[[i]])
+                
+                if(max(kingdom$freq) >= ki.lim){
+                  best.kingdom <- kingdom$kingdom[[which(kingdom$freq >= ki.lim)]]
+                }
+                if(isTRUE(best.kingdom != "NA")){
+                  BLAST10_merge[[i]] <- BLAST10_merge[[i]] %>%
+                    filter(kingdom == best.kingdom) %>%
+                    arrange(desc(pident)) %>% .[1,] %>%
+                    mutate(species = NA, genus = NA, family = NA, order = NA, 
+                           class = NA, phylum = NA)
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  BLAST10_merge <- BLAST10_merge %>% map_df(~as.data.frame(.x))
+  
+  return(BLAST10_merge)
+}
+```

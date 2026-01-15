@@ -2,6 +2,8 @@ project:
   type: website
   render:
     - index.qmd
+    - get-started.qmd
+    - get-started/**/*.qmd
     - pages/**/*.qmd
 
 format:
@@ -25,25 +27,38 @@ website:
       - icon: github
         href: https://github.com/Silvanova/Common_scripts
     left:
-      - text: "Install R and packages"
-        href: pages/install.qmd
+      - text: "Get started"
+        href: get-started.qmd
       - text: "Handling OTU tables"
         href: pages/OTU.tables.qmd
       - text: "Statistical Analyses"
         href: pages/stats.qmd
 
   sidebar:
-    - title: "Handling OTU tables"
+    - title: "Silva Nova MAW"
       style: "docked"
       background: light
-      logo: images/Silva Nova logo.png
+      logo: images/Silva Nova MAW logo.png
       collapse-level: 3
       align: left
       contents:
+        - file: index.qmd
+          text: " "
+
+    - title: "Get started"
+      contents:
+        - section: "Get started"
+          file: get-started.qmd
+          contents:
+            - href: get-started/install.qmd
+              text: "Install R and packages"
+            - href: get-started/data-prep.qmd
+              text: "Data preparation"
+
+    - title: "Handling OTU tables"
+      contents:
         - file: pages/OTU.tables.qmd
           text: "Handling OTU tables"
-        - file: pages/data.prep.qmd
-          text: "Data preparation"
         - file: pages/control.qmd
           text: "Controls"
         - file: pages/filter.rare.qmd
@@ -53,16 +68,6 @@ website:
         - file: pages/normalize.qmd
           text: "Normalization and rarefaction"
 
-
-    - title: "Silva Nova MAW"
-      contents:
-        - file: index.qmd
-          text: " "
-
-    - title: "Install R and packages"
-      contents:
-        - file: pages/install.qmd
-          text: " "
 
     - title: "Statistical Analyses"
       contents:

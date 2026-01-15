@@ -53,3 +53,5 @@ rsconnect/
 /_site/
 /_extensions/
 README.qmd
+
+**/*.quarto_ipynb

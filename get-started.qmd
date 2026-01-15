@@ -1,0 +1,34 @@
+---
+title: "Get started"
+editor: visual
+format: 
+  html: 
+    toc: false
+---
+
+### [\> Install R and packages](get-started/install.qmd)
+
+All data handling and analyses in this workflow are performed in R. Before you get started,
+
+-   [Install R and RStudio](get-started/install.qmd#r-and-rstudio)
+-   [Install and load required packages](get-started/install.qmd#required-packages)
+
+::: callout-tip
+### Source another script {.callout-tip}
+
+In this workflow, the first script is used to [install and load R packages](get-started/install.qmd#required-packages). To make sure that all packages are installed and loaded, one should run that script before every other script. A quick and easy way to do so is to source the script at the beginning of every other script:
+
+```{r}
+#| eval: false
+# Load packages
+source("001_required_packages.R")
+```
+:::
+
+### [\> Data preparation](get-started/data-prep.qmd)
+
+Then, to get started with the data analysis, you must first ensure that the raw data is in the right format. Convert raw data into a `phyloseq` object and save them as .RData files.
+
+-   [Load auxiliary data (e.g. Excel sheet)](get-started/data-prep.qmd#auxfile)
+-   [Construct a phyloseq object from BLAST results](get-started/data-prep.qmd#phyloseq)
+-   [Save data as .RData](get-started/data-prep.qmd#save)

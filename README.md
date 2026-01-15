@@ -1,4 +1,4 @@
-# Microbiome analysis workflow![](images/Silva%20Nova%20MAW%20logo.png){width="209" align="right"}
+# Microbiome analysis workflow[<img src="images/Silva Nova MAW logo.png" width="207" align="right" />](https://silvanova.github.io/Microbiome_Analysis_Workflow/)
 
 This workflow was created for microbiome analyses within the Silva Nova project, to ensure that all publications related to the Silva Nova project use the same data processing, and avoid inconsistencies between sub-projects. This workflow should also make microbial analyses more accessible and streamlined.
 
