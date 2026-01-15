@@ -65,6 +65,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../get-started/data-prep.html" rel="next">
+<link href="../get-started.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -108,7 +110,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </head>
 
-<body class="nav-sidebar docked nav-fixed fullcontent quarto-light">
+<body class="nav-sidebar docked nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -126,8 +128,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="../pages/install.html" aria-current="page"> 
-<span class="menu-text">Install R and packages</span></a>
+    <a class="nav-link active" href="../get-started.html" aria-current="page"> 
+<span class="menu-text">Get started</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../pages/OTU.tables.html"> 
@@ -150,7 +152,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/install.html"></a></li></ol></nav>
+        <h1 class="quarto-secondary-nav-title no-breadcrumbs">Install R and required packages</h1>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -162,30 +164,61 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
       <a href="../index.html" class="sidebar-logo-link">
-      <img src="../images/Silva Nova logo.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
-      <img src="../images/Silva Nova logo.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+      <img src="../images/Silva Nova MAW logo.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../images/Silva Nova MAW logo.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
       </a>
       </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../get-started.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Get started</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../pages/install.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"></span></a>
+  <a href="../get-started/install.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Install R and packages</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../get-started/data-prep.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data preparation</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
     </ul>
     </div>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#r-and-rstudio" id="toc-r-and-rstudio" class="nav-link active" data-scroll-target="#r-and-rstudio">R and RStudio</a></li>
+  <li><a href="#required-packages" id="toc-required-packages" class="nav-link" data-scroll-target="#required-packages">Required packages</a>
+  <ul>
+  <li><a href="#install-packages" id="toc-install-packages" class="nav-link" data-scroll-target="#install-packages">Install packages</a></li>
+  <li><a href="#load-packages" id="toc-load-packages" class="nav-link" data-scroll-target="#load-packages">Load packages</a></li>
+  <li><a href="#homemade-functions" id="toc-homemade-functions" class="nav-link" data-scroll-target="#homemade-functions">Homemade functions</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Install R and required packages</h1>
+<h1 class="title d-none d-lg-block">Install R and required packages</h1>
 </div>
 
 
@@ -256,6 +289,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "><i class="fa fa-save"></i> Download script</button>
 </div>
 </div>
+<section id="install-packages" class="level4">
+<h4 class="anchored" data-anchor-id="install-packages">Install packages</h4>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install packages</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># installed from BiocManager ---------------------------------------------------</span></span>
@@ -289,16 +324,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">"plyr"</span>)</span>
 <span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"dplyr"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>))</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)</span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="co"># homemade functions -----------------------------------------------------------</span></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>remove_taxa <span class="ot">&lt;-</span> <span class="cf">function</span>(badTaxa, physeq){</span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  allTaxa <span class="ot">&lt;-</span> <span class="fu">taxa_names</span>(physeq)</span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>  cleanTaxa <span class="ot">&lt;-</span> allTaxa[<span class="sc">!</span>(allTaxa <span class="sc">%in%</span> badTaxa)]</span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">prune_taxa</span>(cleanTaxa, physeq))</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">install.packages</span>(<span class="st">"dplyr"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+</section>
+<section id="load-packages" class="level4">
+<h4 class="anchored" data-anchor-id="load-packages">Load packages</h4>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load packages</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(decontam)</span>
@@ -310,8 +340,171 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plyr)</span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr) <span class="co"># always load dplyr last to avoid conflicts between packages</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+</section>
+<section id="homemade-functions" class="level4">
+<h4 class="anchored" data-anchor-id="homemade-functions">Homemade functions</h4>
+<p>Some additional functions used in this workflow are not part of any R package. These functions are listed below. Make sure to add them to your scripts!</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Homemade functions -----------------------------------------------------------</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove taxa from phyloseq objects</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>remove_taxa <span class="ot">&lt;-</span> <span class="cf">function</span>(badTaxa, physeq){</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  allTaxa <span class="ot">&lt;-</span> <span class="fu">taxa_names</span>(physeq)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  cleanTaxa <span class="ot">&lt;-</span> allTaxa[<span class="sc">!</span>(allTaxa <span class="sc">%in%</span> badTaxa)]</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">prune_taxa</span>(cleanTaxa, physeq))</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge 10 best hits</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>mergeHits <span class="ot">&lt;-</span> <span class="cf">function</span>(BLAST10, <span class="at">sp =</span> <span class="fl">98.7</span>, <span class="at">ge =</span> <span class="fl">94.5</span>, <span class="at">fa =</span> <span class="fl">86.5</span>, <span class="at">or =</span> <span class="dv">82</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>                      <span class="at">cl =</span> <span class="fl">78.5</span>, <span class="at">ph =</span> <span class="dv">75</span>, <span class="at">ki =</span> <span class="dv">70</span>){</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  BLAST10_merge <span class="ot">&lt;-</span> BLAST10 <span class="sc">%&gt;%</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Replace NA with character string "NA"</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="fu">across</span>(phylum<span class="sc">:</span>species, <span class="cf">function</span>(x) <span class="fu">if_else</span>(<span class="fu">is.na</span>(x), <span class="st">"NA"</span>, x))) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Split into a list of data frames</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_split</span>(OTU)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Loop through the list of data frames</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(BLAST10_merge)){</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Assign NULL to variables without binding</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>    best.species <span class="ot">&lt;-</span> best.genus <span class="ot">&lt;-</span> best.family <span class="ot">&lt;-</span> best.order <span class="ot">&lt;-</span> </span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>      best.class <span class="ot">&lt;-</span> best.phylum <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Frequency of species</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    species <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(BLAST10_merge[[i]]<span class="sc">$</span>species)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>      <span class="st">`</span><span class="at">colnames&lt;-</span><span class="st">`</span>(<span class="fu">c</span>(<span class="st">"species"</span>, <span class="st">"freq"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="at">species =</span> <span class="fu">as.character</span>(species))</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    sp.lim <span class="ot">&lt;-</span> sp<span class="sc">/</span><span class="dv">100</span><span class="sc">*</span><span class="fu">nrow</span>(BLAST10_merge[[i]])</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">max</span>(species<span class="sc">$</span>freq) <span class="sc">&gt;=</span> sp.lim){</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>      best.species <span class="ot">&lt;-</span> species<span class="sc">$</span>species[[<span class="fu">which</span>(species<span class="sc">$</span>freq <span class="sc">&gt;=</span> sp.lim)]]</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">isTRUE</span>(best.species <span class="sc">!=</span> <span class="st">"NA"</span>)){</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>      BLAST10_merge[[i]] <span class="ot">&lt;-</span> BLAST10_merge[[i]] <span class="sc">%&gt;%</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>        <span class="fu">filter</span>(species <span class="sc">==</span> best.species) <span class="sc">%&gt;%</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>        <span class="fu">arrange</span>(<span class="fu">desc</span>(pident)) <span class="sc">%&gt;%</span> .[<span class="dv">1</span>,]</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>      <span class="co"># Frequency of genus</span></span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>      genus <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(BLAST10_merge[[i]]<span class="sc">$</span>genus)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>        <span class="st">`</span><span class="at">colnames&lt;-</span><span class="st">`</span>(<span class="fu">c</span>(<span class="st">"genus"</span>, <span class="st">"freq"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>(<span class="at">genus =</span> <span class="fu">as.character</span>(genus))</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>      ge.lim <span class="ot">&lt;-</span> ge<span class="sc">/</span><span class="dv">100</span><span class="sc">*</span><span class="fu">nrow</span>(BLAST10_merge[[i]])</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span>(<span class="fu">max</span>(genus<span class="sc">$</span>freq) <span class="sc">&gt;=</span> ge.lim){</span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>        best.genus <span class="ot">&lt;-</span> genus<span class="sc">$</span>genus[[<span class="fu">which</span>(genus<span class="sc">$</span>freq <span class="sc">&gt;=</span> ge.lim)]]</span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span>(<span class="fu">isTRUE</span>(best.genus <span class="sc">!=</span> <span class="st">"NA"</span>)){</span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>        BLAST10_merge[[i]] <span class="ot">&lt;-</span> BLAST10_merge[[i]] <span class="sc">%&gt;%</span></span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>          <span class="fu">filter</span>(genus <span class="sc">==</span> best.genus) <span class="sc">%&gt;%</span></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>          <span class="fu">arrange</span>(<span class="fu">desc</span>(pident)) <span class="sc">%&gt;%</span> .[<span class="dv">1</span>,] <span class="sc">%&gt;%</span></span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">species =</span> <span class="cn">NA</span>)</span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>      } <span class="cf">else</span> {</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Frequency of family</span></span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>        family <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(BLAST10_merge[[i]]<span class="sc">$</span>family)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>          <span class="st">`</span><span class="at">colnames&lt;-</span><span class="st">`</span>(<span class="fu">c</span>(<span class="st">"family"</span>, <span class="st">"freq"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">family =</span> <span class="fu">as.character</span>(family))</span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>        fa.lim <span class="ot">&lt;-</span> fa<span class="sc">/</span><span class="dv">100</span><span class="sc">*</span><span class="fu">nrow</span>(BLAST10_merge[[i]])</span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(<span class="fu">max</span>(family<span class="sc">$</span>freq) <span class="sc">&gt;=</span> fa.lim){</span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>          best.family <span class="ot">&lt;-</span> family<span class="sc">$</span>family[[<span class="fu">which</span>(family<span class="sc">$</span>freq <span class="sc">&gt;=</span> fa.lim)]]</span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span>(<span class="fu">isTRUE</span>(best.family <span class="sc">!=</span> <span class="st">"NA"</span>)){</span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>          BLAST10_merge[[i]] <span class="ot">&lt;-</span> BLAST10_merge[[i]] <span class="sc">%&gt;%</span></span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>            <span class="fu">filter</span>(family <span class="sc">==</span> best.family) <span class="sc">%&gt;%</span></span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>            <span class="fu">arrange</span>(<span class="fu">desc</span>(pident)) <span class="sc">%&gt;%</span> .[<span class="dv">1</span>,] <span class="sc">%&gt;%</span></span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">species =</span> <span class="cn">NA</span>, <span class="at">genus =</span> <span class="cn">NA</span>)</span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>          </span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>          <span class="co"># Frequency of order</span></span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>          order <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(BLAST10_merge[[i]]<span class="sc">$</span>order)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>            <span class="st">`</span><span class="at">colnames&lt;-</span><span class="st">`</span>(<span class="fu">c</span>(<span class="st">"order"</span>, <span class="st">"freq"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>            <span class="fu">mutate</span>(<span class="at">order =</span> <span class="fu">as.character</span>(order))</span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>          </span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>          or.lim <span class="ot">&lt;-</span> or<span class="sc">/</span><span class="dv">100</span><span class="sc">*</span><span class="fu">nrow</span>(BLAST10_merge[[i]])</span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>          </span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>          <span class="cf">if</span>(<span class="fu">max</span>(order<span class="sc">$</span>freq) <span class="sc">&gt;=</span> or.lim){</span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>            best.order <span class="ot">&lt;-</span> order<span class="sc">$</span>order[[<span class="fu">which</span>(order<span class="sc">$</span>freq <span class="sc">&gt;=</span> or.lim)]]</span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>          }</span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a>          <span class="cf">if</span>(<span class="fu">isTRUE</span>(best.order <span class="sc">!=</span> <span class="st">"NA"</span>)){</span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>            BLAST10_merge[[i]] <span class="ot">&lt;-</span> BLAST10_merge[[i]] <span class="sc">%&gt;%</span></span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>              <span class="fu">filter</span>(order <span class="sc">==</span> best.order) <span class="sc">%&gt;%</span></span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a>              <span class="fu">arrange</span>(<span class="fu">desc</span>(pident)) <span class="sc">%&gt;%</span> .[<span class="dv">1</span>,] <span class="sc">%&gt;%</span></span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mutate</span>(<span class="at">species =</span> <span class="cn">NA</span>, <span class="at">genus =</span> <span class="cn">NA</span>, <span class="at">family =</span> <span class="cn">NA</span>)</span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>          } <span class="cf">else</span> {</span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>            <span class="co"># Frequency of class</span></span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>            class <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(BLAST10_merge[[i]]<span class="sc">$</span>class)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a>              <span class="st">`</span><span class="at">colnames&lt;-</span><span class="st">`</span>(<span class="fu">c</span>(<span class="st">"class"</span>, <span class="st">"freq"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a>              <span class="fu">mutate</span>(<span class="at">class =</span> <span class="fu">as.character</span>(class))</span>
+<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a>            cl.lim <span class="ot">&lt;-</span> cl<span class="sc">/</span><span class="dv">100</span><span class="sc">*</span><span class="fu">nrow</span>(BLAST10_merge[[i]])</span>
+<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a>            </span>
+<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span>(<span class="fu">max</span>(class<span class="sc">$</span>freq) <span class="sc">&gt;=</span> cl.lim){</span>
+<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a>              best.class <span class="ot">&lt;-</span> class<span class="sc">$</span>class[[<span class="fu">which</span>(class<span class="sc">$</span>freq <span class="sc">&gt;=</span> cl.lim)]]</span>
+<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span>(<span class="fu">isTRUE</span>(best.class <span class="sc">!=</span> <span class="st">"NA"</span>)){</span>
+<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a>              BLAST10_merge[[i]] <span class="ot">&lt;-</span> BLAST10_merge[[i]] <span class="sc">%&gt;%</span></span>
+<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a>                <span class="fu">filter</span>(class <span class="sc">==</span> best.class) <span class="sc">%&gt;%</span></span>
+<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a>                <span class="fu">arrange</span>(<span class="fu">desc</span>(pident)) <span class="sc">%&gt;%</span> .[<span class="dv">1</span>,] <span class="sc">%&gt;%</span></span>
+<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a>                <span class="fu">mutate</span>(<span class="at">species =</span> <span class="cn">NA</span>, <span class="at">genus =</span> <span class="cn">NA</span>, <span class="at">family =</span> <span class="cn">NA</span>, <span class="at">order =</span> <span class="cn">NA</span>)</span>
+<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a>            } <span class="cf">else</span> {</span>
+<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a>              </span>
+<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a>              <span class="co"># Frequency of phylum</span></span>
+<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a>              phylum <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(BLAST10_merge[[i]]<span class="sc">$</span>phylum)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a>                <span class="st">`</span><span class="at">colnames&lt;-</span><span class="st">`</span>(<span class="fu">c</span>(<span class="st">"phylum"</span>, <span class="st">"freq"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-114"><a href="#cb4-114" aria-hidden="true" tabindex="-1"></a>                <span class="fu">mutate</span>(<span class="at">phylum =</span> <span class="fu">as.character</span>(phylum))</span>
+<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a>              </span>
+<span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a>              ph.lim <span class="ot">&lt;-</span> ph<span class="sc">/</span><span class="dv">100</span><span class="sc">*</span><span class="fu">nrow</span>(BLAST10_merge[[i]])</span>
+<span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a>              </span>
+<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a>              <span class="cf">if</span>(<span class="fu">max</span>(phylum<span class="sc">$</span>freq) <span class="sc">&gt;=</span> ph.lim){</span>
+<span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a>                best.phylum <span class="ot">&lt;-</span> phylum<span class="sc">$</span>phylum[[<span class="fu">which</span>(phylum<span class="sc">$</span>freq <span class="sc">&gt;=</span> ph.lim)]]</span>
+<span id="cb4-120"><a href="#cb4-120" aria-hidden="true" tabindex="-1"></a>              }</span>
+<span id="cb4-121"><a href="#cb4-121" aria-hidden="true" tabindex="-1"></a>              <span class="cf">if</span>(<span class="fu">isTRUE</span>(best.phylum <span class="sc">!=</span> <span class="st">"NA"</span>)){</span>
+<span id="cb4-122"><a href="#cb4-122" aria-hidden="true" tabindex="-1"></a>                BLAST10_merge[[i]] <span class="ot">&lt;-</span> BLAST10_merge[[i]] <span class="sc">%&gt;%</span></span>
+<span id="cb4-123"><a href="#cb4-123" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">filter</span>(phylum <span class="sc">==</span> best.phylum) <span class="sc">%&gt;%</span></span>
+<span id="cb4-124"><a href="#cb4-124" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">arrange</span>(<span class="fu">desc</span>(pident)) <span class="sc">%&gt;%</span> .[<span class="dv">1</span>,] <span class="sc">%&gt;%</span></span>
+<span id="cb4-125"><a href="#cb4-125" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">mutate</span>(<span class="at">species =</span> <span class="cn">NA</span>, <span class="at">genus =</span> <span class="cn">NA</span>, <span class="at">family =</span> <span class="cn">NA</span>, <span class="at">order =</span> <span class="cn">NA</span>, <span class="at">class =</span> <span class="cn">NA</span>)</span>
+<span id="cb4-126"><a href="#cb4-126" aria-hidden="true" tabindex="-1"></a>              } <span class="cf">else</span> {</span>
+<span id="cb4-127"><a href="#cb4-127" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb4-128"><a href="#cb4-128" aria-hidden="true" tabindex="-1"></a>                <span class="co"># Frequency of kingdom</span></span>
+<span id="cb4-129"><a href="#cb4-129" aria-hidden="true" tabindex="-1"></a>                kingdom <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">table</span>(BLAST10_merge[[i]]<span class="sc">$</span>kingdom)) <span class="sc">%&gt;%</span></span>
+<span id="cb4-130"><a href="#cb4-130" aria-hidden="true" tabindex="-1"></a>                  <span class="st">`</span><span class="at">colnames&lt;-</span><span class="st">`</span>(<span class="fu">c</span>(<span class="st">"kingdom"</span>, <span class="st">"freq"</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-131"><a href="#cb4-131" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">mutate</span>(<span class="at">kingdom =</span> <span class="fu">as.character</span>(kingdom))</span>
+<span id="cb4-132"><a href="#cb4-132" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb4-133"><a href="#cb4-133" aria-hidden="true" tabindex="-1"></a>                ki.lim <span class="ot">&lt;-</span> ki<span class="sc">/</span><span class="dv">100</span><span class="sc">*</span><span class="fu">nrow</span>(BLAST10_merge[[i]])</span>
+<span id="cb4-134"><a href="#cb4-134" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb4-135"><a href="#cb4-135" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span>(<span class="fu">max</span>(kingdom<span class="sc">$</span>freq) <span class="sc">&gt;=</span> ki.lim){</span>
+<span id="cb4-136"><a href="#cb4-136" aria-hidden="true" tabindex="-1"></a>                  best.kingdom <span class="ot">&lt;-</span> kingdom<span class="sc">$</span>kingdom[[<span class="fu">which</span>(kingdom<span class="sc">$</span>freq <span class="sc">&gt;=</span> ki.lim)]]</span>
+<span id="cb4-137"><a href="#cb4-137" aria-hidden="true" tabindex="-1"></a>                }</span>
+<span id="cb4-138"><a href="#cb4-138" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span>(<span class="fu">isTRUE</span>(best.kingdom <span class="sc">!=</span> <span class="st">"NA"</span>)){</span>
+<span id="cb4-139"><a href="#cb4-139" aria-hidden="true" tabindex="-1"></a>                  BLAST10_merge[[i]] <span class="ot">&lt;-</span> BLAST10_merge[[i]] <span class="sc">%&gt;%</span></span>
+<span id="cb4-140"><a href="#cb4-140" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">filter</span>(kingdom <span class="sc">==</span> best.kingdom) <span class="sc">%&gt;%</span></span>
+<span id="cb4-141"><a href="#cb4-141" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">arrange</span>(<span class="fu">desc</span>(pident)) <span class="sc">%&gt;%</span> .[<span class="dv">1</span>,] <span class="sc">%&gt;%</span></span>
+<span id="cb4-142"><a href="#cb4-142" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">mutate</span>(<span class="at">species =</span> <span class="cn">NA</span>, <span class="at">genus =</span> <span class="cn">NA</span>, <span class="at">family =</span> <span class="cn">NA</span>, <span class="at">order =</span> <span class="cn">NA</span>, </span>
+<span id="cb4-143"><a href="#cb4-143" aria-hidden="true" tabindex="-1"></a>                           <span class="at">class =</span> <span class="cn">NA</span>, <span class="at">phylum =</span> <span class="cn">NA</span>)</span>
+<span id="cb4-144"><a href="#cb4-144" aria-hidden="true" tabindex="-1"></a>                }</span>
+<span id="cb4-145"><a href="#cb4-145" aria-hidden="true" tabindex="-1"></a>              }</span>
+<span id="cb4-146"><a href="#cb4-146" aria-hidden="true" tabindex="-1"></a>            }</span>
+<span id="cb4-147"><a href="#cb4-147" aria-hidden="true" tabindex="-1"></a>          }</span>
+<span id="cb4-148"><a href="#cb4-148" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb4-149"><a href="#cb4-149" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb4-150"><a href="#cb4-150" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb4-151"><a href="#cb4-151" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-152"><a href="#cb4-152" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-153"><a href="#cb4-153" aria-hidden="true" tabindex="-1"></a>  BLAST10_merge <span class="ot">&lt;-</span> BLAST10_merge <span class="sc">%&gt;%</span> <span class="fu">map_df</span>(<span class="sc">~</span><span class="fu">as.data.frame</span>(.x))</span>
+<span id="cb4-154"><a href="#cb4-154" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-155"><a href="#cb4-155" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(BLAST10_merge)</span>
+<span id="cb4-156"><a href="#cb4-156" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -720,6 +913,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../get-started.html" class="pagination-link" aria-label="Get started">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Get started</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../get-started/data-prep.html" class="pagination-link" aria-label="Data preparation">
+        <span class="nav-page-text">Data preparation</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

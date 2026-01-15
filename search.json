@@ -22,25 +22,14 @@
     ]
   },
   {
-    "objectID": "pages/filter.rare.html",
-    "href": "pages/filter.rare.html",
-    "title": "Global filtering",
+    "objectID": "pages/diff.abund.html",
+    "href": "pages/diff.abund.html",
+    "title": "Differential abundance",
     "section": "",
-    "text": "Scripts used to do a preliminary filtering to remove the less abundant OTUs, which are most often artifacts. These also usually coincide with the OTUs with lowest BLAST accuracy.\nBefore any other step, we should remove the features that have too low frequency. To do this, we sum the reads for all features, obtaining the total read count for each one. We then calculate the average feature frequency, and only select the OTUs with a frequency larger than 0.05% of the average frequency.\nDownload the script 003_global_filter.R, or copy the codes below into your own script.\n\n\n Download script",
+    "text": "Download the script 030_diff_abund.R, or copy the codes below into your own script.\n\n\n Download script",
     "crumbs": [
-      "Handling OTU tables",
-      "Global filtering"
-    ]
-  },
-  {
-    "objectID": "pages/data.prep.html",
-    "href": "pages/data.prep.html",
-    "title": "Data preparation",
-    "section": "",
-    "text": "To get started with the data analysis, you must first ensure that the raw data is in the right format. This script prepares the raw data into a phyloseq object and produces the .RData files used in the next steps.\nDownload the script 002_data_preparation.R, or copy the codes below into your own script.\n\n\n Download script\n\n\n\n\n\n\n\n\nTipSource another script\n\n\n\nIn this workflow, the first script is used to install and load R packages. To make sure that all packages are installed and loaded, one should run that script before every other script. A quick and easy way to do so is to source the script at the beginning of every other script:\n\n# Load packages\nsource(\"001_required_packages.R\")\n\n\n\n\nAuxiliary file\nThe auxiliary file contains data about samples, which is used to filter samples in the phyloseq object. This file could be, for example, an Excel sheet, a .txt file or a .csv file.\n\n# Load an Excel sheet (.xlsx)\n\n\n# Load a text file (.txt or .csv)\n\n\n\nTaxonomy table\nThe taxonomy table was generated\n\n\nOTU table\n\n\nFormat the data\n\n\nSave as RData",
-    "crumbs": [
-      "Handling OTU tables",
-      "Data preparation"
+      "Statistical Analyses",
+      "Differential abundance"
     ]
   },
   {
@@ -62,6 +51,17 @@
     "text": "Handling OTU tables",
     "crumbs": [
       "Handling OTU tables"
+    ]
+  },
+  {
+    "objectID": "get-started/data-prep.html",
+    "href": "get-started/data-prep.html",
+    "title": "Data preparation",
+    "section": "",
+    "text": "To get started with the data analysis, you must first ensure that the raw data is in the right format. This script prepares the raw data into a phyloseq object and produces the .RData files used in the next steps.\nDownload the script 002_data_preparation.R, or copy the codes below into your own script.\n\n\n Download script\n\n\n\nLoad auxiliary data\nThe auxiliary file contains data about samples, which is used to filter samples in the phyloseq object. This file could be, for example, an Excel sheet, a .txt file or a .csv file.\n\n# Load an Excel sheet (.xlsx)\naux &lt;- read.xlsx(\"aux_data.xlsx\")\n\n# Load a text file (.txt or .csv)\naux &lt;- read.csv(\"aux_data.csv\")\n\n\n\nConstruct a phyloseq object from BLAST results\n\nTaxonomy table\nThe taxonomy table was generated\n\n\nOTU table\n\n\nFormat the data\n\n\n\nSave as .RData",
+    "crumbs": [
+      "Get started",
+      "Data preparation"
     ]
   },
   {
@@ -105,6 +105,49 @@
     ]
   },
   {
+    "objectID": "get-started.html",
+    "href": "get-started.html",
+    "title": "Get started",
+    "section": "",
+    "text": "&gt; Install R and packages\nAll data handling and analyses in this workflow are performed in R. Before you get started,\n\nInstall R and RStudio\nInstall and load required packages\n\n\n\n\n\n\n\nTipSource another script\n\n\n\nIn this workflow, the first script is used to install and load R packages. To make sure that all packages are installed and loaded, one should run that script before every other script. A quick and easy way to do so is to source the script at the beginning of every other script:\n\n# Load packages\nsource(\"001_required_packages.R\")\n\n\n\n\n\n&gt; Data preparation\nThen, to get started with the data analysis, you must first ensure that the raw data is in the right format. Convert raw data into a phyloseq object and save them as .RData files.\n\nLoad auxiliary data (e.g. Excel sheet)\nConstruct a phyloseq object from BLAST results\nSave data as .RData",
+    "crumbs": [
+      "Get started"
+    ]
+  },
+  {
+    "objectID": "get-started/install.html",
+    "href": "get-started/install.html",
+    "title": "Install R and required packages",
+    "section": "",
+    "text": "To work in R, you’ll need to install R and RStudio. Both programs are free and easy to download. For an easy step by step, follow the procedure described here.\n\n\n\n\n\n\nTipSet working directory\n\n\n\nIn each of your script, always start with setting the working directory to avoid issues with folder structure and ensure that your RData is saved in the proper location.\n\nsetwd(\"some_folder/my_working_directory\")",
+    "crumbs": [
+      "Get started",
+      "Install R and packages"
+    ]
+  },
+  {
+    "objectID": "get-started/install.html#r-and-rstudio",
+    "href": "get-started/install.html#r-and-rstudio",
+    "title": "Install R and required packages",
+    "section": "",
+    "text": "To work in R, you’ll need to install R and RStudio. Both programs are free and easy to download. For an easy step by step, follow the procedure described here.\n\n\n\n\n\n\nTipSet working directory\n\n\n\nIn each of your script, always start with setting the working directory to avoid issues with folder structure and ensure that your RData is saved in the proper location.\n\nsetwd(\"some_folder/my_working_directory\")",
+    "crumbs": [
+      "Get started",
+      "Install R and packages"
+    ]
+  },
+  {
+    "objectID": "get-started/install.html#required-packages",
+    "href": "get-started/install.html#required-packages",
+    "title": "Install R and required packages",
+    "section": "Required packages",
+    "text": "Required packages\nSome packages from the CRAN are required to run the examples on this website.\nDownload the script 001_required_packages.R, or copy the codes below into your own script.\n\n\n Download script\n\n\n\nInstall packages\n\n# Install packages\n# installed from BiocManager ---------------------------------------------------\n\nif (!requireNamespace(\"BiocManager\", quietly = TRUE))\n  install.packages(\"BiocManager\")\n\n# decontam\nif (!require(\"decontam\", quietly = TRUE))\n  BiocManager::install(\"decontam\")\n\n# phyloseq\nif (!require(\"phyloseq\", quietly = TRUE))\n  BiocManager::install(\"phyloseq\")\n\n# CRAN packages ----------------------------------------------------------------\n\nif (!require(\"ggplot2\", quietly = TRUE))\n  install.packages(\"ggplot2\")\n\nif (!require(\"ggpubr\", quietly = TRUE))\n  install.packages(\"ggpubr\")\n\nif (!require(\"vegan\", quietly = TRUE))\n  install.packages(\"vegan\")\n\nif (!require(\"openxlsx\", quietly = TRUE))\n  install.packages(\"openxlsx\")\n\nif (!require(\"plyr\", quietly = TRUE))\n  install.packages(\"plyr\")\n\nif (!require(\"dplyr\", quietly = TRUE))\n  install.packages(\"dplyr\")\n\n\n\nLoad packages\n\n# Load packages\nlibrary(decontam)\nlibrary(phyloseq)\nlibrary(ggplot2)\nlibrary(ggpubr)\nlibrary(vegan)\nlibrary(openxlsx)\nlibrary(plyr)\nlibrary(dplyr) # always load dplyr last to avoid conflicts between packages\n\n\n\nHomemade functions\nSome additional functions used in this workflow are not part of any R package. These functions are listed below. Make sure to add them to your scripts!\n\n# Homemade functions -----------------------------------------------------------\n\n# Remove taxa from phyloseq objects\nremove_taxa &lt;- function(badTaxa, physeq){\n  allTaxa &lt;- taxa_names(physeq)\n  cleanTaxa &lt;- allTaxa[!(allTaxa %in% badTaxa)]\n  return(prune_taxa(cleanTaxa, physeq))\n}\n\n# Merge 10 best hits\nmergeHits &lt;- function(BLAST10, sp = 98.7, ge = 94.5, fa = 86.5, or = 82,\n                      cl = 78.5, ph = 75, ki = 70){\n  \n  BLAST10_merge &lt;- BLAST10 %&gt;%\n    # Replace NA with character string \"NA\"\n    mutate(across(phylum:species, function(x) if_else(is.na(x), \"NA\", x))) %&gt;% \n    # Split into a list of data frames\n    group_split(OTU)\n  \n  # Loop through the list of data frames\n  for (i in 1:length(BLAST10_merge)){\n    \n    # Assign NULL to variables without binding\n    best.species &lt;- best.genus &lt;- best.family &lt;- best.order &lt;- \n      best.class &lt;- best.phylum &lt;- NULL\n    \n    # Frequency of species\n    species &lt;- as.data.frame(table(BLAST10_merge[[i]]$species)) %&gt;%\n      `colnames&lt;-`(c(\"species\", \"freq\")) %&gt;% \n      mutate(species = as.character(species))\n    \n    sp.lim &lt;- sp/100*nrow(BLAST10_merge[[i]])\n    \n    if(max(species$freq) &gt;= sp.lim){\n      best.species &lt;- species$species[[which(species$freq &gt;= sp.lim)]]\n    }\n    if(isTRUE(best.species != \"NA\")){\n      BLAST10_merge[[i]] &lt;- BLAST10_merge[[i]] %&gt;%\n        filter(species == best.species) %&gt;%\n        arrange(desc(pident)) %&gt;% .[1,]\n    } else {\n      \n      # Frequency of genus\n      genus &lt;- as.data.frame(table(BLAST10_merge[[i]]$genus)) %&gt;%\n        `colnames&lt;-`(c(\"genus\", \"freq\")) %&gt;% \n        mutate(genus = as.character(genus))\n      \n      ge.lim &lt;- ge/100*nrow(BLAST10_merge[[i]])\n      \n      if(max(genus$freq) &gt;= ge.lim){\n        best.genus &lt;- genus$genus[[which(genus$freq &gt;= ge.lim)]]\n      }\n      if(isTRUE(best.genus != \"NA\")){\n        BLAST10_merge[[i]] &lt;- BLAST10_merge[[i]] %&gt;%\n          filter(genus == best.genus) %&gt;%\n          arrange(desc(pident)) %&gt;% .[1,] %&gt;%\n          mutate(species = NA)\n      } else {\n        \n        # Frequency of family\n        family &lt;- as.data.frame(table(BLAST10_merge[[i]]$family)) %&gt;%\n          `colnames&lt;-`(c(\"family\", \"freq\")) %&gt;% \n          mutate(family = as.character(family))\n        \n        fa.lim &lt;- fa/100*nrow(BLAST10_merge[[i]])\n        \n        if(max(family$freq) &gt;= fa.lim){\n          best.family &lt;- family$family[[which(family$freq &gt;= fa.lim)]]\n        }\n        if(isTRUE(best.family != \"NA\")){\n          BLAST10_merge[[i]] &lt;- BLAST10_merge[[i]] %&gt;%\n            filter(family == best.family) %&gt;%\n            arrange(desc(pident)) %&gt;% .[1,] %&gt;%\n            mutate(species = NA, genus = NA)\n        } else {\n          \n          # Frequency of order\n          order &lt;- as.data.frame(table(BLAST10_merge[[i]]$order)) %&gt;%\n            `colnames&lt;-`(c(\"order\", \"freq\")) %&gt;% \n            mutate(order = as.character(order))\n          \n          or.lim &lt;- or/100*nrow(BLAST10_merge[[i]])\n          \n          if(max(order$freq) &gt;= or.lim){\n            best.order &lt;- order$order[[which(order$freq &gt;= or.lim)]]\n          }\n          if(isTRUE(best.order != \"NA\")){\n            BLAST10_merge[[i]] &lt;- BLAST10_merge[[i]] %&gt;%\n              filter(order == best.order) %&gt;%\n              arrange(desc(pident)) %&gt;% .[1,] %&gt;%\n              mutate(species = NA, genus = NA, family = NA)\n          } else {\n            \n            # Frequency of class\n            class &lt;- as.data.frame(table(BLAST10_merge[[i]]$class)) %&gt;%\n              `colnames&lt;-`(c(\"class\", \"freq\")) %&gt;% \n              mutate(class = as.character(class))\n            \n            cl.lim &lt;- cl/100*nrow(BLAST10_merge[[i]])\n            \n            if(max(class$freq) &gt;= cl.lim){\n              best.class &lt;- class$class[[which(class$freq &gt;= cl.lim)]]\n            }\n            if(isTRUE(best.class != \"NA\")){\n              BLAST10_merge[[i]] &lt;- BLAST10_merge[[i]] %&gt;%\n                filter(class == best.class) %&gt;%\n                arrange(desc(pident)) %&gt;% .[1,] %&gt;%\n                mutate(species = NA, genus = NA, family = NA, order = NA)\n            } else {\n              \n              # Frequency of phylum\n              phylum &lt;- as.data.frame(table(BLAST10_merge[[i]]$phylum)) %&gt;%\n                `colnames&lt;-`(c(\"phylum\", \"freq\")) %&gt;% \n                mutate(phylum = as.character(phylum))\n              \n              ph.lim &lt;- ph/100*nrow(BLAST10_merge[[i]])\n              \n              if(max(phylum$freq) &gt;= ph.lim){\n                best.phylum &lt;- phylum$phylum[[which(phylum$freq &gt;= ph.lim)]]\n              }\n              if(isTRUE(best.phylum != \"NA\")){\n                BLAST10_merge[[i]] &lt;- BLAST10_merge[[i]] %&gt;%\n                  filter(phylum == best.phylum) %&gt;%\n                  arrange(desc(pident)) %&gt;% .[1,] %&gt;%\n                  mutate(species = NA, genus = NA, family = NA, order = NA, class = NA)\n              } else {\n                \n                # Frequency of kingdom\n                kingdom &lt;- as.data.frame(table(BLAST10_merge[[i]]$kingdom)) %&gt;%\n                  `colnames&lt;-`(c(\"kingdom\", \"freq\")) %&gt;% \n                  mutate(kingdom = as.character(kingdom))\n                \n                ki.lim &lt;- ki/100*nrow(BLAST10_merge[[i]])\n                \n                if(max(kingdom$freq) &gt;= ki.lim){\n                  best.kingdom &lt;- kingdom$kingdom[[which(kingdom$freq &gt;= ki.lim)]]\n                }\n                if(isTRUE(best.kingdom != \"NA\")){\n                  BLAST10_merge[[i]] &lt;- BLAST10_merge[[i]] %&gt;%\n                    filter(kingdom == best.kingdom) %&gt;%\n                    arrange(desc(pident)) %&gt;% .[1,] %&gt;%\n                    mutate(species = NA, genus = NA, family = NA, order = NA, \n                           class = NA, phylum = NA)\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n  \n  BLAST10_merge &lt;- BLAST10_merge %&gt;% map_df(~as.data.frame(.x))\n  \n  return(BLAST10_merge)\n}",
+    "crumbs": [
+      "Get started",
+      "Install R and packages"
+    ]
+  },
+  {
     "objectID": "pages/alpha.div.html",
     "href": "pages/alpha.div.html",
     "title": "Alpha diversity",
@@ -127,47 +170,14 @@
     ]
   },
   {
-    "objectID": "pages/diff.abund.html",
-    "href": "pages/diff.abund.html",
-    "title": "Differential abundance",
+    "objectID": "pages/filter.rare.html",
+    "href": "pages/filter.rare.html",
+    "title": "Global filtering",
     "section": "",
-    "text": "Download the script 030_diff_abund.R, or copy the codes below into your own script.\n\n\n Download script",
+    "text": "Scripts used to do a preliminary filtering to remove the less abundant OTUs, which are most often artifacts. These also usually coincide with the OTUs with lowest BLAST accuracy.\nBefore any other step, we should remove the features that have too low frequency. To do this, we sum the reads for all features, obtaining the total read count for each one. We then calculate the average feature frequency, and only select the OTUs with a frequency larger than 0.05% of the average frequency.\nDownload the script 003_global_filter.R, or copy the codes below into your own script.\n\n\n Download script",
     "crumbs": [
-      "Statistical Analyses",
-      "Differential abundance"
-    ]
-  },
-  {
-    "objectID": "pages/install.html",
-    "href": "pages/install.html",
-    "title": "Install R and required packages",
-    "section": "",
-    "text": "To work in R, you’ll need to install R and RStudio. Both programs are free and easy to download. For an easy step by step, follow the procedure described here.\n\n\n\n\n\n\nTipSet working directory\n\n\n\nIn each of your script, always start with setting the working directory to avoid issues with folder structure and ensure that your RData is saved in the proper location.\n\nsetwd(\"some_folder/my_working_directory\")",
-    "crumbs": [
-      "Install R and packages",
-      " "
-    ]
-  },
-  {
-    "objectID": "pages/install.html#r-and-rstudio",
-    "href": "pages/install.html#r-and-rstudio",
-    "title": "Install R and required packages",
-    "section": "",
-    "text": "To work in R, you’ll need to install R and RStudio. Both programs are free and easy to download. For an easy step by step, follow the procedure described here.\n\n\n\n\n\n\nTipSet working directory\n\n\n\nIn each of your script, always start with setting the working directory to avoid issues with folder structure and ensure that your RData is saved in the proper location.\n\nsetwd(\"some_folder/my_working_directory\")",
-    "crumbs": [
-      "Install R and packages",
-      " "
-    ]
-  },
-  {
-    "objectID": "pages/install.html#required-packages",
-    "href": "pages/install.html#required-packages",
-    "title": "Install R and required packages",
-    "section": "Required packages",
-    "text": "Required packages\nSome packages from the CRAN are required to run the examples on this website.\nDownload the script 001_required_packages.R, or copy the codes below into your own script.\n\n\n Download script\n\n\n\n# Install packages\n# installed from BiocManager ---------------------------------------------------\n\nif (!requireNamespace(\"BiocManager\", quietly = TRUE))\n  install.packages(\"BiocManager\")\n\n# decontam\nif (!require(\"decontam\", quietly = TRUE))\n  BiocManager::install(\"decontam\")\n\n# phyloseq\nif (!require(\"phyloseq\", quietly = TRUE))\n  BiocManager::install(\"phyloseq\")\n\n# CRAN packages ----------------------------------------------------------------\n\nif (!require(\"ggplot2\", quietly = TRUE))\n  install.packages(\"ggplot2\")\n\nif (!require(\"ggpubr\", quietly = TRUE))\n  install.packages(\"ggpubr\")\n\nif (!require(\"vegan\", quietly = TRUE))\n  install.packages(\"vegan\")\n\nif (!require(\"openxlsx\", quietly = TRUE))\n  install.packages(\"openxlsx\")\n\nif (!require(\"plyr\", quietly = TRUE))\n  install.packages(\"plyr\")\n\nif (!require(\"dplyr\", quietly = TRUE))\n  install.packages(\"dplyr\")\n\n# homemade functions -----------------------------------------------------------\n\nremove_taxa &lt;- function(badTaxa, physeq){\n  allTaxa &lt;- taxa_names(physeq)\n  cleanTaxa &lt;- allTaxa[!(allTaxa %in% badTaxa)]\n  return(prune_taxa(cleanTaxa, physeq))\n}\n\n\n# Load packages\nlibrary(decontam)\nlibrary(phyloseq)\nlibrary(ggplot2)\nlibrary(ggpubr)\nlibrary(vegan)\nlibrary(openxlsx)\nlibrary(plyr)\nlibrary(dplyr) # always load dplyr last to avoid conflicts between packages",
-    "crumbs": [
-      "Install R and packages",
-      " "
+      "Handling OTU tables",
+      "Global filtering"
     ]
   },
   {
