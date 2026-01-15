@@ -14,23 +14,18 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      # --- Add: install R so Quarto can run R code chunks ---
-      - name: Set up R
-        uses: r-lib/actions/setup-r@v2
-
-      # --- Add: install/cached R packages used by your .qmd files ---
-      # If you have an renv.lock, this will use it automatically.
-      # Otherwise it will look for DESCRIPTION, or you can list packages explicitly.
-      - name: Set up R dependencies
-        uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          cache-version: 1
-          # Uncomment and list packages if you are NOT using renv/DESCRIPTION:
-          packages: |
-            any::downloadthis
-
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Install R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: '4.5.2'
+
+      - name: Install R Dependencies
+        uses: r-lib/actions/setup-renv@v2
+        with:
+          cache-version: 1
 
       - name: Render and Publish
         uses: quarto-dev/quarto-actions/publish@v2

@@ -1,9 +1,6 @@
 project:
   type: website
 
-execute:
-  freeze: auto
-
 format:
   html:
     toc: true
@@ -32,12 +29,12 @@ website:
         text: "Installation"
       - file: data.prep.qmd
         text: "Data preparation"
+      - file: control.qmd
+        text: "Negative controls"
       - file: filter.rare.qmd
         text: "Global filtering"
       - file: taxonomy.qmd
         text: "Taxonomy filtering"
-      - file: control.qmd
-        text: "Negative controls"
       - file: normalize.qmd
         text: "Normalization and rarefaction"
       - file: alpha.div.qmd

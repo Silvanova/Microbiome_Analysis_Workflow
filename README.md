@@ -1,5 +1,4 @@
-# Microbiome analyses workflow
-Karelle RheaultDavide Barsotti
+# Microbiome analysis workflow
 
 This workflow was created for microbiome analyses within the Silva Nova
 project, to ensure that all publications related to the Silva Nova
@@ -10,14 +9,15 @@ accessible and streamlined.
 Decisions for each step of the workflow are supported by literature and
 R scripts, which aim to answer the following questions:
 
-1.  Should rare and scarce species be removed? If so, what are the
+1.  How to handle negative and positive controls?
+2.  Should rare and scarce species be removed? If so, what are the
     thresholds?
-2.  After taxonomy assignation, which taxa should be kept or removed?
+3.  After taxonomy assignation, which taxa should be kept or removed?
     What are the quality threshold for species identification with
     BLAST?
-3.  When should we rarefy? What other normalization methods should be
+4.  When should we rarefy? What other normalization methods should be
     used?
-4.  Which diversity metrics (alpha and beta) can be used with microbiome
+5.  Which diversity metrics (alpha and beta) can be used with microbiome
     data?
 
 Visit [our GitHub web
@@ -26,7 +26,8 @@ user friendly walk-through of the workflow.
 
 ## Community Guidelines
 
-Authors: Karelle Rheault and Davide Barsotti
+Authors: [Karelle Rheault](https://github.com/Qepanna) and [Davide
+Barsotti](https://github.com/dbarsotti)
 
 To report problems, seek support or contribute to the workflow, please
 contact the maintainer, Karelle Rheault (<karh@ign.ku.dk>). Suggestions
