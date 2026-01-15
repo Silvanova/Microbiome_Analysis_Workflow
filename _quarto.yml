@@ -10,6 +10,7 @@ format:
     toc-expand: 1
     toc-depth: 4
     link-external-newwindow: true
+    link-external-filter: '^(?:http:|https:)\/\/(?:www\.)*(silvanova\.github\.io)\/.*$'
 
 website:
   title: "SilvaNova_microbiome"

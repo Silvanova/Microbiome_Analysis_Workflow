@@ -1,5 +1,5 @@
 ---
-title: "Microbiome analyses workflow"
+title: "Microbiome analysis workflow"
 editor: visual
 format:
   html:
