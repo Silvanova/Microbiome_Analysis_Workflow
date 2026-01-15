@@ -1,62 +1,67 @@
 [
   {
-    "objectID": "taxonomy.html",
-    "href": "taxonomy.html",
+    "objectID": "pages/taxonomy.html",
+    "href": "pages/taxonomy.html",
     "title": "Taxonomy filtering",
     "section": "",
     "text": "Scripts used to filter away the otus with unsatisfactory BLAST results. In this script, users can find the thresholds chosen to select OTUs at different taxonomic levels. A first step in analyses should be subsetting to the Kingdom one wants to analyse (e.g. Fungi for ITS). Here one can also filter away the taxonomic groups that are not likely to be found in european forests (e.g. Gorillas and starfishes) (See below for values of % identity and )\nDownload the script 004_taxonomy_filter.R, or copy the codes below into your own script.\n\n\n Download script\n\n\n\nThreshold for BLAST quality check\n% identification:\n\nKingdom:\nPhylum:\nClass:\nOrder:\nFamily:\nGenus:\nSpecies:\n\nq cov:\n\nKingdom:\nPhylum:\nClass:\nOrder:\nFamily:\nGenus:\nSpecies:\n\n\n\nList of taxa to be included by analyses\nAttention within mainly terrestrial phyla, there can be classes or other lower taxonomic groups that belong to the sea. we should check at least the class level (e.g. Pycnogonida or Polychaeta).\n\nTaxa to include: CO1 analyses for arthropoda\nPhylum: Anellida, Arthropoda, Nematoda, Platyhelmynthes, Tardigrada, Rotifera, Mollusca Class: Hexapoda, Chelicerata/Aracnida, Gastropoda,\n\n\nTaxa to include: ITS analyses for fungi\nthis one is hard!\n\n\nTaxa to include: 16S analyses for bacteria\nis this even possible?",
     "crumbs": [
+      "Handling OTU tables",
       "Taxonomy filtering"
     ]
   },
   {
-    "objectID": "control.html",
-    "href": "control.html",
-    "title": "Deal with negative controls",
-    "section": "",
-    "text": "for now: remove the rows where controls are &gt; 0 to do: look for a reference on the methods to use controls in a more statistically sound way\nDownload the script 005_negative_control.R, or copy the codes below into your own script.\n\n\n Download script",
-    "crumbs": [
-      "Negative controls"
-    ]
-  },
-  {
-    "objectID": "install.html",
-    "href": "install.html",
-    "title": "Install R and required packages",
-    "section": "",
-    "text": "To work in R, you’ll need to install R and RStudio. Both programs are free and easy to download. For an easy step by step, follow the procedure described here.\n\n\n\n\n\n\nTipSet working directory\n\n\n\nIn each of your script, always start with setting the working directory to avoid issues with folder structure and ensure that your RData is saved in the proper location.\n\nsetwd(\"some_folder/my_working_directory\")",
-    "crumbs": [
-      "Installation"
-    ]
-  },
-  {
-    "objectID": "install.html#r-and-rstudio",
-    "href": "install.html#r-and-rstudio",
-    "title": "Install R and required packages",
-    "section": "",
-    "text": "To work in R, you’ll need to install R and RStudio. Both programs are free and easy to download. For an easy step by step, follow the procedure described here.\n\n\n\n\n\n\nTipSet working directory\n\n\n\nIn each of your script, always start with setting the working directory to avoid issues with folder structure and ensure that your RData is saved in the proper location.\n\nsetwd(\"some_folder/my_working_directory\")",
-    "crumbs": [
-      "Installation"
-    ]
-  },
-  {
-    "objectID": "install.html#required-packages",
-    "href": "install.html#required-packages",
-    "title": "Install R and required packages",
-    "section": "Required packages",
-    "text": "Required packages\nSome packages from the CRAN are required to run the examples on this website.\nDownload the script 001_required_packages.R, or copy the codes below into your own script.\n\n\n Download script\n\n\n\n# Install packages\n# installed from BiocManager ---------------------------------------------------\n\nif (!requireNamespace(\"BiocManager\", quietly = TRUE))\n  install.packages(\"BiocManager\")\n\n# decontam\nif (!require(\"decontam\", quietly = TRUE))\n  BiocManager::install(\"decontam\")\n\n# phyloseq\nif (!require(\"phyloseq\", quietly = TRUE))\n  BiocManager::install(\"phyloseq\")\n\n# CRAN packages ----------------------------------------------------------------\n\nif (!require(\"ggplot2\", quietly = TRUE))\n  install.packages(\"ggplot2\")\n\nif (!require(\"ggpubr\", quietly = TRUE))\n  install.packages(\"ggpubr\")\n\nif (!require(\"vegan\", quietly = TRUE))\n  install.packages(\"vegan\")\n\nif (!require(\"openxlsx\", quietly = TRUE))\n  install.packages(\"openxlsx\")\n\nif (!require(\"plyr\", quietly = TRUE))\n  install.packages(\"plyr\")\n\nif (!require(\"dplyr\", quietly = TRUE))\n  install.packages(\"dplyr\")\n\n# homemade functions -----------------------------------------------------------\n\nremove_taxa &lt;- function(badTaxa, physeq){\n  allTaxa &lt;- taxa_names(physeq)\n  cleanTaxa &lt;- allTaxa[!(allTaxa %in% badTaxa)]\n  return(prune_taxa(cleanTaxa, physeq))\n}\n\n\n# Load packages\nlibrary(decontam)\nlibrary(phyloseq)\nlibrary(ggplot2)\nlibrary(ggpubr)\nlibrary(vegan)\nlibrary(openxlsx)\nlibrary(plyr)\nlibrary(dplyr) # always load dplyr last to avoid conflicts between packages",
-    "crumbs": [
-      "Installation"
-    ]
-  },
-  {
-    "objectID": "normalize.html",
-    "href": "normalize.html",
+    "objectID": "pages/normalize.html",
+    "href": "pages/normalize.html",
     "title": "Normalization and rarefaction",
     "section": "",
     "text": "Scripts used to perform data transformation. This is an alternative to thinning which preserves all the data. Rather than removing information, this method recognised the compositional nature of the data and transforms it in the logarithm of the ratio of counts within each sample. The data changes but the transformation allows comparability between samples. The script includes both the transformation and extra checks.\nScripts used to perform data thinning. That is, randomly resampling a subset of the data so that all samples have the same sampling/sequencing depth. This “ensures” comparability between samples but also causes a significant loss of data. Included are notes on how to evaluate thinning threshold and how to assess the effects of the data loss.\nDownload the scripts 006_normalization.R and 007_rarefaction.R, or copy the codes below into your own script.\n\n\n\n \n\n\n Download normalization script\n\n\n \n\n\n Download rarefaction script\n\n\n \n\n\n\n\nhow to decide if the data is suitable for thinning\nThe rarefaction curve reaches a plateau.\n\n\nhow to decide on the threshold\nSet a threshold that gets as close as possible to the plateau, removing max N samples\n15th percentile of mean sequencing depth (Karelle’s previous lab)",
     "crumbs": [
+      "Handling OTU tables",
       "Normalization and rarefaction"
+    ]
+  },
+  {
+    "objectID": "pages/filter.rare.html",
+    "href": "pages/filter.rare.html",
+    "title": "Global filtering",
+    "section": "",
+    "text": "Scripts used to do a preliminary filtering to remove the less abundant OTUs, which are most often artifacts. These also usually coincide with the OTUs with lowest BLAST accuracy.\nBefore any other step, we should remove the features that have too low frequency. To do this, we sum the reads for all features, obtaining the total read count for each one. We then calculate the average feature frequency, and only select the OTUs with a frequency larger than 0.05% of the average frequency.\nDownload the script 003_global_filter.R, or copy the codes below into your own script.\n\n\n Download script",
+    "crumbs": [
+      "Handling OTU tables",
+      "Global filtering"
+    ]
+  },
+  {
+    "objectID": "pages/data.prep.html",
+    "href": "pages/data.prep.html",
+    "title": "Data preparation",
+    "section": "",
+    "text": "To get started with the data analysis, you must first ensure that the raw data is in the right format. This script prepares the raw data into a phyloseq object and produces the .RData files used in the next steps.\nDownload the script 002_data_preparation.R, or copy the codes below into your own script.\n\n\n Download script\n\n\n\n\n\n\n\n\nTipSource another script\n\n\n\nIn this workflow, the first script is used to install and load R packages. To make sure that all packages are installed and loaded, one should run that script before every other script. A quick and easy way to do so is to source the script at the beginning of every other script:\n\n# Load packages\nsource(\"001_required_packages.R\")\n\n\n\n\nAuxiliary file\nThe auxiliary file contains data about samples, which is used to filter samples in the phyloseq object. This file could be, for example, an Excel sheet, a .txt file or a .csv file.\n\n# Load an Excel sheet (.xlsx)\n\n\n# Load a text file (.txt or .csv)\n\n\n\nTaxonomy table\nThe taxonomy table was generated\n\n\nOTU table\n\n\nFormat the data\n\n\nSave as RData",
+    "crumbs": [
+      "Handling OTU tables",
+      "Data preparation"
+    ]
+  },
+  {
+    "objectID": "pages/beta.div.html",
+    "href": "pages/beta.div.html",
+    "title": "Beta diversity",
+    "section": "",
+    "text": "Scripts used to calcualte a distance matrix to be used in further analyses. Several matrices can be calculated with different distance metrics, based on the research question. The distance can be e.g. giving more weight to the common or rare species, or finding a bit more balance, or it could be better suited for presence-absence data if one wants to use that.\nDownload the script 020_beta_diversity.R, or copy the codes below into your own script.\n\n\n Download script",
+    "crumbs": [
+      "Statistical Analyses",
+      "Beta diversity"
+    ]
+  },
+  {
+    "objectID": "pages/OTU.tables.html",
+    "href": "pages/OTU.tables.html",
+    "title": "Handling OTU tables",
+    "section": "",
+    "text": "Handling OTU tables",
+    "crumbs": [
+      "Handling OTU tables"
     ]
   },
   {
@@ -66,7 +71,7 @@
     "section": "",
     "text": "This workflow was created for microbiome analyses within the Silva Nova project, to ensure that all publications related to the Silva Nova project use the same data processing, and avoid inconsistencies between sub-projects. This workflow should also make microbial analyses more accessible and streamlined.\nDecisions for each step of the workflow are supported by literature and R scripts, which aim to answer the following questions:",
     "crumbs": [
-      "About"
+      " "
     ]
   },
   {
@@ -74,9 +79,9 @@
     "href": "index.html#structure",
     "title": "Microbiome analysis workflow",
     "section": "Structure",
-    "text": "Structure\nIn the sidebar menu of this webpage, you will find each step of the workflow:\n\nInstall R and required packages: get started with RStudio and install the packages required for the analyses in this workflow\nData preparation: prepare OTU tables, manage metadata, and convert raw files to .RData\nNormalization and rarefaction: normalize or rarefy data to control for variable sequencing depth\nGlobal filtering: filter out singletons and rare OTUs\nTaxonomy filtering: filter OTUs based on taxonomy and BLAST quality thresholds\nControls: deal with OTUs found in negative controls\nAlpha diversity: choose the best alpha diversity metrics to answer your hypothesis\nBeta diversity: choose the right transformation and the right distance matrix for beta diversity analyses\nDifferential abundance: perform statistical tests to find differential abundance of taxa",
+    "text": "Structure\nIn the sidebar menu of this webpage, you will find each step of the workflow:\n\nInstall R and required packages: get started with RStudio and install the packages required for the analyses in this workflow\nData preparation: prepare OTU tables, manage metadata, and convert raw files to .RData\nControls: deal with OTUs found in negative and positive controls\nGlobal filtering: filter out singletons and rare OTUs\nTaxonomy filtering: filter OTUs based on taxonomy and BLAST quality thresholds\nNormalization and rarefaction: normalize or rarefy data to control for variable sequencing depth\nAlpha diversity: choose the best alpha diversity metrics to answer your hypothesis\nBeta diversity: choose the right transformation and the right distance matrix for beta diversity analyses\nDifferential abundance: perform statistical tests to find differential abundance of taxa",
     "crumbs": [
-      "About"
+      " "
     ]
   },
   {
@@ -86,7 +91,7 @@
     "section": "Download all scripts",
     "text": "Download all scripts\nClick on the button below to download all pre-made scripts, or copy codes from each page of this website.\n\n\n Download scripts",
     "crumbs": [
-      "About"
+      " "
     ]
   },
   {
@@ -96,57 +101,83 @@
     "section": "Acknowledgements",
     "text": "Acknowledgements\nThis workflow development was supported by the Silva Nova project funded by the NOVO Nordisk Foundation (grant no. NNF20OC0059948).",
     "crumbs": [
-      "About"
+      " "
     ]
   },
   {
-    "objectID": "diff.abund.html",
-    "href": "diff.abund.html",
-    "title": "Differential abundance",
-    "section": "",
-    "text": "Download the script 030_diff_abund.R, or copy the codes below into your own script.\n\n\n Download script",
-    "crumbs": [
-      "Differential abundance"
-    ]
-  },
-  {
-    "objectID": "filter.rare.html",
-    "href": "filter.rare.html",
-    "title": "Global filtering",
-    "section": "",
-    "text": "Scripts used to do a preliminary filtering to remove the less abundant OTUs, which are most often artifacts. These also usually coincide with the OTUs with lowest BLAST accuracy.\nBefore any other step, we should remove the features that have too low frequency. To do this, we sum the reads for all features, obtaining the total read count for each one. We then calculate the average feature frequency, and only select the OTUs with a frequency larger than 0.05% of the average frequency.\nDownload the script 003_global_filter.R, or copy the codes below into your own script.\n\n\n Download script",
-    "crumbs": [
-      "Global filtering"
-    ]
-  },
-  {
-    "objectID": "beta.div.html",
-    "href": "beta.div.html",
-    "title": "Beta diversity",
-    "section": "",
-    "text": "Scripts used to calcualte a distance matrix to be used in further analyses. Several matrices can be calculated with different distance metrics, based on the research question. The distance can be e.g. giving more weight to the common or rare species, or finding a bit more balance, or it could be better suited for presence-absence data if one wants to use that.\nDownload the script 020_beta_diversity.R, or copy the codes below into your own script.\n\n\n Download script",
-    "crumbs": [
-      "Beta diversity"
-    ]
-  },
-  {
-    "objectID": "data.prep.html",
-    "href": "data.prep.html",
-    "title": "Data preparation",
-    "section": "",
-    "text": "To get started with the data analysis, you must first ensure that the raw data is in the right format. This script prepares the raw data into a phyloseq object and produces the .RData files used in the next steps.\nDownload the script 002_data_preparation.R, or copy the codes below into your own script.\n\n\n Download script\n\n\n\n\n\n\n\n\nTipSource another script\n\n\n\nIn this workflow, the first script is used to install and load R packages. To make sure that all packages are installed and loaded, one should run that script before every other script. A quick and easy way to do so is to source the script at the beginning of every other script:\n\n# Load packages\nsource(\"001_required_packages.R\")\n\n\n\n\nAuxiliary file\nThe auxiliary file contains data about samples, which is used to filter samples in the phyloseq object. This file could be, for example, an Excel sheet, a .txt file or a .csv file.\n\n# Load an Excel sheet (.xlsx)\n\n\n# Load a text file (.txt or .csv)\n\n\n\nTaxonomy table\nThe taxonomy table was generated\n\n\nOTU table\n\n\nFormat the data\n\n\nSave as RData",
-    "crumbs": [
-      "Data preparation"
-    ]
-  },
-  {
-    "objectID": "alpha.div.html",
-    "href": "alpha.div.html",
+    "objectID": "pages/alpha.div.html",
+    "href": "pages/alpha.div.html",
     "title": "Alpha diversity",
     "section": "",
     "text": "Download the script 010_alpha_diversity.R, or copy the codes below into your own script.\n\n\n Download script",
     "crumbs": [
+      "Statistical Analyses",
       "Alpha diversity"
+    ]
+  },
+  {
+    "objectID": "pages/control.html",
+    "href": "pages/control.html",
+    "title": "Deal with negative controls",
+    "section": "",
+    "text": "for now: remove the rows where controls are &gt; 0 to do: look for a reference on the methods to use controls in a more statistically sound way\nDownload the script 005_negative_control.R, or copy the codes below into your own script.\n\n\n Download script",
+    "crumbs": [
+      "Handling OTU tables",
+      "Controls"
+    ]
+  },
+  {
+    "objectID": "pages/diff.abund.html",
+    "href": "pages/diff.abund.html",
+    "title": "Differential abundance",
+    "section": "",
+    "text": "Download the script 030_diff_abund.R, or copy the codes below into your own script.\n\n\n Download script",
+    "crumbs": [
+      "Statistical Analyses",
+      "Differential abundance"
+    ]
+  },
+  {
+    "objectID": "pages/install.html",
+    "href": "pages/install.html",
+    "title": "Install R and required packages",
+    "section": "",
+    "text": "To work in R, you’ll need to install R and RStudio. Both programs are free and easy to download. For an easy step by step, follow the procedure described here.\n\n\n\n\n\n\nTipSet working directory\n\n\n\nIn each of your script, always start with setting the working directory to avoid issues with folder structure and ensure that your RData is saved in the proper location.\n\nsetwd(\"some_folder/my_working_directory\")",
+    "crumbs": [
+      "Install R and packages",
+      " "
+    ]
+  },
+  {
+    "objectID": "pages/install.html#r-and-rstudio",
+    "href": "pages/install.html#r-and-rstudio",
+    "title": "Install R and required packages",
+    "section": "",
+    "text": "To work in R, you’ll need to install R and RStudio. Both programs are free and easy to download. For an easy step by step, follow the procedure described here.\n\n\n\n\n\n\nTipSet working directory\n\n\n\nIn each of your script, always start with setting the working directory to avoid issues with folder structure and ensure that your RData is saved in the proper location.\n\nsetwd(\"some_folder/my_working_directory\")",
+    "crumbs": [
+      "Install R and packages",
+      " "
+    ]
+  },
+  {
+    "objectID": "pages/install.html#required-packages",
+    "href": "pages/install.html#required-packages",
+    "title": "Install R and required packages",
+    "section": "Required packages",
+    "text": "Required packages\nSome packages from the CRAN are required to run the examples on this website.\nDownload the script 001_required_packages.R, or copy the codes below into your own script.\n\n\n Download script\n\n\n\n# Install packages\n# installed from BiocManager ---------------------------------------------------\n\nif (!requireNamespace(\"BiocManager\", quietly = TRUE))\n  install.packages(\"BiocManager\")\n\n# decontam\nif (!require(\"decontam\", quietly = TRUE))\n  BiocManager::install(\"decontam\")\n\n# phyloseq\nif (!require(\"phyloseq\", quietly = TRUE))\n  BiocManager::install(\"phyloseq\")\n\n# CRAN packages ----------------------------------------------------------------\n\nif (!require(\"ggplot2\", quietly = TRUE))\n  install.packages(\"ggplot2\")\n\nif (!require(\"ggpubr\", quietly = TRUE))\n  install.packages(\"ggpubr\")\n\nif (!require(\"vegan\", quietly = TRUE))\n  install.packages(\"vegan\")\n\nif (!require(\"openxlsx\", quietly = TRUE))\n  install.packages(\"openxlsx\")\n\nif (!require(\"plyr\", quietly = TRUE))\n  install.packages(\"plyr\")\n\nif (!require(\"dplyr\", quietly = TRUE))\n  install.packages(\"dplyr\")\n\n# homemade functions -----------------------------------------------------------\n\nremove_taxa &lt;- function(badTaxa, physeq){\n  allTaxa &lt;- taxa_names(physeq)\n  cleanTaxa &lt;- allTaxa[!(allTaxa %in% badTaxa)]\n  return(prune_taxa(cleanTaxa, physeq))\n}\n\n\n# Load packages\nlibrary(decontam)\nlibrary(phyloseq)\nlibrary(ggplot2)\nlibrary(ggpubr)\nlibrary(vegan)\nlibrary(openxlsx)\nlibrary(plyr)\nlibrary(dplyr) # always load dplyr last to avoid conflicts between packages",
+    "crumbs": [
+      "Install R and packages",
+      " "
+    ]
+  },
+  {
+    "objectID": "pages/stats.html",
+    "href": "pages/stats.html",
+    "title": "Statistical Analyses",
+    "section": "",
+    "text": "Statistical Analyses",
+    "crumbs": [
+      "Statistical Analyses"
     ]
   }
 ]

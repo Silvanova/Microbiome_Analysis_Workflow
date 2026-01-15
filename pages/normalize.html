@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Data preparation – SilvaNova_microbiome</title>
+<title>Normalization and rarefaction – Silva Nova MAW</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,70 +20,34 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-html { -webkit-text-size-adjust: 100%; }
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./control.html" rel="next">
-<link href="./install.html" rel="prev">
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-f4f457e805d2b247f730789ca0bbc19f.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../pages/taxonomy.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-eeba5ed4e7b862b439362aad387f8aa0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
-  "location": "sidebar",
+  "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
-  "panel-placement": "start",
-  "type": "textbox",
+  "panel-placement": "end",
+  "type": "overlay",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
@@ -105,108 +69,105 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-label": "Search"
   }
 }</script>
-<script src="site_libs/font-awesome-6.7.2/js/script.js"></script>
+<script src="../site_libs/font-awesome-6.7.2/js/script.js"></script>
 
 
 </head>
 
-<body class="nav-sidebar docked quarto-light">
+<body class="nav-sidebar docked nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Silva Nova MAW</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/install.html"> 
+<span class="menu-text">Install R and packages</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="../pages/OTU.tables.html" aria-current="page"> 
+<span class="menu-text">Handling OTU tables</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../pages/stats.html"> 
+<span class="menu-text">Statistical Analyses</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+    <a href="https://twitter.com/SilvaNova_NNF" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-twitter"></i></a>
+    <a href="https://github.com/Silvanova/Common_scripts" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./data.prep.html">Data preparation</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../pages/normalize.html">Normalization and rarefaction</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
-        <i class="bi bi-search"></i>
-      </button>
     </div>
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
-      <a href="./index.html" class="sidebar-logo-link">
-      <img src="./images/Silva Nova logo.jpg" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
-      <img src="./images/Silva Nova logo.jpg" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      <img src="../images/Silva Nova logo.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
+      <img src="../images/Silva Nova logo.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
       </a>
-      <div class="sidebar-tools-main">
-    <a href="https://twitter.com/SilvaNova_NNF" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-twitter"></i></a>
-    <a href="https://github.com/Silvanova/Common_scripts" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
-</div>
       </div>
-        <div class="mt-2 flex-shrink-0 align-items-center">
-        <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Search"></div>
-        </div>
-        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">About</span></a>
+  <a href="../pages/OTU.tables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Handling OTU tables</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./install.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Installation</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./data.prep.html" class="sidebar-item-text sidebar-link active">
+  <a href="../pages/data.prep.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Data preparation</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./control.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Negative controls</span></a>
+  <a href="../pages/control.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Controls</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./filter.rare.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/filter.rare.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Global filtering</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./taxonomy.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/taxonomy.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Taxonomy filtering</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./normalize.html" class="sidebar-item-text sidebar-link">
+  <a href="../pages/normalize.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Normalization and rarefaction</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./alpha.div.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Alpha diversity</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./beta.div.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Beta diversity</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./diff.abund.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Differential abundance</span></a>
   </div>
 </li>
     </ul>
@@ -219,12 +180,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#auxiliary-file" id="toc-auxiliary-file" class="nav-link active" data-scroll-target="#auxiliary-file">Auxiliary file</a></li>
-  <li><a href="#taxonomy-table" id="toc-taxonomy-table" class="nav-link" data-scroll-target="#taxonomy-table">Taxonomy table</a></li>
-  <li><a href="#otu-table" id="toc-otu-table" class="nav-link" data-scroll-target="#otu-table">OTU table</a></li>
-  <li><a href="#format-the-data" id="toc-format-the-data" class="nav-link" data-scroll-target="#format-the-data">Format the data</a></li>
-  <li><a href="#save-as-rdata" id="toc-save-as-rdata" class="nav-link" data-scroll-target="#save-as-rdata">Save as RData</a></li>
-  <li><a href="#section" id="toc-section" class="nav-link" data-scroll-target="#section"></a></li>
+  <li><a href="#how-to-decide-if-the-data-is-suitable-for-thinning" id="toc-how-to-decide-if-the-data-is-suitable-for-thinning" class="nav-link active" data-scroll-target="#how-to-decide-if-the-data-is-suitable-for-thinning">how to decide if the data is suitable for thinning</a></li>
+  <li><a href="#how-to-decide-on-the-threshold" id="toc-how-to-decide-on-the-threshold" class="nav-link" data-scroll-target="#how-to-decide-on-the-threshold">how to decide on the threshold</a></li>
   </ul>
 </nav>
     </div>
@@ -233,7 +190,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Data preparation</h1>
+<h1 class="title">Normalization and rarefaction</h1>
 </div>
 
 
@@ -250,10 +207,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>To get started with the data analysis, you must first ensure that the raw data is in the right format. This script prepares the raw data into a <code>phyloseq</code> object and produces the .RData files used in the next steps.</p>
-<p>Download the script <code>002_data_preparation.R</code>, or copy the codes below into your own script.</p>
-<div class="cell">
-<div class="cell-output-display">
+<p>Scripts used to perform data transformation. This is an alternative to thinning which preserves all the data. Rather than removing information, this method recognised the compositional nature of the data and transforms it in the logarithm of the ratio of counts within each sample. The data changes but the transformation allows comparability between samples. The script includes both the transformation and extra checks.</p>
+<p>Scripts used to perform data thinning. That is, randomly resampling a subset of the data so that all samples have the same sampling/sequencing depth. This “ensures” comparability between samples but also causes a significant loss of data. Included are notes on how to evaluate thinning threshold and how to assess the effects of the data loss.</p>
+<p>Download the scripts <code>006_normalization.R</code> and <code>007_rarefaction.R</code>, or copy the codes below into your own script.</p>
+<div class="cell quarto-layout-panel" data-layout="[[-10,40,-5,35,-10]]">
+<div class="quarto-layout-row">
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 10.0%;justify-content: flex-start;">
+<p>&nbsp;</p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 40.0%;justify-content: flex-start;">
 <button class="btn btn-success" onclick="
     async function downloadFile(event) {
       event.preventDefault();
@@ -264,7 +226,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         const blobUrl = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = blobUrl;
-        a.download = '002_data_preparation.R';
+        a.download = '006_normalization.R';
         a.style.display = 'none';
         document.body.appendChild(a);
         a.dispatchEvent(new MouseEvent('click'));
@@ -279,51 +241,52 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       }
     }
     downloadFile(event);
-  "><i class="fa fa-save"></i> Download script</button>
+  "><i class="fa fa-save"></i> Download normalization script</button>
+</div>
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 5.0%;justify-content: flex-start;">
+<p>&nbsp;</p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 35.0%;justify-content: flex-start;">
+<button class="btn btn-success" onclick="
+    async function downloadFile(event) {
+      event.preventDefault();
+      try {
+        const response = await fetch('data:text/plain;base64,');
+        if (!response.ok) throw new Error('Network response failed');
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = '007_rarefaction.R';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.dispatchEvent(new MouseEvent('click'));
+        document.body.removeChild(a);
+        setTimeout(() => {
+          window.URL.revokeObjectURL(blobUrl);
+        }, 100);
+        return false;
+      } catch (error) {
+        console.error('Download failed:', error);
+        alert('Download failed. Please try again.');
+      }
+    }
+    downloadFile(event);
+  "><i class="fa fa-save"></i> Download rarefaction script</button>
+</div>
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 10.0%;justify-content: flex-start;">
+<p>&nbsp;</p>
 </div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
 </div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Source another script
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>In this workflow, the first script is used to install and load R packages. To make sure that all packages are installed and loaded, one should run that script before every other script. A quick and easy way to do so is to source the script at the beginning of every other script:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load packages</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"001_required_packages.R"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-<section id="auxiliary-file" class="level3">
-<h3 class="anchored" data-anchor-id="auxiliary-file">Auxiliary file</h3>
-<p>The auxiliary file contains data about samples, which is used to filter samples in the <code>phyloseq</code> object. This file could be, for example, an Excel sheet, a .txt file or a .csv file.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load an Excel sheet (.xlsx)</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load a text file (.txt or .csv)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<section id="how-to-decide-if-the-data-is-suitable-for-thinning" class="level4">
+<h4 class="anchored" data-anchor-id="how-to-decide-if-the-data-is-suitable-for-thinning">how to decide if the data is suitable for thinning</h4>
+<p>The rarefaction curve reaches a plateau.</p>
 </section>
-<section id="taxonomy-table" class="level3">
-<h3 class="anchored" data-anchor-id="taxonomy-table">Taxonomy table</h3>
-<p>The taxonomy table was generated</p>
-</section>
-<section id="otu-table" class="level3">
-<h3 class="anchored" data-anchor-id="otu-table">OTU table</h3>
-</section>
-<section id="format-the-data" class="level3">
-<h3 class="anchored" data-anchor-id="format-the-data">Format the data</h3>
-</section>
-<section id="save-as-rdata" class="level3">
-<h3 class="anchored" data-anchor-id="save-as-rdata">Save as RData</h3>
-</section>
-<section id="section" class="level3">
-<h3 class="anchored" data-anchor-id="section"></h3>
+<section id="how-to-decide-on-the-threshold" class="level4">
+<h4 class="anchored" data-anchor-id="how-to-decide-on-the-threshold">how to decide on the threshold</h4>
+<p>Set a threshold that gets as close as possible to the plateau, removing max N samples</p>
+<p>15th percentile of mean sequencing depth (Karelle’s previous lab)</p>
 
 
 </section>
@@ -736,14 +699,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./install.html" class="pagination-link" aria-label="Installation">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Installation</span>
+      <a href="../pages/taxonomy.html" class="pagination-link" aria-label="Taxonomy filtering">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Taxonomy filtering</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./control.html" class="pagination-link" aria-label="Negative controls">
-        <span class="nav-page-text">Negative controls</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->
