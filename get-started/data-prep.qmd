@@ -2,6 +2,7 @@
 title: "Data preparation"
 format: html
 editor: visual
+bibliography: references.bib
 ---
 
 To get started with the data analysis, you must first ensure that the raw data is in the right format. This script prepares the raw data into a `phyloseq` object and produces the .RData files used in the next steps.
@@ -40,7 +41,7 @@ download_dir(
 
 ### Load auxiliary data {#auxfile}
 
-The auxiliary file contains data about samples, which is used to filter samples in the `phyloseq` object. This file could be, for example, an Excel sheet, a .txt file or a .csv file.
+Auxiliary data files contain information about the samples and other types of environmental data. This example auxiliary data file contains site metadata and soil physicochemical analyses. Environmental data can be used in later analyses, such as db-RDA, while metadata can be used to filter samples in the `phyloseq` object.
 
 ```{r}
 #| eval: false
@@ -49,14 +50,36 @@ aux <- read.xlsx("aux_data.xlsx")
 
 # Load a text file (.txt or .csv)
 aux <- read.csv("aux_data.csv")
-
 ```
 
 ### Construct a phyloseq object from BLAST results {#phyloseq}
 
+The procedure is exactly the same with the other target genes (ITS and CO1).
+
 #### Taxonomy table
 
-The taxonomy table was generated
+Our 16S taxonomy table was generated using BLASTn search against SILVA v138.1 database [@quast2012]. Make sure your taxonomy table looks similar to this one before continuing to the next steps.
+
+```{r}
+# Load BLAST results
+BLAST_raw <- read.delim("../raw data/16S_BLAST.txt")
+
+head(BLAST_raw) # Note that the column qseqid is duplicated (qseqid.1)
+```
+
+::: callout-caution
+## Were your samples part of a larger sequencing run containing other samples?
+
+If your samples were mixed with multiple other samples in a larger library, you may find OTUs present in none of your samples. Make sure to remove superflu data before you proceed to the next steps.
+
+```{r}
+#| eval: false
+# Remove NAs or all OTUs with sum == 0
+ntaxa(otu_table_raw) # 70006
+otu_table_raw <- prune_taxa(taxa_sums(otu_table_raw) > 0, otu_table_raw) 
+ntaxa(otu_table_raw) # 25794 (63% of the OTUs were absent of this subset of samples)
+```
+:::
 
 #### OTU table
 
