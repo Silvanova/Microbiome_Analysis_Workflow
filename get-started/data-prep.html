@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.26">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -59,7 +59,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="../site_libs/quarto-nav/headroom.min.js"></script>
 <script src="../site_libs/clipboard/clipboard.min.js"></script>
 <script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
@@ -73,7 +72,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-eeba5ed4e7b862b439362aad387f8aa0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -126,18 +125,79 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
-  <li class="nav-item">
-    <a class="nav-link active" href="../get-started.html" aria-current="page"> 
-<span class="menu-text">Get started</span></a>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-get-started" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Get started</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-get-started">    
+        <li>
+    <a class="dropdown-item" href="../get-started.html">
+ <span class="dropdown-text">Get started</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../pages/OTU.tables.html"> 
-<span class="menu-text">Handling OTU tables</span></a>
+        <li>
+    <a class="dropdown-item" href="../get-started/install.html">
+ <span class="dropdown-text">Install R and packages</span></a>
   </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="../pages/stats.html"> 
-<span class="menu-text">Statistical Analyses</span></a>
+        <li>
+    <a class="dropdown-item" href="../get-started/data-prep.html">
+ <span class="dropdown-text">Data preparation</span></a>
   </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-handling-otu-tables" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Handling OTU tables</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-handling-otu-tables">    
+        <li>
+    <a class="dropdown-item" href="../pages/OTU.tables.html">
+ <span class="dropdown-text">Handling OTU tables</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../pages/control.html">
+ <span class="dropdown-text">Controls</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../pages/filter.rare.html">
+ <span class="dropdown-text">Global filtering</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../pages/taxonomy.html">
+ <span class="dropdown-text">Taxonomy filtering</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../pages/normalize.html">
+ <span class="dropdown-text">Normalization and rarefaction</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-statistical-analyses" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Statistical Analyses</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-statistical-analyses">    
+        <li>
+    <a class="dropdown-item" href="../pages/stats.html">
+ <span class="dropdown-text">Statistical Analyses</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../pages/stats.html">
+ <span class="dropdown-text">Statistical Analyses</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../pages/alpha.div.html">
+ <span class="dropdown-text">Alpha diversity</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../pages/beta.div.html">
+ <span class="dropdown-text">Beta diversity</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../pages/diff.abund.html">
+ <span class="dropdown-text">Differential abundance</span></a>
+  </li>  
+    </ul>
+  </li>
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
@@ -151,9 +211,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <h1 class="quarto-secondary-nav-title no-breadcrumbs">Data preparation</h1>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-        </a>
+        <a class="flex-grow-1 no-decor" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+          <h1 class="quarto-secondary-nav-title">Data preparation</h1>
+        </a>     
     </div>
   </nav>
 </header>
@@ -198,7 +258,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="1">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="4">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
@@ -236,14 +296,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>To get started with the data analysis, you must first ensure that the raw data is in the right format. This script prepares the raw data into a <code>phyloseq</code> object and produces the .RData files used in the next steps.</p>
-<p>Download the script <code>002_data_preparation.R</code>, or copy the codes below into your own script.</p>
-<div class="cell">
-<div class="cell-output-display">
+<p>To follow the example presented on this page directly on your computer, download the script <code>002_data_preparation.R</code> and the example raw data by clicking the buttons below. Alternatively, you may copy the codes below into your own script, and use your own data.</p>
+<div class="cell quarto-layout-panel" data-layout="[[-10,40,-5,35,-10]]">
+<div class="quarto-layout-row">
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 10.0%;justify-content: flex-start;">
+<p>&nbsp;</p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 40.0%;justify-content: flex-start;">
 <button class="btn btn-success" onclick="
     async function downloadFile(event) {
       event.preventDefault();
       try {
-        const response = await fetch('data:text/plain;base64,');
+        const response = await fetch('data:text/plain;base64,Iz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PSMKIyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICMKIyAgUHJlcGFyZSBPVFUgdGFibGVzLCBtYW5hZ2UgYXV4aWxpYXJ5IGRhdGEsIGFuZCBjb252ZXJ0IHJhdyBmaWxlcyB0byAuUkRhdGEgICMKIyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICMKIyAgV3JpdHRlbiBieSBLYXJlbGxlIFJoZWF1bHQ6IGthcmhAaWduLmt1LmRrICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICMKIyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICMKIz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PSMKCiMgU2V0IHdvcmtpbmcgZGlyZWN0b3J5IChtb2RpZnkgdGhlIHBhdGggYmVsb3cgdG8gbWF0Y2ggeW91ciBvd24pCnNldHdkKCJzb21lX2ZvbGRlcl9wYXRoL215X3dvcmtpbmdfZGlyZWN0b3J5IikKCiMgTG9hZCBwYWNrYWdlcwpzb3VyY2UoIjAwMV9yZXF1aXJlZF9wYWNrYWdlcy5SIikKCiMgTG9hZCBhdXhpbGlhcnkgZGF0YSAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCgojIExvYWQgYW4gRXhjZWwgc2hlZXQgKC54bHN4KQphdXggPC0gcmVhZC54bHN4KCIuLi9yYXcgZGF0YS9hdXhfZGF0YS54bHN4IikK');
         if (!response.ok) throw new Error('Network response failed');
         const blob = await response.blob();
         const blobUrl = window.URL.createObjectURL(blob);
@@ -265,6 +329,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     }
     downloadFile(event);
   "><i class="fa fa-save"></i> Download script</button>
+</div>
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 5.0%;justify-content: flex-start;">
+<p>&nbsp;</p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 35.0%;justify-content: flex-start;">
+<button class="btn btn-success" onclick="
+    async function downloadFile(event) {
+      event.preventDefault();
+      try {
+        const response = await fetch('data:application/zip;base64,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');
+        if (!response.ok) throw new Error('Network response failed');
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = 'Silva Nova MAW raw data.zip';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.dispatchEvent(new MouseEvent('click'));
+        document.body.removeChild(a);
+        setTimeout(() => {
+          window.URL.revokeObjectURL(blobUrl);
+        }, 100);
+        return false;
+      } catch (error) {
+        console.error('Download failed:', error);
+        alert('Download failed. Please try again.');
+      }
+    }
+    downloadFile(event);
+  "><i class="fa fa-save"></i> Download example raw data</button>
+</div>
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 10.0%;justify-content: flex-start;">
+<p>&nbsp;</p>
+</div>
 </div>
 </div>
 <section id="auxfile" class="level3">
