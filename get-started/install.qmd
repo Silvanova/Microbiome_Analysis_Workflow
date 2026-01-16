@@ -15,7 +15,7 @@ In each of your script, always start with setting the working directory to avoid
 
 ```{r}
 #| eval: false
-setwd("some_folder/my_working_directory")
+setwd("some_folder_path/my_working_directory")
 ```
 :::
 

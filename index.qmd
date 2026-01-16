@@ -44,9 +44,9 @@ In the sidebar menu of this webpage, you will find each step of the workflow:
 
 -   [**Differential abundance**](diff.abund.qmd): perform statistical tests to find differential abundance of taxa
 
-## Download all scripts
+## Download all scripts and data
 
-Click on the button below to download all pre-made scripts, or copy codes from each page of this website.
+Click on the buttons below to download all pre-made scripts and example raw data sets used with the examples on this website.
 
 ```{r}
 #| echo: false
@@ -55,11 +55,22 @@ library(downloadthis)
 ```
 
 ```{r}
+#| layout: [[-10,30,-5,35,-20]]
 #| echo: false
 download_dir(
   path = "scripts",
-  output_name = "Silva Nova microbiome anlayses R scripts",
+  output_name = "Silva Nova MAW R scripts",
   button_label = "Download scripts",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+download_dir(
+  path = "raw data",
+  output_name = "Silva Nova MAW raw data",
+  button_label = "Download example raw data",
   button_type = "success",
   has_icon = TRUE,
   icon = "fa fa-save",
@@ -71,4 +82,8 @@ download_dir(
 
 This workflow development was supported by the Silva Nova project funded by the NOVO Nordisk Foundation (grant no. NNF20OC0059948).
 
-[![](images/Novo%20Nordisk%20fonden%20logo.png){fig-align="center" width="128"}](https://novonordiskfonden.dk/en/)
+::: {layout="[[45,-10,45]]"}
+[![](images/Silva%20Nova%20logo.png){width="200" fig-align="right" height="120"}](https://ign.ku.dk/english/silvanova/)
+
+[![](images/Novo%20Nordisk%20fonden%20logo.png){fig-align="left" width="128"}](https://novonordiskfonden.dk/en/)
+:::

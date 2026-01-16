@@ -10,7 +10,7 @@ format:
   html:
     theme: minty
     toc: true
-    toc-expand: 1
+    toc-expand: 4
     toc-depth: 4
     link-external-newwindow: true
     link-external-filter: '^(?:http:|https:)\/\/(?:www\.)*(silvanova\.github\.io)\/.*$'
@@ -18,21 +18,52 @@ format:
 website:
   title: "Silva Nova MAW"
   page-navigation: true
+  bread-crumbs: false
   navbar:
     background: primary
     search: true
+    pinned: true
     tools:
       - icon: twitter
         href: https://twitter.com/SilvaNova_NNF
       - icon: github
         href: https://github.com/Silvanova/Common_scripts
+
     left:
       - text: "Get started"
-        href: get-started.qmd
+        menu:
+          - text: "Get started"
+            href: get-started.qmd
+          - text: "Install R and packages"
+            href: get-started/install.qmd
+          - text: "Data preparation"
+            href: get-started/data-prep.qmd
+
       - text: "Handling OTU tables"
-        href: pages/OTU.tables.qmd
+        menu:
+          - text: "Handling OTU tables"
+            href: pages/OTU.tables.qmd
+          - text: "Controls"
+            file: pages/control.qmd
+          - text: "Global filtering"
+            file: pages/filter.rare.qmd
+          - text: "Taxonomy filtering"
+            href: pages/taxonomy.qmd
+          - text: "Normalization and rarefaction"
+            file: pages/normalize.qmd
+
       - text: "Statistical Analyses"
-        href: pages/stats.qmd
+        menu:
+          - text: "Statistical Analyses"
+            href: pages/stats.qmd
+          - text: "Statistical Analyses"
+            file: pages/stats.qmd
+          - text: "Alpha diversity"
+            file: pages/alpha.div.qmd
+          - text: "Beta diversity"
+            file: pages/beta.div.qmd
+          - text: "Differential abundance"
+            file: pages/diff.abund.qmd
 
   sidebar:
     - title: "Silva Nova MAW"

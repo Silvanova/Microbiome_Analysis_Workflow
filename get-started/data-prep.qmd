@@ -6,7 +6,7 @@ editor: visual
 
 To get started with the data analysis, you must first ensure that the raw data is in the right format. This script prepares the raw data into a `phyloseq` object and produces the .RData files used in the next steps.
 
-Download the script `002_data_preparation.R`, or copy the codes below into your own script.
+To follow the example presented on this page directly on your computer, download the script `002_data_preparation.R` and the example raw data by clicking the buttons below. Alternatively, you may copy the codes below into your own script, and use your own data.
 
 ```{r}
 #| echo: false
@@ -15,11 +15,22 @@ library(downloadthis)
 ```
 
 ```{r}
+#| layout: [[-10,40,-5,35,-10]]
 #| echo: false
 download_file(
   path = "../scripts/002_data_preparation.R",
   output_name = "002_data_preparation",
   button_label = "Download script",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+download_dir(
+  path = "../raw data",
+  output_name = "Silva Nova MAW raw data",
+  button_label = "Download example raw data",
   button_type = "success",
   has_icon = TRUE,
   icon = "fa fa-save",
