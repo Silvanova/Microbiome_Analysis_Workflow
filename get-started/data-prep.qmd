@@ -54,35 +54,109 @@ aux <- read.csv("aux_data.csv")
 
 ### Construct a phyloseq object from BLAST results {#phyloseq}
 
-The procedure is exactly the same with the other target genes (ITS and CO1).
+The procedure demonstrated below for 16S can be applied similarly for the other target genes (ITS and CO1). A complete procedure for each target gene can also be found in the downloadable script `002_data_preparation.R`.
 
 #### Taxonomy table
 
 Our 16S taxonomy table was generated using BLASTn search against SILVA v138.1 database [@quast2012]. Make sure your taxonomy table looks similar to this one before continuing to the next steps.
 
 ```{r}
+#| eval: false
 # Load BLAST results
 BLAST_raw <- read.delim("../raw data/16S_BLAST.txt")
 
 head(BLAST_raw) # Note that the column qseqid is duplicated (qseqid.1)
 ```
 
-::: callout-caution
-## Were your samples part of a larger sequencing run containing other samples?
-
-If your samples were mixed with multiple other samples in a larger library, you may find OTUs present in none of your samples. Make sure to remove superflu data before you proceed to the next steps.
+To extract taxonomy from BLAST results, transform the column "X1st_hit" into multiple columns, one per taxonomy level (Kingdom, Phylum, Class, etc.), extract the BLAST ID and clean the resulting table.
 
 ```{r}
 #| eval: false
-# Remove NAs or all OTUs with sum == 0
-ntaxa(otu_table_raw) # 70006
-otu_table_raw <- prune_taxa(taxa_sums(otu_table_raw) > 0, otu_table_raw) 
-ntaxa(otu_table_raw) # 25794 (63% of the OTUs were absent of this subset of samples)
+# Extract taxonomy from BLAST results
+taxonomy_raw <- BLAST_raw %>%
+  # Split columns based on delimiter (;)
+  separate_wider_delim(cols = X1st_hit, delim = ";",
+                       names = c("kingdom", "phylum", "class", "order", "family",
+                                 "genus", "species", "x1", "x2", "x3", "x4", "x5",
+                                 "x6", "x7", "x8", "x9", "x10", "x11", "x12"),
+                       too_few = "align_start") %>%
+  # Split kingdom column containing a BLAST ID, based on delimiter (space)
+  separate_wider_delim(cols = kingdom, delim = " ",
+                       names = c("BLAST_ID", "kingdom"),
+                       too_few = "align_end") %>%
+  # Filter out OTUs without significant similarity found
+  filter(kingdom != "No_significant_similarity_found" & !is.na(kingdom) &
+           BLAST_ID != "No_significant_similarity_found") %>%
+  # Remove duplicated column qseqid.1 and rename qseqid column to OTU
+  as.data.frame() %>% dplyr::rename(OTU = qseqid) %>% select(!qseqid.1) %>%
+  # OTU names must be moved to row names
+  `row.names<-`(.$OTU)
 ```
-:::
 
 #### OTU table
 
-#### Format the data
+::: callout-caution
+## Were your samples part of a larger sequencing run containing other samples?
+
+If your samples were mixed with multiple other samples in a larger library, you will need to filter your OTU table to keep only your own samples. You may then find OTUs present in none of your samples (they were present in the other samples you removed). Follow the procedure below to make sure to remove superfluous data before you proceed to the next scripts.
+:::
+
+First load your OTU table and remove samples absent from your auxiliary data. Remember to include blanks, or negative and positive controls in your auxiliary data. Before proceeding to the next steps, make sure that the sample identifiers in your auxiliary file match those in the OTU table (column names).
+
+```{r}
+#| eval: false
+# Load OTU table
+otu_table_raw <- read.delim("../raw data/16S_table.txt")
+
+# The first column contains OTU names, the rest are the count data per sample.
+
+# Add sample identifier (Soil_ID) as row names to aux data
+row.names(aux) <- aux$Soil_ID
+
+# Clean the otu_table_raw to keep only relevant samples.
+otu_table_raw <- otu_table_raw %>%
+  # Keep only samples from aux data
+  select(OTU, contains(rownames(aux))) %>%
+  # OTU names must be moved to row names
+  as.data.frame() %>% `row.names<-`(.$OTU) %>% select(!OTU)
+```
+
+After cleaning the OTU table, make sure the selected columns match your auxiliary data. Potentially missing samples may have not amplified properly and were removed during bioinformatic processing. Ask your lab technician or the company providing your sequences for more information about missing samples.
+
+#### Format the data into a phyloseq-class object
+
+Combine your OTU table, auxiliary data, taxonomy table and raw sequences into a phyloseq-class object. For more information about phyloseq, look up [@mcmurdie2013], or their [GitHub pages](https://joey711.github.io/phyloseq/).
+
+```{r}
+#| eval: false
+# Combine data into a phyloseq-class object
+otu_table_raw <- phyloseq(otu_table(otu_table_raw, taxa_are_rows = T),
+                          sample_data(aux),
+                          tax_table(as.matrix(taxonomy_raw)),
+                          DNAStringSet(refseq_raw))
+```
+
+Were your samples part of a larger sequencing run containing other samples? Filter out OTU absent from your data set.
+
+```{r}
+#| eval: false
+# Remove all OTUs with sum == 0
+ntaxa(otu_table_raw) # 71448 before filtering
+otu_table_raw <- prune_taxa(taxa_sums(otu_table_raw) > 0, otu_table_raw)
+ntaxa(otu_table_raw) # 25399 after filtering
+```
+
+64% of the OTUs were absent from this subset of samples.
 
 ### Save as .RData {#save}
+
+Save all newly created files as RData for usage with other scripts.
+
+```{r}
+#| eval: false
+save(BLAST_raw, file = "RData/16S/BLAST_raw.RData")
+save(taxonomy_raw, file = "RData/16S/taxonomy_raw.RData")
+save(otu_table_raw, file = "RData/16S/otu_table_raw.RData")
+save(refseq_raw, file = "RData/16S/refseq_raw.RData")
+save(aux, file = "RData/auxfile.RData")
+```

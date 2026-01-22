@@ -6,7 +6,7 @@ editor: visual
 
 for now: remove the rows where controls are \> 0 to do: look for a reference on the methods to use controls in a more statistically sound way
 
-Download the script `005_negative_control.R`, or copy the codes below into your own script.
+Download the script `003_negative_control.R`, or copy the codes below into your own script.
 
 ```{r}
 #| echo: false
@@ -17,8 +17,8 @@ library(downloadthis)
 ```{r}
 #| echo: false
 download_file(
-  path = "../scripts/005_negative_control.R",
-  output_name = "005_negative_control",
+  path = "../scripts/003_negative_control.R",
+  output_name = "003_negative_control",
   button_label = "Download script",
   button_type = "success",
   has_icon = TRUE,
