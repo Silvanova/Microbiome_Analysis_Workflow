@@ -29,7 +29,9 @@ aux <- read.xlsx("../raw data/aux_data.xlsx")
 # Load BLAST results
 BLAST_raw <- read.delim("../raw data/16S_BLAST.txt")
 
-head(BLAST_raw) # Note that the column qseqid is duplicated (qseqid.1)
+# Verify that the data loaded properly: e.g., check that numeric value should have
+# class numeric or integer
+summary(BLAST_raw)
 
 # Extract taxonomy from BLAST results
 taxonomy_raw <- BLAST_raw %>%
@@ -43,10 +45,9 @@ taxonomy_raw <- BLAST_raw %>%
   separate_wider_delim(cols = kingdom, delim = " ", names = c("BLAST_ID", "kingdom"),
                        too_few = "align_end") %>%
   # Filter out OTUs without significant similarity found
-  filter(kingdom != "No_significant_similarity_found" & !is.na(kingdom) &
-           BLAST_ID != "No_significant_similarity_found") %>%
-  # Remove duplicated column qseqid.1 and rename qseqid column to OTU
-  as.data.frame() %>% dplyr::rename(OTU = qseqid) %>% select(!qseqid.1) %>%
+  filter(kingdom != "No_significant_similarity_found" & !is.na(kingdom)) %>%
+  # Rename qseqid column to OTU
+  as.data.frame() %>% dplyr::rename(OTU = qseqid) %>%
   # OTU names must be moved to row names
   `row.names<-`(.$OTU)
 
@@ -73,7 +74,9 @@ otu_table_raw <- read.delim("../raw data/16S_table.txt")
 # Add sample identifier (Soil_ID) as row names to aux data
 row.names(aux) <- aux$Soil_ID
 
-# Clean the otu_table_raw to keep only relevant samples.
+# Clean the otu_table_raw to keep only relevant samples. Make sure the selected
+# columns match your aux data. Potentially missing samples may have not amplified
+# properly and were removed during bioinformatic processing. Ask your lab tech.
 otu_table_raw <- otu_table_raw %>%
   # Keep only samples from aux data
   select(OTU, contains(rownames(aux))) %>%
@@ -90,9 +93,9 @@ otu_table_raw <- phyloseq(otu_table(otu_table_raw, taxa_are_rows = T),
                           DNAStringSet(refseq_raw))
 
 # Remove all OTUs with sum == 0
-ntaxa(otu_table_raw) # 71448 before filtering
+ntaxa(otu_table_raw) # 38500 before filtering
 otu_table_raw <- prune_taxa(taxa_sums(otu_table_raw) > 0, otu_table_raw)
-ntaxa(otu_table_raw) # 25399 (64% of the OTUs are absent from this subset of samples)
+ntaxa(otu_table_raw) # 25412 (34% of the OTUs are absent from this subset of samples)
 
 
 ## Save as RData ####
@@ -112,7 +115,9 @@ save(aux, file = "RData/auxfile.RData")
 # Load BLAST results
 BLAST_raw <- read.delim("../raw data/ITS_BLAST.txt")
 
-head(BLAST_raw) # Note that the column qseqid is duplicated (qseqid.1)
+# Verify that the data loaded properly: e.g., check that numeric value should have
+# class numeric or integer
+summary(BLAST_raw)
 
 # Extract taxonomy from BLAST results
 taxonomy_raw <- BLAST_raw %>%
@@ -124,10 +129,9 @@ taxonomy_raw <- BLAST_raw %>%
                                  "x10", "x11", "x12"),
                        too_few = "align_start") %>%
   # Filter out OTUs without significant similarity found
-  filter(kingdom != "No_significant_similarity_found" & !is.na(kingdom) &
-           BLAST_ID != "No_significant_similarity_found") %>%
-  # Remove duplicated column qseqid.1 and rename qseqid column to OTU
-  as.data.frame() %>% dplyr::rename(OTU = qseqid) %>% select(!qseqid.1) %>%
+  filter(kingdom != "No_significant_similarity_found" & !is.na(kingdom)) %>%
+  # Rename qseqid column to OTU
+  as.data.frame() %>% dplyr::rename(OTU = qseqid) %>%
   # OTU names must be moved to row names
   `row.names<-`(.$OTU)
 
@@ -154,7 +158,9 @@ otu_table_raw <- read.delim("../raw data/ITS_table.txt")
 # Add sample identifier (Library_ID) as row names to aux data
 row.names(aux) <- aux$Library_ID
 
-# Clean the otu_table_raw to keep only relevant samples.
+# Clean the otu_table_raw to keep only relevant samples. Make sure the selected
+# columns match your aux data. Potentially missing samples may have not amplified
+# properly and were removed during bioinformatic processing. Ask your lab tech.
 otu_table_raw <- otu_table_raw %>%
   # Keep only samples from aux data
   select(OTU, contains(rownames(aux))) %>%
@@ -171,9 +177,9 @@ otu_table_raw <- phyloseq(otu_table(otu_table_raw, taxa_are_rows = T),
                           DNAStringSet(refseq_raw))
 
 # Remove all OTUs with sum == 0
-ntaxa(otu_table_raw) # 82782 before filtering
+ntaxa(otu_table_raw) # 27699 before filtering
 otu_table_raw <- prune_taxa(taxa_sums(otu_table_raw) > 0, otu_table_raw)
-ntaxa(otu_table_raw) # 16467 (80% of the OTUs are absent from this subset of samples)
+ntaxa(otu_table_raw) # 16467 (41% of the OTUs are absent from this subset of samples)
 
 
 ## Save as RData ####
@@ -193,7 +199,9 @@ save(aux, file = "RData/auxfile.RData")
 # Load BLAST results
 BLAST_raw <- read.delim("../raw data/CO1_BLAST.txt")
 
-head(BLAST_raw) # Note that the column qseqid is duplicated (qseqid.1)
+# Verify that the data loaded properly: e.g., check that numeric value should have
+# class numeric or integer
+summary(BLAST_raw)
 
 # Extract taxonomy from BLAST results
 taxonomy_raw <- BLAST_raw %>%
@@ -205,10 +213,9 @@ taxonomy_raw <- BLAST_raw %>%
                                  "x10", "x11", "x12"),
                        too_few = "align_start") %>%
   # Filter out OTUs without significant similarity found
-  filter(kingdom != "No_significant_similarity_found" & !is.na(kingdom) &
-           BLAST_ID != "No_significant_similarity_found") %>%
-  # Remove duplicated column qseqid.1 and rename qseqid column to OTU
-  as.data.frame() %>% dplyr::rename(OTU = qseqid) %>% select(!qseqid.1) %>%
+  filter(kingdom != "No_significant_similarity_found" & !is.na(kingdom)) %>%
+  # Rename qseqid column to OTU
+  as.data.frame() %>% dplyr::rename(OTU = qseqid) %>%
   # OTU names must be moved to row names
   `row.names<-`(.$OTU)
 
@@ -254,9 +261,9 @@ otu_table_raw <- phyloseq(otu_table(otu_table_raw, taxa_are_rows = T),
                           DNAStringSet(refseq_raw))
 
 # Remove all OTUs with sum == 0
-ntaxa(otu_table_raw) # 56986 before filtering
+ntaxa(otu_table_raw) # 33027 before filtering
 otu_table_raw <- prune_taxa(taxa_sums(otu_table_raw) > 0, otu_table_raw)
-ntaxa(otu_table_raw) # 22511 (60% of the OTUs are absent from this subset of samples)
+ntaxa(otu_table_raw) # 22511 (32% of the OTUs are absent from this subset of samples)
 
 
 ## Save as RData ####

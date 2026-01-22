@@ -65,7 +65,9 @@ Our 16S taxonomy table was generated using BLASTn search against SILVA v138.1 da
 # Load BLAST results
 BLAST_raw <- read.delim("../raw data/16S_BLAST.txt")
 
-head(BLAST_raw) # Note that the column qseqid is duplicated (qseqid.1)
+# Verify that the data loaded properly: e.g., check that numeric value should have
+# class numeric or integer
+summary(BLAST_raw) # Note that the column qseqid is duplicated (qseqid.1)
 ```
 
 To extract taxonomy from BLAST results, transform the column "X1st_hit" into multiple columns, one per taxonomy level (Kingdom, Phylum, Class, etc.), extract the BLAST ID and clean the resulting table.
@@ -85,8 +87,7 @@ taxonomy_raw <- BLAST_raw %>%
                        names = c("BLAST_ID", "kingdom"),
                        too_few = "align_end") %>%
   # Filter out OTUs without significant similarity found
-  filter(kingdom != "No_significant_similarity_found" & !is.na(kingdom) &
-           BLAST_ID != "No_significant_similarity_found") %>%
+  filter(kingdom != "No_significant_similarity_found" & !is.na(kingdom)) %>%
   # Remove duplicated column qseqid.1 and rename qseqid column to OTU
   as.data.frame() %>% dplyr::rename(OTU = qseqid) %>% select(!qseqid.1) %>%
   # OTU names must be moved to row names
@@ -141,12 +142,12 @@ Were your samples part of a larger sequencing run containing other samples? Filt
 ```{r}
 #| eval: false
 # Remove all OTUs with sum == 0
-ntaxa(otu_table_raw) # 71448 before filtering
+ntaxa(otu_table_raw) # 38500 before filtering
 otu_table_raw <- prune_taxa(taxa_sums(otu_table_raw) > 0, otu_table_raw)
-ntaxa(otu_table_raw) # 25399 after filtering
+ntaxa(otu_table_raw) # 25412 after filtering 
 ```
 
-64% of the OTUs were absent from this subset of samples.
+34% of the OTUs were absent from this subset of samples.
 
 ### Save as .RData {#save}
 
