@@ -55,7 +55,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -307,6 +327,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="data-preparation" class="level3">
 <h3 class="anchored" data-anchor-id="data-preparation"><a href="./get-started/data-prep.html">&gt; Data preparation</a></h3>
 <p>Then, to get started with the data analysis, you must first ensure that the raw data is in the right format. Convert raw data into a <code>phyloseq</code> object and save them as .RData files.</p>
+<p>For more information about phyloseq, look up <span class="citation" data-cites="mcmurdie2013">(<a href="#ref-mcmurdie2013" role="doc-biblioref">McMurdie and Holmes 2013</a>)</span>, or their <a href="https://joey711.github.io/phyloseq/">GitHub pages</a>.</p>
 <ul>
 <li><a href="./get-started/data-prep.html#auxfile">Load auxiliary data (e.g.&nbsp;Excel sheet)</a></li>
 <li><a href="./get-started/data-prep.html#phyloseq">Construct a phyloseq object from BLAST results</a></li>
@@ -314,9 +335,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 
 
+
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-mcmurdie2013" class="csl-entry" role="listitem">
+McMurdie, Paul J., and Susan Holmes. 2013. <span>“Phyloseq: An R Package for Reproducible Interactive Analysis and Graphics of Microbiome Census Data.”</span> Edited by Michael Watson. <em>PLoS ONE</em> 8 (4): e61217. <a href="https://doi.org/10.1371/journal.pone.0061217">https://doi.org/10.1371/journal.pone.0061217</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

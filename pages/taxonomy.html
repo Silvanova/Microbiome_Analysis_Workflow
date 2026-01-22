@@ -268,7 +268,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 <p>Scripts used to filter away the otus with unsatisfactory BLAST results. In this script, users can find the thresholds chosen to select OTUs at different taxonomic levels. A first step in analyses should be subsetting to the Kingdom one wants to analyse (e.g.&nbsp;Fungi for ITS). Here one can also filter away the taxonomic groups that are not likely to be found in european forests (e.g.&nbsp;Gorillas and starfishes) (See below for values of % identity and )</p>
-<p>Download the script <code>004_taxonomy_filter.R</code>, or copy the codes below into your own script.</p>
+<p>Download the script <code>005_taxonomy_filter.R</code>, or copy the codes below into your own script.</p>
 <div class="cell">
 <div class="cell-output-display">
 <button class="btn btn-success" onclick="
@@ -281,7 +281,7 @@ ul.task-list li input[type="checkbox"] {
         const blobUrl = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = blobUrl;
-        a.download = '004_taxonomy_filter.R';
+        a.download = '005_taxonomy_filter.R';
         a.style.display = 'none';
         document.body.appendChild(a);
         a.dispatchEvent(new MouseEvent('click'));
