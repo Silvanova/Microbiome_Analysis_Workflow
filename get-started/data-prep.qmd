@@ -13,6 +13,8 @@ To follow the example presented on this page directly on your computer, download
 #| echo: false
 #| output: false
 library(downloadthis)
+library(DT)
+BLAST_raw <- read.delim("../raw data/16S_BLAST.txt")
 ```
 
 ```{r}
@@ -46,10 +48,10 @@ Auxiliary data files contain information about the samples and other types of en
 ```{r}
 #| eval: false
 # Load an Excel sheet (.xlsx)
-aux <- read.xlsx("aux_data.xlsx")
+aux <- read.xlsx("raw data/aux_data.xlsx")
 
 # Load a text file (.txt or .csv)
-aux <- read.csv("aux_data.csv")
+aux <- read.csv("raw data/aux_data.csv")
 ```
 
 ### Construct a phyloseq object from BLAST results {#phyloseq}
@@ -63,11 +65,41 @@ Our 16S taxonomy table was generated using BLASTn search against SILVA v138.1 da
 ```{r}
 #| eval: false
 # Load BLAST results
-BLAST_raw <- read.delim("../raw data/16S_BLAST.txt")
+BLAST_raw <- read.delim("raw data/16S_BLAST.txt")
 
 # Verify that the data loaded properly: e.g., check that numeric value should have
 # class numeric or integer
 summary(BLAST_raw) # Note that the column qseqid is duplicated (qseqid.1)
+View(BLAST_raw)
+```
+
+```{r}
+#| echo: false
+truncate_cols <- c("qseqid", "query_seq", "X1st_hit")
+idx <- match(truncate_cols, names(BLAST_raw)) - 1  # DT uses 0-based indices
+
+datatable(
+  head(BLAST_raw, n=100),
+  options = list(
+    scrollX = TRUE,
+    pageLength = 5,
+    columnDefs = list(
+      list(
+        targets = idx,
+        render = JS(
+          "function(data, type, row, meta) {",
+          "  if (type !== 'display' || data === null) return data;",
+          "  data = data.toString();",
+          "  return data.length > 8 ?",
+          "    '<span title=\"' + data.replace(/\"/g, '&quot;') + '\">' + data.substr(0, 8) + '…</span>' :",
+          "    data;",
+          "}"
+        )
+      )
+    )
+  ),
+  rownames = FALSE
+)
 ```
 
 To extract taxonomy from BLAST results, transform the column "X1st_hit" into multiple columns, one per taxonomy level (Kingdom, Phylum, Class, etc.), extract the BLAST ID and clean the resulting table.
@@ -107,7 +139,7 @@ First load your OTU table and remove samples absent from your auxiliary data. Re
 ```{r}
 #| eval: false
 # Load OTU table
-otu_table_raw <- read.delim("../raw data/16S_table.txt")
+otu_table_raw <- read.delim("raw data/16S_table.txt")
 
 # The first column contains OTU names, the rest are the count data per sample.
 

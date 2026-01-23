@@ -58,11 +58,11 @@ website:
           - text: "Statistical Analyses"
             href: stats.qmd
           - text: "Alpha diversity"
-            file: stats/alpha.div.qmd
+            file: stats/alpha-div.qmd
           - text: "Beta diversity"
-            file: stats/beta.div.qmd
+            file: stats/beta-div.qmd
           - text: "Differential abundance"
-            file: stats/diff.abund.qmd
+            file: stats/diff-abund.qmd
 
 # TABS IN SIDEBAR
 

@@ -10,7 +10,7 @@
 setwd("some_folder_path/my_working_directory")
 
 # Load packages
-source("001_required_packages.R")
+source("scripts/001_required_packages.R")
 
 # Load auxiliary data ----------------------------------------------------------
 
@@ -18,7 +18,7 @@ source("001_required_packages.R")
 # taken (metadata), chemical analyses, and other types of environmental data.
 
 # Load an Excel sheet (.xlsx)
-aux <- read.xlsx("../raw data/aux_data.xlsx")
+aux <- read.xlsx("raw data/aux_data.xlsx")
 
 # This auxiliary data file contains site metadata and soil physicochemical analyses.
 
@@ -27,7 +27,7 @@ aux <- read.xlsx("../raw data/aux_data.xlsx")
 ## Taxonomy table ####
 
 # Load BLAST results
-BLAST_raw <- read.delim("../raw data/16S_BLAST.txt")
+BLAST_raw <- read.delim("raw data/16S_BLAST.txt")
 
 # Verify that the data loaded properly: e.g., check that numeric value should have
 # class numeric or integer
@@ -65,7 +65,7 @@ refseq_raw <- taxonomy_raw$query_seq %>% `names<-`(taxonomy_raw$OTU)
 # superfluous data before you proceed to the next scripts.
 
 # Load OTU table
-otu_table_raw <- read.delim("../raw data/16S_table.txt")
+otu_table_raw <- read.delim("raw data/16S_table.txt")
 
 # The first column contains OTU names, the rest are the count data per sample.
 # Before proceeding to the next steps, make sure that the sample identifiers
@@ -113,7 +113,7 @@ save(aux, file = "RData/auxfile.RData")
 ## Taxonomy table ####
 
 # Load BLAST results
-BLAST_raw <- read.delim("../raw data/ITS_BLAST.txt")
+BLAST_raw <- read.delim("raw data/ITS_BLAST.txt")
 
 # Verify that the data loaded properly: e.g., check that numeric value should have
 # class numeric or integer
@@ -149,7 +149,7 @@ refseq_raw <- taxonomy_raw$query_seq %>% `names<-`(taxonomy_raw$OTU)
 # superfluous data before you proceed to the next scripts.
 
 # Load OTU table
-otu_table_raw <- read.delim("../raw data/ITS_table.txt")
+otu_table_raw <- read.delim("raw data/ITS_table.txt")
 
 # The first column contains OTU names, the rest are the count data per sample.
 # Before proceeding to the next steps, make sure that the sample identifiers
@@ -197,7 +197,7 @@ save(aux, file = "RData/auxfile.RData")
 ## Taxonomy table ####
 
 # Load BLAST results
-BLAST_raw <- read.delim("../raw data/CO1_BLAST.txt")
+BLAST_raw <- read.delim("raw data/CO1_BLAST.txt")
 
 # Verify that the data loaded properly: e.g., check that numeric value should have
 # class numeric or integer
@@ -233,7 +233,7 @@ refseq_raw <- taxonomy_raw$query_seq %>% `names<-`(taxonomy_raw$OTU)
 # superfluous data before you proceed to the next scripts.
 
 # Load OTU table
-otu_table_raw <- read.delim("../raw data/CO1_table.txt")
+otu_table_raw <- read.delim("raw data/CO1_table.txt")
 
 # The first column contains OTU names, the rest are the count data per sample.
 # Before proceeding to the next steps, make sure that the sample identifiers

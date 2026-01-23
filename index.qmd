@@ -39,9 +39,9 @@ In the navigation menu of this webpage, you will find each step of the workflow:
 
 -   **Statistical analyzes**
 
-    -   [Alpha diversity](alpha.div.qmd): choose the best alpha diversity metrics to answer your hypothesis
-    -   [Beta diversity](beta.div.qmd): choose the right transformation and the right distance matrix for beta diversity analyses
-    -   [Differential abundance](diff.abund.qmd): perform statistical tests to find differential abundance of taxa
+    -   [Alpha diversity](stats/alpha-div.qmd): choose the best alpha diversity metrics to answer your hypothesis
+    -   [Beta diversity](stats/beta-div.qmd): choose the right transformation and the right distance matrix for beta diversity analyses
+    -   [Differential abundance](stats/diff-abund.qmd): perform statistical tests to find differential abundance of taxa
 
 ## Download all scripts and data
 
