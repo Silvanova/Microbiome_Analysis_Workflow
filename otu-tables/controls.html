@@ -158,15 +158,15 @@ div.csl-indent {
  <span class="dropdown-text">Statistical Analyses</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../stats/alpha.div.qmd">
+    <a class="dropdown-item" href="../stats/alpha-div.html">
  <span class="dropdown-text">Alpha diversity</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../stats/beta.div.qmd">
+    <a class="dropdown-item" href="../stats/beta-div.html">
  <span class="dropdown-text">Beta diversity</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../stats/diff.abund.qmd">
+    <a class="dropdown-item" href="../stats/diff-abund.html">
  <span class="dropdown-text">Differential abundance</span></a>
   </li>  
     </ul>
@@ -348,7 +348,7 @@ div.csl-indent {
 
 
 <p>During DNA extraction, library preparation and sequencing, technical blanks, negative controls and positive controls may be added to detect contamination, confirm successful amplification of target genes, detect false results, and overall, verify that the full workflow (from extraction to bioinformatics) behaves as expected <span class="citation" data-cites="lear2018">(<a href="#ref-lear2018" role="doc-biblioref">Lear et al. 2018</a>)</span>.</p>
-<p>This section documents how we analyse control samples, and how we translate those results into practical actions in the data set: flagging suspect samples, identifying recurrent contaminants, and evaluating wheter the observed community composition matches expectations for the positive controls.</p>
+<p>This section documents how we analyse control samples and translate those results into practical actions in the data set. Using the R package <code>decontam</code>, the workflow enables identification and removal of contaminant DNA sequences based on patterns observed in blanks and negative controls <span class="citation" data-cites="davis2018">(<a href="#ref-davis2018" role="doc-biblioref">Davis et al. 2018</a>)</span>. In addition, positive controls can be used to evaluate whether the observed community composition matches the expected taxonomic profile.</p>
 <p>The two downloadable scripts below (<code>003_negative_control.R</code> and <code>003_positive_control.R</code>) implement a standard approach for dealing with negative and positive controls in a <code>phyloseq</code> object.</p>
 <div class="cell quarto-layout-panel" data-layout="[[-15,25,-15,25,-15]]">
 <div class="quarto-layout-row">
@@ -421,14 +421,17 @@ div.csl-indent {
 </div>
 <p>For a step-by-step explanation of how each control type is handled, see the sections below:</p>
 <ul>
-<li><a href="otu-tables/controls-negative.qmd">Dealing with negative controls (and blanks)</a></li>
-<li><a href="otu-tables/controls-positive.qmd">Dealing with positive controls</a></li>
+<li><a href="../otu-tables/controls-negative.html">Dealing with negative controls (and blanks)</a></li>
+<li><a href="../otu-tables/controls-positive.html">Dealing with positive controls</a></li>
 </ul>
 
 
 
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-davis2018" class="csl-entry" role="listitem">
+Davis, Nicole M., Diana M. Proctor, Susan P. Holmes, David A. Relman, and Benjamin J. Callahan. 2018. <span>“Simple Statistical Identification and Removal of Contaminant Sequences in Marker-Gene and Metagenomics Data.”</span> <em>Microbiome</em> 6 (1). <a href="https://doi.org/10.1186/s40168-018-0605-2">https://doi.org/10.1186/s40168-018-0605-2</a>.
+</div>
 <div id="ref-lear2018" class="csl-entry" role="listitem">
 Lear, Gavin, Ian Dickie, Jonathan Banks, Stephane Boyer, Hannah Buckley, Thomas Buckley, Rob Cruickshank, et al. 2018. <span>“Methods for the Extraction, Storage, Amplification and Sequencing of DNA from Environmental Samples.”</span> <em>New Zealand Journal of Ecology</em>. <a href="https://doi.org/10.20417/nzjecol.42.9">https://doi.org/10.20417/nzjecol.42.9</a>.
 </div>
