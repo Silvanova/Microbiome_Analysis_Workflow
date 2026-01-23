@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Deal with negative controls – Silva Nova MAW</title>
+<title>Dealing with controls – Silva Nova MAW</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -310,7 +330,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Deal with negative controls</h1>
+<h1 class="title">Dealing with controls</h1>
 </div>
 
 
@@ -327,10 +347,15 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>for now: remove the rows where controls are &gt; 0 to do: look for a reference on the methods to use controls in a more statistically sound way</p>
-<p>Download the script <code>003_negative_control.R</code>, or copy the codes below into your own script.</p>
-<div class="cell">
-<div class="cell-output-display">
+<p>During DNA extraction, library preparation and sequencing, technical blanks, negative controls and positive controls may be added to detect contamination, confirm successful amplification of target genes, detect false results, and overall, verify that the full workflow (from extraction to bioinformatics) behaves as expected <span class="citation" data-cites="lear2018">(<a href="#ref-lear2018" role="doc-biblioref">Lear et al. 2018</a>)</span>.</p>
+<p>This section documents how we analyse control samples, and how we translate those results into practical actions in the data set: flagging suspect samples, identifying recurrent contaminants, and evaluating wheter the observed community composition matches expectations for the positive controls.</p>
+<p>The two downloadable scripts below (<code>003_negative_control.R</code> and <code>003_positive_control.R</code>) implement a standard approach for dealing with negative and positive controls in a <code>phyloseq</code> object.</p>
+<div class="cell quarto-layout-panel" data-layout="[[-15,25,-15,25,-15]]">
+<div class="quarto-layout-row">
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 15.8%;justify-content: flex-start;">
+<p>&nbsp;</p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 26.3%;justify-content: flex-start;">
 <button class="btn btn-success" onclick="
     async function downloadFile(event) {
       event.preventDefault();
@@ -356,13 +381,58 @@ ul.task-list li input[type="checkbox"] {
       }
     }
     downloadFile(event);
-  "><i class="fa fa-save"></i> Download script</button>
+  "><i class="fa fa-save"></i> Download script 003_negative_control</button>
+</div>
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 15.8%;justify-content: flex-start;">
+<p>&nbsp;</p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 26.3%;justify-content: flex-start;">
+<button class="btn btn-success" onclick="
+    async function downloadFile(event) {
+      event.preventDefault();
+      try {
+        const response = await fetch('data:text/plain;base64,');
+        if (!response.ok) throw new Error('Network response failed');
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = '003_positive_control.R';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.dispatchEvent(new MouseEvent('click'));
+        document.body.removeChild(a);
+        setTimeout(() => {
+          window.URL.revokeObjectURL(blobUrl);
+        }, 100);
+        return false;
+      } catch (error) {
+        console.error('Download failed:', error);
+        alert('Download failed. Please try again.');
+      }
+    }
+    downloadFile(event);
+  "><i class="fa fa-save"></i> Download script 003_positive_control</button>
+</div>
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 15.8%;justify-content: flex-start;">
+<p>&nbsp;</p>
 </div>
 </div>
+</div>
+<p>For a step-by-step explanation of how each control type is handled, see the sections below:</p>
+<ul>
+<li><a href="otu-tables/controls-negative.qmd">Dealing with negative controls (and blanks)</a></li>
+<li><a href="otu-tables/controls-positive.qmd">Dealing with positive controls</a></li>
+</ul>
 
 
 
-</main> <!-- /main -->
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-lear2018" class="csl-entry" role="listitem">
+Lear, Gavin, Ian Dickie, Jonathan Banks, Stephane Boyer, Hannah Buckley, Thomas Buckley, Rob Cruickshank, et al. 2018. <span>“Methods for the Extraction, Storage, Amplification and Sequencing of DNA from Environmental Samples.”</span> <em>New Zealand Journal of Ecology</em>. <a href="https://doi.org/10.20417/nzjecol.42.9">https://doi.org/10.20417/nzjecol.42.9</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

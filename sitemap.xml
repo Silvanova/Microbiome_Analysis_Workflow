@@ -2,90 +2,90 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/stats/diff-abund.html</loc>
-    <lastmod>2026-01-23T08:05:21.531Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.678Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/stats/alpha-div.html</loc>
-    <lastmod>2026-01-23T08:05:21.531Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.678Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/otu-tables/rarefy.html</loc>
-    <lastmod>2026-01-23T08:05:21.136Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.285Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/otu-tables/normalize.html</loc>
-    <lastmod>2026-01-23T08:05:21.136Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.284Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/otu-tables/filter/scarce.html</loc>
-    <lastmod>2026-01-23T08:05:21.135Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.283Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/otu-tables/filter/ITS.html</loc>
-    <lastmod>2026-01-23T08:05:21.135Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.283Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/otu-tables/filter/16S.html</loc>
-    <lastmod>2026-01-23T08:05:21.135Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.283Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/otu-tables/controls.html</loc>
-    <lastmod>2026-01-23T08:05:21.135Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.283Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/otu-tables/controls-negative.html</loc>
-    <lastmod>2026-01-23T08:05:21.135Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.283Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/get-started/install.html</loc>
-    <lastmod>2026-01-23T08:05:21.129Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.277Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/get-started.html</loc>
-    <lastmod>2026-01-23T08:05:21.128Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.276Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/index.html</loc>
-    <lastmod>2026-01-23T08:05:21.135Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.283Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/get-started/data-prep.html</loc>
-    <lastmod>2026-01-23T08:05:21.128Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.277Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/otu-tables.html</loc>
-    <lastmod>2026-01-23T08:05:21.135Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.283Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/otu-tables/controls-positive.html</loc>
-    <lastmod>2026-01-23T08:05:21.135Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.283Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/otu-tables/filter.html</loc>
-    <lastmod>2026-01-23T08:05:21.135Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.283Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/otu-tables/filter/CO1.html</loc>
-    <lastmod>2026-01-23T08:05:21.135Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.283Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/otu-tables/filter/rare.html</loc>
-    <lastmod>2026-01-23T08:05:21.135Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.283Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/otu-tables/filter/singletons.html</loc>
-    <lastmod>2026-01-23T08:05:21.135Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.284Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/otu-tables/rare-norm.html</loc>
-    <lastmod>2026-01-23T08:05:21.136Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.285Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/stats.html</loc>
-    <lastmod>2026-01-23T08:05:21.531Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.678Z</lastmod>
   </url>
   <url>
     <loc>https://Silvanova.github.io/Microbiome_Analysis_Workflow/stats/beta-div.html</loc>
-    <lastmod>2026-01-23T08:05:21.531Z</lastmod>
+    <lastmod>2026-01-23T09:11:08.678Z</lastmod>
   </url>
 </urlset>

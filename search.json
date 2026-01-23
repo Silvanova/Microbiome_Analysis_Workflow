@@ -82,9 +82,9 @@
   {
     "objectID": "otu-tables/controls.html",
     "href": "otu-tables/controls.html",
-    "title": "Deal with negative controls",
+    "title": "Dealing with controls",
     "section": "",
-    "text": "for now: remove the rows where controls are &gt; 0 to do: look for a reference on the methods to use controls in a more statistically sound way\nDownload the script 003_negative_control.R, or copy the codes below into your own script.\n\n\n Download script",
+    "text": "During DNA extraction, library preparation and sequencing, technical blanks, negative controls and positive controls may be added to detect contamination, confirm successful amplification of target genes, detect false results, and overall, verify that the full workflow (from extraction to bioinformatics) behaves as expected (Lear et al. 2018).\nThis section documents how we analyse control samples, and how we translate those results into practical actions in the data set: flagging suspect samples, identifying recurrent contaminants, and evaluating wheter the observed community composition matches expectations for the positive controls.\nThe two downloadable scripts below (003_negative_control.R and 003_positive_control.R) implement a standard approach for dealing with negative and positive controls in a phyloseq object.\n\n\n\n \n\n\n Download script 003_negative_control\n\n\n \n\n\n Download script 003_positive_control\n\n\n \n\n\n\nFor a step-by-step explanation of how each control type is handled, see the sections below:\n\nDealing with negative controls (and blanks)\nDealing with positive controls\n\n\n\n\n\nReferences\n\nLear, Gavin, Ian Dickie, Jonathan Banks, Stephane Boyer, Hannah Buckley, Thomas Buckley, Rob Cruickshank, et al. 2018. “Methods for the Extraction, Storage, Amplification and Sequencing of DNA from Environmental Samples.” New Zealand Journal of Ecology. https://doi.org/10.20417/nzjecol.42.9.",
     "crumbs": [
       "Controls"
     ]
