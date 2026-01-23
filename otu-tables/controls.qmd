@@ -7,7 +7,7 @@ bibliography: references.bib
 
 During DNA extraction, library preparation and sequencing, technical blanks, negative controls and positive controls may be added to detect contamination, confirm successful amplification of target genes, detect false results, and overall, verify that the full workflow (from extraction to bioinformatics) behaves as expected [@lear2018].
 
-This section documents how we analyse control samples, and how we translate those results into practical actions in the data set: flagging suspect samples, identifying recurrent contaminants, and evaluating wheter the observed community composition matches expectations for the positive controls.
+This section documents how we analyse control samples and translate those results into practical actions in the data set. Using the R package `decontam`, the workflow enables identification and removal of contaminant DNA sequences based on patterns observed in blanks and negative controls [@davis2018]. In addition, positive controls can be used to evaluate whether the observed community composition matches the expected taxonomic profile.
 
 The two downloadable scripts below (`003_negative_control.R` and `003_positive_control.R`) implement a standard approach for dealing with negative and positive controls in a `phyloseq` object.
 
@@ -43,5 +43,5 @@ download_file(
 
 For a step-by-step explanation of how each control type is handled, see the sections below:
 
--   [Dealing with negative controls (and blanks)](otu-tables/controls-negative.qmd)
--   [Dealing with positive controls](otu-tables/controls-positive.qmd)
+-   [Dealing with negative controls (and blanks)](controls-negative.qmd)
+-   [Dealing with positive controls](controls-positive.qmd)
