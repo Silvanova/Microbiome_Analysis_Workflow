@@ -1,12 +1,15 @@
 ---
-title: "Deal with negative controls"
+title: "Dealing with controls"
 format: html
 editor: visual
+bibliography: references.bib
 ---
 
-for now: remove the rows where controls are \> 0 to do: look for a reference on the methods to use controls in a more statistically sound way
+During DNA extraction, library preparation and sequencing, technical blanks, negative controls and positive controls may be added to detect contamination, confirm successful amplification of target genes, detect false results, and overall, verify that the full workflow (from extraction to bioinformatics) behaves as expected [@lear2018].
 
-Download the script `003_negative_control.R`, or copy the codes below into your own script.
+This section documents how we analyse control samples, and how we translate those results into practical actions in the data set: flagging suspect samples, identifying recurrent contaminants, and evaluating wheter the observed community composition matches expectations for the positive controls.
+
+The two downloadable scripts below (`003_negative_control.R` and `003_positive_control.R`) implement a standard approach for dealing with negative and positive controls in a `phyloseq` object.
 
 ```{r}
 #| echo: false
@@ -15,14 +18,30 @@ library(downloadthis)
 ```
 
 ```{r}
+#| layout: [[-15,25,-15,25,-15]]
 #| echo: false
 download_file(
   path = "../scripts/003_negative_control.R",
   output_name = "003_negative_control",
-  button_label = "Download script",
+  button_label = "Download script 003_negative_control",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+download_file(
+  path = "../scripts/003_positive_control.R",
+  output_name = "003_positive_control",
+  button_label = "Download script 003_positive_control",
   button_type = "success",
   has_icon = TRUE,
   icon = "fa fa-save",
   self_contained = FALSE
 )
 ```
+
+For a step-by-step explanation of how each control type is handled, see the sections below:
+
+-   [Dealing with negative controls (and blanks)](otu-tables/controls-negative.qmd)
+-   [Dealing with positive controls](otu-tables/controls-positive.qmd)
