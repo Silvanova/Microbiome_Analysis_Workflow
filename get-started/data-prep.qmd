@@ -121,7 +121,7 @@ taxonomy_raw <- BLAST_raw %>%
   # Filter out OTUs without significant similarity found
   filter(kingdom != "No_significant_similarity_found" & !is.na(kingdom)) %>%
   # Remove duplicated column qseqid.1 and rename qseqid column to OTU
-  as.data.frame() %>% dplyr::rename(OTU = qseqid) %>% select(!qseqid.1) %>%
+  as.data.frame() %>% dplyr::rename(OTU = qseqid) %>%
   # OTU names must be moved to row names
   `row.names<-`(.$OTU)
 ```
