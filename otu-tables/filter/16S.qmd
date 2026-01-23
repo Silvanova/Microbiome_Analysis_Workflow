@@ -17,7 +17,7 @@ library(downloadthis)
 ```{r}
 #| echo: false
 download_file(
-  path = "../scripts/005_taxonomy_filter.R",
+  path = "../../scripts/005_taxonomy_filter.R",
   output_name = "005_taxonomy_filter",
   button_label = "Download script",
   button_type = "success",

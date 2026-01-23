@@ -4,7 +4,10 @@ project:
     - index.qmd
     - get-started.qmd
     - get-started/**/*.qmd
-    - pages/**/*.qmd
+    - otu-tables.qmd
+    - otu-tables/**/*.qmd
+    - stats.qmd
+    - stats/**/*.qmd
 
 format:
   html:
@@ -18,7 +21,7 @@ format:
 website:
   title: "Silva Nova MAW"
   page-navigation: true
-  bread-crumbs: false
+  # bread-crumbs: false
   navbar:
     background: primary
     search: true
@@ -28,6 +31,8 @@ website:
         href: https://twitter.com/SilvaNova_NNF
       - icon: github
         href: https://github.com/Silvanova/Common_scripts
+
+# TABS IN NAVIGATION BAR (TOP)
 
     left:
       - text: "Get started"
@@ -41,29 +46,25 @@ website:
 
       - text: "Handling OTU tables"
         menu:
-          - text: "Handling OTU tables"
-            href: pages/OTU.tables.qmd
           - text: "Controls"
-            file: pages/control.qmd
-          - text: "Global filtering"
-            file: pages/filter.rare.qmd
-          - text: "Taxonomy filtering"
-            href: pages/taxonomy.qmd
-          - text: "Normalization and rarefaction"
-            file: pages/normalize.qmd
+            file: otu-tables/controls.qmd
+          - text: "Filtering"
+            file: otu-tables/filter.qmd
+          - text: "Rarefaction & Normalization"
+            file: otu-tables/rare-norm.qmd
 
       - text: "Statistical Analyses"
         menu:
           - text: "Statistical Analyses"
-            href: pages/stats.qmd
-          - text: "Statistical Analyses"
-            file: pages/stats.qmd
+            href: stats.qmd
           - text: "Alpha diversity"
-            file: pages/alpha.div.qmd
+            file: stats/alpha.div.qmd
           - text: "Beta diversity"
-            file: pages/beta.div.qmd
+            file: stats/beta.div.qmd
           - text: "Differential abundance"
-            file: pages/diff.abund.qmd
+            file: stats/diff.abund.qmd
+
+# TABS IN SIDEBAR
 
   sidebar:
     - title: "Silva Nova MAW"
@@ -88,25 +89,53 @@ website:
 
     - title: "Handling OTU tables"
       contents:
-        - file: pages/OTU.tables.qmd
-          text: "Handling OTU tables"
-        - file: pages/control.qmd
-          text: "Controls"
-        - file: pages/filter.rare.qmd
-          text: "Global filtering"
-        - href: pages/taxonomy.qmd
-          text: "Taxonomy filtering"
-        - file: pages/normalize.qmd
-          text: "Normalization and rarefaction"
+
+        - section: "Controls"
+          file: otu-tables/controls.qmd
+          contents:
+          - text: "Negative controls"
+            file: otu-tables/controls-negative.qmd
+          - text: "Positive controls"
+            file: otu-tables/controls-positive.qmd
+
+        - section: "Filtering"
+          file: otu-tables/filter.qmd
+          contents:
+          - section: "Global filtering"
+            contents:
+            - text: "Singletons"
+              file: otu-tables/filter/singletons.qmd
+            - text: "Rare features"
+              file: otu-tables/filter/rare.qmd
+            - text: "Scarce features"
+              file: otu-tables/filter/scarce.qmd
+
+          - section: "Taxonomy filtering"
+            contents:
+            - text: "Bacteria and Archaea (16S)"
+              href: otu-tables/filter/16S.qmd
+            - text: "Fungi (ITS)"
+              href: otu-tables/filter/ITS.qmd
+            - text: "Soil animals (CO1)"
+              href: otu-tables/filter/CO1.qmd
+
+        - section: "Rarefaction & Normalization"
+          file: otu-tables/rare-norm.qmd
+          contents:
+          - text: "Rarefaction"
+            file: otu-tables/rarefy.qmd
+          - text: "Normalizations"
+            file: otu-tables/normalize.qmd
 
 
     - title: "Statistical Analyses"
       contents:
-        - file: pages/stats.qmd
-          text: "Statistical Analyses"
-        - file: pages/alpha.div.qmd
-          text: "Alpha diversity"
-        - file: pages/beta.div.qmd
-          text: "Beta diversity"
-        - file: pages/diff.abund.qmd
-          text: "Differential abundance"
+        - section: "Statistical Analyses"
+          file: stats.qmd
+          contents:
+          - text: "Alpha diversity"
+            file: stats/alpha-div.qmd
+          - text: "Beta diversity"
+            file: stats/beta-div.qmd
+          - text: "Differential abundance"
+            file: stats/diff-abund.qmd

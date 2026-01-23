@@ -24,25 +24,24 @@ Decisions for each step of the workflow are supported by literature and R script
 
 ## Structure
 
-In the sidebar menu of this webpage, you will find each step of the workflow:
+In the navigation menu of this webpage, you will find each step of the workflow:
 
--   [**Install R and required packages**](get-started/install.qmd): get started with RStudio and install the packages required for the analyses in this workflow
+-   **Get started**
 
--   [**Data preparation**](get-started/data-prep.qmd): prepare OTU tables, manage metadata, and convert raw files to .RData
+    -   [Install R and required packages](get-started/install.qmd): get started with RStudio and install the packages required for the analyses in this workflow
+    -   [Data preparation](get-started/data-prep.qmd): prepare OTU tables, manage metadata, and convert raw files to .RData
 
--   [**Controls**](control.qmd): deal with OTUs found in negative and positive controls
+-   **Handling OTU tables**
 
--   [**Global filtering**](filter.rare.qmd): filter out singletons and rare OTUs
+    -   [Controls](otu-tables/controls.qmd): deal with OTUs found in negative and positive controls
+    -   [Filtering](otu-tables/filter.qmd): filter out OTUs based on abundance and prevalence, or based on taxonomy and BLAST quality
+    -   [Rarefaction and normalization](otu-tables/rare-norm.qmd): rarefy or normalize data to control for variable sequencing depth
 
--   [**Taxonomy filtering**](pages/taxonomy.qmd): filter OTUs based on taxonomy and BLAST quality thresholds
+-   **Statistical analyzes**
 
--   [**Normalization and rarefaction**](normalize.qmd): normalize or rarefy data to control for variable sequencing depth
-
--   [**Alpha diversity**](alpha.div.qmd): choose the best alpha diversity metrics to answer your hypothesis
-
--   [**Beta diversity**](beta.div.qmd): choose the right transformation and the right distance matrix for beta diversity analyses
-
--   [**Differential abundance**](diff.abund.qmd): perform statistical tests to find differential abundance of taxa
+    -   [Alpha diversity](alpha.div.qmd): choose the best alpha diversity metrics to answer your hypothesis
+    -   [Beta diversity](beta.div.qmd): choose the right transformation and the right distance matrix for beta diversity analyses
+    -   [Differential abundance](diff.abund.qmd): perform statistical tests to find differential abundance of taxa
 
 ## Download all scripts and data
 
