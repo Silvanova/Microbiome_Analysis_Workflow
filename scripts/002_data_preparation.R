@@ -46,13 +46,13 @@ taxonomy_raw <- BLAST_raw %>%
                        too_few = "align_end") %>%
   # Filter out OTUs without significant similarity found
   filter(kingdom != "No_significant_similarity_found" & !is.na(kingdom)) %>%
-  # Rename qseqid column to OTU
-  as.data.frame() %>% dplyr::rename(OTU = qseqid) %>%
-  # OTU names must be moved to row names
-  `row.names<-`(.$OTU)
+  # Rename qseqid column to taxa_OTU
+  as.data.frame() %>% dplyr::rename(taxa_OTU = qseqid) %>%
+  # taxa_OTU names must be moved to row names
+  `row.names<-`(.$taxa_OTU)
 
 # Extract sequences from taxonomy raw
-refseq_raw <- taxonomy_raw$query_seq %>% `names<-`(taxonomy_raw$OTU)
+refseq_raw <- taxonomy_raw$query_seq %>% `names<-`(taxonomy_raw$taxa_OTU)
 
 
 ## OTU table ####
@@ -95,7 +95,7 @@ otu_table_raw <- phyloseq(otu_table(otu_table_raw, taxa_are_rows = T),
 # Remove all OTUs with sum == 0
 ntaxa(otu_table_raw) # 38500 before filtering
 otu_table_raw <- prune_taxa(taxa_sums(otu_table_raw) > 0, otu_table_raw)
-ntaxa(otu_table_raw) # 25412 (34% of the OTUs are absent from this subset of samples)
+ntaxa(otu_table_raw) # 25461 (34% of the OTUs are absent from this subset of samples)
 
 
 ## Save as RData ####
@@ -130,13 +130,13 @@ taxonomy_raw <- BLAST_raw %>%
                        too_few = "align_start") %>%
   # Filter out OTUs without significant similarity found
   filter(kingdom != "No_significant_similarity_found" & !is.na(kingdom)) %>%
-  # Rename qseqid column to OTU
-  as.data.frame() %>% dplyr::rename(OTU = qseqid) %>%
-  # OTU names must be moved to row names
-  `row.names<-`(.$OTU)
+  # Rename qseqid column to taxa_OTU
+  as.data.frame() %>% dplyr::rename(taxa_OTU = qseqid) %>%
+  # taxa_OTU names must be moved to row names
+  `row.names<-`(.$taxa_OTU)
 
 # Extract sequences from taxonomy raw
-refseq_raw <- taxonomy_raw$query_seq %>% `names<-`(taxonomy_raw$OTU)
+refseq_raw <- taxonomy_raw$query_seq %>% `names<-`(taxonomy_raw$taxa_OTU)
 
 
 ## OTU table ####
@@ -179,7 +179,7 @@ otu_table_raw <- phyloseq(otu_table(otu_table_raw, taxa_are_rows = T),
 # Remove all OTUs with sum == 0
 ntaxa(otu_table_raw) # 27699 before filtering
 otu_table_raw <- prune_taxa(taxa_sums(otu_table_raw) > 0, otu_table_raw)
-ntaxa(otu_table_raw) # 16467 (41% of the OTUs are absent from this subset of samples)
+ntaxa(otu_table_raw) # 16691 (40% of the OTUs are absent from this subset of samples)
 
 
 ## Save as RData ####
@@ -214,13 +214,13 @@ taxonomy_raw <- BLAST_raw %>%
                        too_few = "align_start") %>%
   # Filter out OTUs without significant similarity found
   filter(kingdom != "No_significant_similarity_found" & !is.na(kingdom)) %>%
-  # Rename qseqid column to OTU
-  as.data.frame() %>% dplyr::rename(OTU = qseqid) %>%
-  # OTU names must be moved to row names
-  `row.names<-`(.$OTU)
+  # Rename qseqid column to taxa_OTU
+  as.data.frame() %>% dplyr::rename(taxa_OTU = qseqid) %>%
+  # taxa_OTU names must be moved to row names
+  `row.names<-`(.$taxa_OTU)
 
 # Extract sequences from taxonomy raw
-refseq_raw <- taxonomy_raw$query_seq %>% `names<-`(taxonomy_raw$OTU)
+refseq_raw <- taxonomy_raw$query_seq %>% `names<-`(taxonomy_raw$taxa_OTU)
 
 
 ## OTU table ####
@@ -263,7 +263,7 @@ otu_table_raw <- phyloseq(otu_table(otu_table_raw, taxa_are_rows = T),
 # Remove all OTUs with sum == 0
 ntaxa(otu_table_raw) # 33027 before filtering
 otu_table_raw <- prune_taxa(taxa_sums(otu_table_raw) > 0, otu_table_raw)
-ntaxa(otu_table_raw) # 22511 (32% of the OTUs are absent from this subset of samples)
+ntaxa(otu_table_raw) # 22772 (31% of the OTUs are absent from this subset of samples)
 
 
 ## Save as RData ####

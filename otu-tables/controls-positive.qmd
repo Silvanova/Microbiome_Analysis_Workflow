@@ -1,20 +1,25 @@
 ---
-title: "Deal with negative controls"
+title: "Dealing with positive controls"
 format: html
 editor: visual
 ---
 
-for now: remove the rows where controls are \> 0 to do: look for a reference on the methods to use controls in a more statistically sound way
+This section documents how to inspect positive controls to confirm successful amplification of target genes, detect false results, and overall, verify that the full workflow (from extraction to bioinformatics) behaves as expected [@lear2018].
 
-Download the script `003_negative_control.R`, or copy the codes below into your own script.
+To follow the example presented on this page directly on your computer, download the script `003_positive_control.R` and the example raw data by clicking the buttons below. Alternatively, you may copy the codes below into your own script, and use your own data.
 
 ```{r}
 #| echo: false
 #| output: false
 library(downloadthis)
+library(plotly)
+library(phyloseq)
+library(dplyr)
+load("../RData/16S/otu_ctrl_neg_clean.RData")
 ```
 
 ```{r}
+#| layout: [[-10,35,-5,40,-10]]
 #| echo: false
 download_file(
   path = "../scripts/003_negative_control.R",
@@ -25,4 +30,103 @@ download_file(
   icon = "fa fa-save",
   self_contained = FALSE
 )
+
+download_file(
+  path = "../RData/16S/otu_table_raw.RData",
+  output_name = "16S_otu_table_raw",
+  button_label = "Download example RData",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```
+
+### Inspect samples
+
+Positive controls added before sequencing usually contain a synthetic community (OTUs absent from true samples) and serve to demonstrate that the sequencing and bio-informatic processing worked as expected.
+
+```{r}
+#| eval: false
+# Load cleaned table from previous section
+load("RData/16S/otu_ctrl_neg_clean.RData")
+
+# Or load raw OTU table if there were no negative controls to deal with
+load("RData/16S/otu_table_raw.RData")
+```
+
+To inspect this data set, convert OTU table from count data to both a presence-absence table and a relative abundance table.
+
+```{r}
+# Convert OTU table from count data to presence-absence
+otu_table.pa <- transform_sample_counts(otu_ctrl_neg_clean, function(x) 1*(x>0))
+
+# Convert OTU table from count data to relative abundance
+otu_table.rel <- transform_sample_counts(otu_ctrl_neg_clean, function(x) x/sum(x))
+```
+
+#### Identify synthetic community
+
+```{r}
+# Identify OTUs present in positive controls
+otu_table.pa.pos <- prune_samples(
+  sample_data(otu_table.pa)$sample_type == "positive control", otu_table.pa)
+
+table.pa.pos <- data.frame(pa.pos = taxa_sums(otu_table.pa.pos))
+
+otu_pos <- filter(table.pa.pos, pa.pos > 0) %>% rownames()
+
+# Filter OTU table to keep only OTUs found in positive controls
+otu_table_pos <- prune_taxa(otu_pos, otu_table.rel)
+
+# Visualize the abundance of these OTUs in all samples
+plot_bar(otu_table_pos, fill = "kingdom") + 
+  facet_grid(~sample_type, scales = "free", space = "free")
+```
+
+As can be seen on this graph, the synthetic community added to these samples was composed of Eukaryota, but some additional contaminants (probably from true samples) can also be found in the positive controls. The issue of contaminants can be dealt with using the R package `decontam` as demonstrated in the previous section: [Dealing with negative controls](controls-negative.qmd).
+
+The rest of the synthetic community will be automatically removed from our data sets while performing [taxonomic filtering](filter.qmd).
+
+#### Compare community profiles
+
+If one suspects issues with sequencing, positive controls can be used for visual inspection, by making sure the taxonomic profiles match expectations.
+
+```{r}
+# Keep only positive controls for visualization
+otu_table.rel.pos <- prune_samples(
+  sample_data(otu_table.rel)$sample_type == "positive control", otu_table.rel)
+
+# Remove taxa with less than 1% abundance (for clarity of the plot)
+otu_table.rel.pos <- filter_taxa(otu_table.rel.pos, function(x) sum(x) > .01, TRUE)
+
+# Visualize the community profiles of these samples
+plot_bar(otu_table.rel.pos, fill = "phylum")
+```
+
+### Clean and save OTU table
+
+::: callout-tip
+## remove_taxa
+
+Homemade function `remove_taxa`: a simplified way of removing a selection of OTU from a `phyloseq` object.
+
+```{r}
+#| eval: false
+remove_taxa <- function(badTaxa, physeq){
+  allTaxa <- taxa_names(physeq)
+  cleanTaxa <- allTaxa[!(allTaxa %in% badTaxa)]
+  return(prune_taxa(cleanTaxa, physeq))
+}
+```
+:::
+
+```{r}
+#| eval: false
+# Remove positive controls
+otu_ctrl_pos_clean <- prune_samples(
+  sample_data(otu_ctrl_neg_clean)$sample_type != "positive control", otu_ctrl_neg_clean)
+
+# Save cleaned OTU table
+save(otu_ctrl_pos_clean, file = "RData/16S/otu_ctrl_pos_clean.RData")
 ```

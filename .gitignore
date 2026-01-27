@@ -55,3 +55,10 @@ rsconnect/
 README.qmd
 
 **/*.quarto_ipynb
+
+# Quarto render artefacts
+**/*_files/*
+**/*.knit.md
+**/*.utf8.md
+.quarto/
+_site/

@@ -39,9 +39,19 @@ if (!require("plyr", quietly = TRUE))
   install.packages("plyr")
 library(plyr)
 
+if (!require("ggplot2", quietly = TRUE))
+  install.packages("ggplot2")
+library(ggplot2)
+
 if (!require("dplyr", quietly = TRUE))
   install.packages("dplyr")
 library(dplyr) # always load dplyr last to avoid conflicts between packages
 
 # Homemade functions -----------------------------------------------------------
 
+# Remove taxa from phyloseq objects
+remove_taxa <- function(badTaxa, physeq){
+  allTaxa <- taxa_names(physeq)
+  cleanTaxa <- allTaxa[!(allTaxa %in% badTaxa)]
+  return(prune_taxa(cleanTaxa, physeq))
+}
