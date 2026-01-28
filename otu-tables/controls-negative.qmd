@@ -2,6 +2,7 @@
 title: "Dealing with negative controls"
 format: html
 editor: visual
+bibliography: references.bib
 ---
 
 This section documents how to inspect negative controls (or blanks) and remove contaminant DNA sequences using the R package `decontam` [@davis2018].
@@ -165,7 +166,7 @@ plot_bar(otu_table_neg, fill = "phylum") +
   facet_grid(~sample_type, scales = "free", space = "free")
 ```
 
-A commonly recommended practice with negative controls is to remove any OTU found in negative controls from the rest of the data set (<https://doi.org/10.1111/nph.12923>). However, as you can see in this demonstration, the OTUs found in the negative controls are found in all samples and represent \~25% of the community in all samples. Therefore, it is most likely that the OTUs found in the negative controls are present due to a contamination from the rest of the samples and not the other way around.
+A commonly recommended practice with negative controls is to remove any OTU found in negative controls from the rest of the data set [@nguyen2014]. However, as you can see in this demonstration, the OTUs found in the negative controls are found in all samples and represent \~25% of the community in all samples. Therefore, it is most likely that the OTUs found in the negative controls are present due to a contamination from the rest of the samples and not the other way around.
 
 Another way to confirm this, is to look at the count data instead of the relative abundance:
 

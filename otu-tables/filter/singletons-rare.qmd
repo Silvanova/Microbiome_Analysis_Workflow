@@ -1,0 +1,62 @@
+---
+title: "Singletons and rare OTUs"
+format: html
+editor: visual
+---
+
+Singletons and other rare OTUs are predominantly composed of PCR, sequencing, and chimera artefacts, and their removal has been shown to have negligible effects on hypothesis-driven community comparisons while substantially reducing noise [@edgar2016; @nikodemova2023; @sgarbi2020; @cao2021]. Retaining them is mainly justified in studies explicitly targeting rare biosphere diversity and requires careful validation [@brown2015]. Consequently, filtering rare features simplifies microbiome datasets without materially altering ecological inference in most comparative analyses.
+
+In R, singletons are typically removed by excluding OTUs with a total count of one across all samples, while rare OTUs are filtered by applying absolute (e.g. total counts \<5 or \<10) or relative abundance thresholds (e.g. \<0.01%) to the OTU table [@edgar2016; @brown2015; @nikodemova2023], commonly using `phyloseq::prune_taxa()` in combination with `taxa_sums()` or transformed relative abundances.
+
+This section documents how to filter out singletons and rare OTUs based on absolute or relative abundance thresholds in `phyloseq` objects. To follow the example presented on this page directly on your computer, download the script `004_global_filter.R` and the example raw data by clicking the buttons below. Alternatively, you may copy the codes below into your own script, and use your own data.
+
+```{r}
+#| echo: false
+#| output: false
+library(downloadthis)
+load("../../RData/16S/otu_ctrl_pos_clean.RData")
+```
+
+```{r}
+#| layout: [[-10,35,-5,40,-10]]
+#| echo: false
+download_file(
+  path = "../../scripts/004_global_filter.R",
+  output_name = "004_global_filter",
+  button_label = "Download script",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+download_file(
+  path = "../../RData/16S/otu_ctrl_pos_clean.RData",
+  output_name = "otu_ctrl_pos_clean",
+  button_label = "Download example RData",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```
+
+### Removing singletons
+
+Removing singletons is as simple as removing anything that has less than 1 read throughout the entire data set.
+
+### Removing rare OTUs
+
+### Clean and save OTU table
+
+```{r}
+#| eval: false
+# OTU table with singletons filtered
+save(otu_table_single, file = "RData/16S/otu_single_clean.RData")
+
+# OTU table with rare taxa filtered
+save(otu_table_rare, file = "RData/16S/otu_rare_clean.RData")
+
+# OTU table with scarce taxa filtered
+save(otu_table_scarce, file = "RData/16S/otu_scarce_clean.RData")
+```

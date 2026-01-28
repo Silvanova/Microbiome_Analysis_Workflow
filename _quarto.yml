@@ -103,10 +103,8 @@ website:
           contents:
           - section: "Global filtering"
             contents:
-            - text: "Singletons"
-              file: otu-tables/filter/singletons.qmd
-            - text: "Rare features"
-              file: otu-tables/filter/rare.qmd
+            - text: "Singletons and rare OTUs"
+              file: otu-tables/filter/singletons-rare.qmd
             - text: "Scarce features"
               file: otu-tables/filter/scarce.qmd
 

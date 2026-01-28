@@ -2,6 +2,7 @@
 title: "Dealing with positive controls"
 format: html
 editor: visual
+bibliography: references.bib
 ---
 
 This section documents how to inspect positive controls to confirm successful amplification of target genes, detect false results, and overall, verify that the full workflow (from extraction to bioinformatics) behaves as expected [@lear2018].
@@ -68,6 +69,7 @@ otu_table.rel <- transform_sample_counts(otu_ctrl_neg_clean, function(x) x/sum(x
 #### Identify synthetic community
 
 ```{r}
+#| warning: false
 # Identify OTUs present in positive controls
 otu_table.pa.pos <- prune_samples(
   sample_data(otu_table.pa)$sample_type == "positive control", otu_table.pa)
@@ -93,6 +95,7 @@ The rest of the synthetic community will be automatically removed from our data 
 If one suspects issues with sequencing, positive controls can be used for visual inspection, by making sure the taxonomic profiles match expectations.
 
 ```{r}
+#| warning: false
 # Keep only positive controls for visualization
 otu_table.rel.pos <- prune_samples(
   sample_data(otu_table.rel)$sample_type == "positive control", otu_table.rel)
@@ -130,3 +133,4 @@ otu_ctrl_pos_clean <- prune_samples(
 # Save cleaned OTU table
 save(otu_ctrl_pos_clean, file = "RData/16S/otu_ctrl_pos_clean.RData")
 ```
+
