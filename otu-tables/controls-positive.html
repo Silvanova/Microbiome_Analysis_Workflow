@@ -55,7 +55,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -261,14 +281,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../otu-tables/filter/singletons.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Singletons</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../otu-tables/filter/rare.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Rare features</span></a>
+  <a href="../otu-tables/filter/singletons-rare.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Singletons and rare OTUs</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -374,7 +388,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>This section documents how to inspect positive controls to confirm successful amplification of target genes, detect false results, and overall, verify that the full workflow (from extraction to bioinformatics) behaves as expected <span class="citation" data-cites="lear2018">[@lear2018]</span>.</p>
+<p>This section documents how to inspect positive controls to confirm successful amplification of target genes, detect false results, and overall, verify that the full workflow (from extraction to bioinformatics) behaves as expected <span class="citation" data-cites="lear2018">(<a href="#ref-lear2018" role="doc-biblioref">Lear et al. 2018</a>)</span>.</p>
 <p>To follow the example presented on this page directly on your computer, download the script <code>003_positive_control.R</code> and the example raw data by clicking the buttons below. Alternatively, you may copy the codes below into your own script, and use your own data.</p>
 <div class="cell quarto-layout-panel" data-layout="[[-10,35,-5,40,-10]]">
 <div class="quarto-layout-row">
@@ -480,13 +494,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize the abundance of these OTUs in all samples</span></span>
 <span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_bar</span>(otu_table_pos, <span class="at">fill =</span> <span class="st">"kingdom"</span>) <span class="sc">+</span> </span>
 <span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span>sample_type, <span class="at">scales =</span> <span class="st">"free"</span>, <span class="at">space =</span> <span class="st">"free"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning: `aes_string()` was deprecated in ggplot2 3.0.0.
-ℹ Please use tidy evaluation idioms with `aes()`.
-ℹ See also `vignette("ggplot2-in-packages")` for more information.
-ℹ The deprecated feature was likely used in the phyloseq package.
-  Please report the issue at &lt;https://github.com/joey711/phyloseq/issues&gt;.</code></pre>
-</div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -502,15 +509,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h4 class="anchored" data-anchor-id="compare-community-profiles">Compare community profiles</h4>
 <p>If one suspects issues with sequencing, positive controls can be used for visual inspection, by making sure the taxonomic profiles match expectations.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep only positive controls for visualization</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>otu_table.rel.pos <span class="ot">&lt;-</span> <span class="fu">prune_samples</span>(</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_data</span>(otu_table.rel)<span class="sc">$</span>sample_type <span class="sc">==</span> <span class="st">"positive control"</span>, otu_table.rel)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove taxa with less than 1% abundance (for clarity of the plot)</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>otu_table.rel.pos <span class="ot">&lt;-</span> <span class="fu">filter_taxa</span>(otu_table.rel.pos, <span class="cf">function</span>(x) <span class="fu">sum</span>(x) <span class="sc">&gt;</span> .<span class="dv">01</span>, <span class="cn">TRUE</span>)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize the community profiles of these samples</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_bar</span>(otu_table.rel.pos, <span class="at">fill =</span> <span class="st">"phylum"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Keep only positive controls for visualization</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>otu_table.rel.pos <span class="ot">&lt;-</span> <span class="fu">prune_samples</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_data</span>(otu_table.rel)<span class="sc">$</span>sample_type <span class="sc">==</span> <span class="st">"positive control"</span>, otu_table.rel)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove taxa with less than 1% abundance (for clarity of the plot)</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>otu_table.rel.pos <span class="ot">&lt;-</span> <span class="fu">filter_taxa</span>(otu_table.rel.pos, <span class="cf">function</span>(x) <span class="fu">sum</span>(x) <span class="sc">&gt;</span> .<span class="dv">01</span>, <span class="cn">TRUE</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize the community profiles of these samples</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_bar</span>(otu_table.rel.pos, <span class="at">fill =</span> <span class="st">"phylum"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -535,27 +542,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="callout-body-container callout-body">
 <p>Homemade function <code>remove_taxa</code>: a simplified way of removing a selection of OTU from a <code>phyloseq</code> object.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>remove_taxa <span class="ot">&lt;-</span> <span class="cf">function</span>(badTaxa, physeq){</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  allTaxa <span class="ot">&lt;-</span> <span class="fu">taxa_names</span>(physeq)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  cleanTaxa <span class="ot">&lt;-</span> allTaxa[<span class="sc">!</span>(allTaxa <span class="sc">%in%</span> badTaxa)]</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">prune_taxa</span>(cleanTaxa, physeq))</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>remove_taxa <span class="ot">&lt;-</span> <span class="cf">function</span>(badTaxa, physeq){</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  allTaxa <span class="ot">&lt;-</span> <span class="fu">taxa_names</span>(physeq)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  cleanTaxa <span class="ot">&lt;-</span> allTaxa[<span class="sc">!</span>(allTaxa <span class="sc">%in%</span> badTaxa)]</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(<span class="fu">prune_taxa</span>(cleanTaxa, physeq))</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove positive controls</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>otu_ctrl_pos_clean <span class="ot">&lt;-</span> <span class="fu">prune_samples</span>(</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_data</span>(otu_ctrl_neg_clean)<span class="sc">$</span>sample_type <span class="sc">!=</span> <span class="st">"positive control"</span>, otu_ctrl_neg_clean)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Save cleaned OTU table</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(otu_ctrl_pos_clean, <span class="at">file =</span> <span class="st">"RData/16S/otu_ctrl_pos_clean.RData"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove positive controls</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>otu_ctrl_pos_clean <span class="ot">&lt;-</span> <span class="fu">prune_samples</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sample_data</span>(otu_ctrl_neg_clean)<span class="sc">$</span>sample_type <span class="sc">!=</span> <span class="st">"positive control"</span>, otu_ctrl_neg_clean)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Save cleaned OTU table</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">save</span>(otu_ctrl_pos_clean, <span class="at">file =</span> <span class="st">"RData/16S/otu_ctrl_pos_clean.RData"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+
 
 
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-lear2018" class="csl-entry" role="listitem">
+Lear, Gavin, Ian Dickie, Jonathan Banks, Stephane Boyer, Hannah Buckley, Thomas Buckley, Rob Cruickshank, et al. 2018. <span>“Methods for the Extraction, Storage, Amplification and Sequencing of DNA from Environmental Samples.”</span> <em>New Zealand Journal of Ecology</em>. <a href="https://doi.org/10.20417/nzjecol.42.9">https://doi.org/10.20417/nzjecol.42.9</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";

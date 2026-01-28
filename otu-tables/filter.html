@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Global filtering – Silva Nova MAW</title>
+<title>Filtering OTU tables – Silva Nova MAW</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,7 +20,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -29,7 +49,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../otu-tables/filter/singletons.html" rel="next">
+<link href="../otu-tables/filter/singletons-rare.html" rel="next">
 <link href="../otu-tables/controls-positive.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
@@ -226,14 +246,8 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../otu-tables/filter/singletons.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Singletons</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../otu-tables/filter/rare.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Rare features</span></a>
+  <a href="../otu-tables/filter/singletons-rare.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Singletons and rare OTUs</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -303,15 +317,26 @@ ul.task-list li input[type="checkbox"] {
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="4">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#global-filtering" id="toc-global-filtering" class="nav-link active" data-scroll-target="#global-filtering">&gt; Global filtering</a>
+  <ul>
+  <li><a href="#singletons-and-rare-otus" id="toc-singletons-and-rare-otus" class="nav-link" data-scroll-target="#singletons-and-rare-otus">Singletons and rare OTUs</a></li>
+  <li><a href="#scarce-otus" id="toc-scarce-otus" class="nav-link" data-scroll-target="#scarce-otus">Scarce OTUs</a></li>
+  </ul></li>
+  <li><a href="#taxonomy-filtering" id="toc-taxonomy-filtering" class="nav-link" data-scroll-target="#taxonomy-filtering">&gt; Taxonomy filtering</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Global filtering</h1>
+<h1 class="title">Filtering OTU tables</h1>
 </div>
 
 
@@ -328,16 +353,23 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Scripts used to do a preliminary filtering to remove the less abundant OTUs, which are most often artifacts. These also usually coincide with the OTUs with lowest BLAST accuracy.</p>
-<p>Before any other step, we should remove the features that have too low frequency. To do this, we sum the reads for all features, obtaining the total read count for each one. We then calculate the average feature frequency, and only select the OTUs with a frequency larger than 0.05% of the average frequency.</p>
-<p>Download the script <code>004_global_filter.R</code>, or copy the codes below into your own script.</p>
-<div class="cell">
-<div class="cell-output-display">
+<p>This section presents two important ways of cleaning the OTU tables:</p>
+<ul>
+<li>First, by going through a global filtering to remove singletons, rare or scarce OTUs, which are most often artifacts <span class="citation" data-cites="sgarbi2020 nikodemova2023 brown2015">(<a href="#ref-sgarbi2020" role="doc-biblioref">Sgarbi et al. 2020</a>; <a href="#ref-nikodemova2023" role="doc-biblioref">Nikodemova et al. 2023</a>; <a href="#ref-brown2015" role="doc-biblioref">Brown et al. 2015</a>)</span>. These also usually coincide with the OTUs with lowest BLAST accuracy <span class="citation" data-cites="tedersoo2022">(<a href="#ref-tedersoo2022" role="doc-biblioref">Tedersoo et al. 2022</a>)</span>.</li>
+<li>Then, by going through a taxonomy filtering, based on BLAST quality thresholds.</li>
+</ul>
+<p>The two downloadable scripts below (<code>004_global_filter.R</code> and <code>005_taxonomy_filter.R</code>) implement a standard approach for cleaning OTU tables based on abundance and prevalence, or based on taxonomy and BLAST quality, in a <code>phyloseq</code> object.</p>
+<div class="cell quarto-layout-panel" data-layout="[[-15,25,-15,25,-15]]">
+<div class="quarto-layout-row">
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 15.8%;justify-content: flex-start;">
+<p>&nbsp;</p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 26.3%;justify-content: flex-start;">
 <button class="btn btn-success" onclick="
     async function downloadFile(event) {
       event.preventDefault();
       try {
-        const response = await fetch('data:text/plain;base64,');
+        const response = await fetch('data:text/plain;base64,Iz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PSMKIyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICMKIyAgR2xvYmFsIGZpbHRlcmluZzogcmVtb3Zpbmcgc2luZ2xldG9ucywgcmFyZSBhbmQvb3Igc2NhcmNlIE9UVXMgICAgICAgICAgICAgICMKIyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICMKIyAgV3JpdHRlbiBieSBLYXJlbGxlIFJoZWF1bHQ6IGthcmhAaWduLmt1LmRrICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICMKIyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICMKIz09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PSMKCiMgU2V0IHdvcmtpbmcgZGlyZWN0b3J5IChtb2RpZnkgdGhlIHBhdGggYmVsb3cgdG8gbWF0Y2ggeW91ciBvd24pCnNldHdkKCJzb21lX2ZvbGRlcl9wYXRoL215X3dvcmtpbmdfZGlyZWN0b3J5IikKCiMgTG9hZCBwYWNrYWdlcwpzb3VyY2UoInNjcmlwdHMvMDAxX3JlcXVpcmVkX3BhY2thZ2VzLlIiKQoKIyBMb2FkIHRoZSBjbGVhbmVkIE9UVSB0YWJsZSBmcm9tIHByZXZpb3VzIHNjcmlwdHMKIyAiMDAzX25lZ2F0aXZlX2NvbnRyb2wuUiIgb3IgIjAwM19wb3NpdGl2ZV9jb250cm9sLlIiCmxvYWQoIlJEYXRhLzE2Uy9vdHVfY3RybF9uZWdfY2xlYW4uUkRhdGEiKQpsb2FkKCJSRGF0YS8xNlMvb3R1X2N0cmxfcG9zX2NsZWFuLlJEYXRhIikKCiMgU2luZ2xldG9ucyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCgoKCiMgUmFyZSBPVFVzIC0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCgoKCiMgU2NhcmNlIE9UVXMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCgoKCiMgU2F2ZSBjbGVhbmVkIE9UVSB0YWJsZSAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCgojIE9UVSB0YWJsZSB3aXRoIHNpbmdsZXRvbnMgZmlsdGVyZWQKc2F2ZShvdHVfdGFibGVfc2luZ2xlLCBmaWxlID0gIlJEYXRhLzE2Uy9vdHVfc2luZ2xlX2NsZWFuLlJEYXRhIikKCiMgT1RVIHRhYmxlIHdpdGggcmFyZSB0YXhhIGZpbHRlcmVkCnNhdmUob3R1X3RhYmxlX3JhcmUsIGZpbGUgPSAiUkRhdGEvMTZTL290dV9yYXJlX2NsZWFuLlJEYXRhIikKCiMgT1RVIHRhYmxlIHdpdGggc2NhcmNlIHRheGEgZmlsdGVyZWQKc2F2ZShvdHVfdGFibGVfc2NhcmNlLCBmaWxlID0gIlJEYXRhLzE2Uy9vdHVfc2NhcmNlX2NsZWFuLlJEYXRhIikK');
         if (!response.ok) throw new Error('Network response failed');
         const blob = await response.blob();
         const blobUrl = window.URL.createObjectURL(blob);
@@ -358,13 +390,112 @@ ul.task-list li input[type="checkbox"] {
       }
     }
     downloadFile(event);
-  "><i class="fa fa-save"></i> Download script</button>
+  "><i class="fa fa-save"></i> Download script 004_global_filter</button>
+</div>
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 15.8%;justify-content: flex-start;">
+<p>&nbsp;</p>
+</div>
+<div class="quarto-layout-cell" style="flex-basis: 26.3%;justify-content: flex-start;">
+<button class="btn btn-success" onclick="
+    async function downloadFile(event) {
+      event.preventDefault();
+      try {
+        const response = await fetch('data:text/plain;base64,');
+        if (!response.ok) throw new Error('Network response failed');
+        const blob = await response.blob();
+        const blobUrl = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = '005_taxonomy_filter.R';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.dispatchEvent(new MouseEvent('click'));
+        document.body.removeChild(a);
+        setTimeout(() => {
+          window.URL.revokeObjectURL(blobUrl);
+        }, 100);
+        return false;
+      } catch (error) {
+        console.error('Download failed:', error);
+        alert('Download failed. Please try again.');
+      }
+    }
+    downloadFile(event);
+  "><i class="fa fa-save"></i> Download script 005_taxonomy_filter</button>
+</div>
+<div class="quarto-figure-spacer quarto-layout-cell" style="flex-basis: 15.8%;justify-content: flex-start;">
+<p>&nbsp;</p>
 </div>
 </div>
+</div>
+<p>For a step-by-step explanation of each filtering procedure, see the sections below:</p>
+<section id="global-filtering" class="level2">
+<h2 class="anchored" data-anchor-id="global-filtering">&gt; Global filtering</h2>
+<p>A global filtering - based on abundance of OTUs across all samples (singletons and rare features), or based on the prevalence of OTUs across samples (scarcity) - is typically applied early to remove very low-count and low-prevalence features that are disproportionately driven by sequencing/PCR error and index misassignment, thereby reducing noise and improving downstream compositional and multivariate analyses.</p>
+<section id="singletons-and-rare-otus" class="level3">
+<h3 class="anchored" data-anchor-id="singletons-and-rare-otus"><a href="singletons-rare.qmd">Singletons and rare OTUs</a></h3>
+<p>Singleton OTUs have been shown to be overwhelmingly composed of artefacts arising from PCR and sequencing errors, including chimeric molecules that are typically low-abundance and sample-restricted <span class="citation" data-cites="tedersoo2021 sze2019">(<a href="#ref-tedersoo2021" role="doc-biblioref">Tedersoo et al. 2021</a>; <a href="#ref-sze2019" role="doc-biblioref">Sze and Schloss 2019</a>)</span>. Their removal has repeatedly been shown to have negligible effects on hypothesis-driven community comparisons while substantially reducing noise <span class="citation" data-cites="edgar2016 nikodemova2023 sgarbi2020">(<a href="#ref-edgar2016" role="doc-biblioref">Edgar 2016</a>; <a href="#ref-nikodemova2023" role="doc-biblioref">Nikodemova et al. 2023</a>; <a href="#ref-sgarbi2020" role="doc-biblioref">Sgarbi et al. 2020</a>)</span>. On the other hand, retaining them is justifiable in studies explicitly targeting rare biosphere diversity, but requires careful manual curation <span class="citation" data-cites="brown2015">(<a href="#ref-brown2015" role="doc-biblioref">Brown et al. 2015</a>)</span>.</p>
+<p>Rare OTUs (beyond singletons) can hardly be distinguished from artefacts, thus, low-abundance OTUs are often excluded from the analysis. However, filtering approaches vary among studies, and there is no agreed-upon consensus as to what filtering thresholds should be employed <span class="citation" data-cites="yu2017 poos2012 nikodemova2023">(<a href="#ref-yu2017" role="doc-biblioref">Yu et al. 2017</a>; <a href="#ref-poos2012" role="doc-biblioref">Poos and Jackson 2012</a>; <a href="#ref-nikodemova2023" role="doc-biblioref">Nikodemova et al. 2023</a>)</span>. Nevertheless, rare OTUs, just like singletons, often represent residual artefacts, and removing them has minimal influence on community comparisons. Thus, filtering reduces the complexity of microbiome data while preserving their integrity in downstream analysis <span class="citation" data-cites="edgar2016 nikodemova2023 sgarbi2020 cao2021">(<a href="#ref-edgar2016" role="doc-biblioref">Edgar 2016</a>; <a href="#ref-nikodemova2023" role="doc-biblioref">Nikodemova et al. 2023</a>; <a href="#ref-sgarbi2020" role="doc-biblioref">Sgarbi et al. 2020</a>; <a href="#ref-cao2021" role="doc-biblioref">Cao et al. 2021</a>)</span>. Although rare taxa may in some contexts carry information on beta diversity, their retention is mainly justified in studies explicitly focused on rare biosphere ecology, where careful validation is required <span class="citation" data-cites="brown2015">(<a href="#ref-brown2015" role="doc-biblioref">Brown et al. 2015</a>)</span>.</p>
+<p>Rare OTUs are frequently removed using absolute abundance thresholds (e.g.&nbsp;&lt;5 or &lt;10 reads) <span class="citation" data-cites="edgar2016 brown2015">(<a href="#ref-edgar2016" role="doc-biblioref">Edgar 2016</a>; <a href="#ref-brown2015" role="doc-biblioref">Brown et al. 2015</a>)</span>, or based on relative abundance thresholds (e.g.&nbsp;&lt;0.01%) <span class="citation" data-cites="nikodemova2023">(<a href="#ref-nikodemova2023" role="doc-biblioref">Nikodemova et al. 2023</a>)</span>, while others filter rare OTUs based on statistical methods <span class="citation" data-cites="smirnova2018">(<a href="#ref-smirnova2018" role="doc-biblioref">Smirnova, Huzurbazar, and Jafari 2018</a>)</span>.</p>
+</section>
+<section id="scarce-otus" class="level3">
+<h3 class="anchored" data-anchor-id="scarce-otus"><a href="scarce.qmd">Scarce OTUs</a></h3>
+<p>Scarce (low-prevalence) OTUs are features detected in only a small fraction of samples (&lt;5%). The extreme sparsity of microbiome data sets poses a major analytical challenge and is largely attributable to sequencing artefacts, contamination, and/or sequencing errors <span class="citation" data-cites="cao2021">(<a href="#ref-cao2021" role="doc-biblioref">Cao et al. 2021</a>)</span>. Thus, scarce OTUs are commonly filtered using simple rule-of-thumb criteria (e.g.&nbsp;presence in at least k samples or k% of samples), which reduces noise and improves statistical stability <span class="citation" data-cites="cao2021">(<a href="#ref-cao2021" role="doc-biblioref">Cao et al. 2021</a>)</span>. This criterion does not relate to the relative abundance of the OTUs, and as such, rare OTUs may be prevalent microbial taxa.</p>
+<p>In certain studies, higher thresholds for prevalence (&gt;25% of samples) may be used to define, for instance, the core microbiome <span class="citation" data-cites="simonin2020">(<a href="#ref-simonin2020" role="doc-biblioref">Simonin et al. 2020</a>)</span>.</p>
+</section>
+</section>
+<section id="taxonomy-filtering" class="level2">
+<h2 class="anchored" data-anchor-id="taxonomy-filtering">&gt; Taxonomy filtering</h2>
+<p>[INSERT HERE A GENERAL INTRODUCTION TO FILTERING BASED ON TAXONOMY AND BLAST QUALITY RESULTS]</p>
+<p>Filtering based on taxonomy and BLAST quality is applied to remove OTUs with ambiguous or low-confidence taxonomic assignments—typically indicated by low sequence similarity, poor alignment coverage, or inconsistent rank resolution—because such features are frequently artefactual or biologically uninterpretable and can bias ecological inference if retained (Altschul et al., 1990, DOI: 10.1016/S0022-2836(05)80360-2; Tedersoo et al., 2018, DOI: 10.1111/1462-2920.14487; Nilsson et al., 2019, DOI: 10.1111/1755-0998.13070).</p>
+<ul>
+<li><a href="16S.qmd">Bacteria &amp; Archaea (16S)</a></li>
+<li><a href="ITS.qmd">Fungi (ITS)</a></li>
+<li><a href="CO1.qmd">Soil animals (CO1)</a></li>
+</ul>
 
 
 
-</main> <!-- /main -->
+</section>
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-brown2015" class="csl-entry" role="listitem">
+Brown, Shawn P., Allison M. Veach, Anne R. Rigdon-Huss, Kirsten Grond, Spencer K. Lickteig, Kale Lothamer, Alena K. Oliver, and Ari Jumpponen. 2015. <span>“Scraping the Bottom of the Barrel: Are Rare High Throughput Sequences Artifacts?”</span> <em>Fungal Ecology</em> 13 (February): 221–25. <a href="https://doi.org/10.1016/j.funeco.2014.08.006">https://doi.org/10.1016/j.funeco.2014.08.006</a>.
+</div>
+<div id="ref-cao2021" class="csl-entry" role="listitem">
+Cao, Quy, Xinxin Sun, Karun Rajesh, Naga Chalasani, Kayla Gelow, Barry Katz, Vijay H. Shah, Arun J. Sanyal, and Ekaterina Smirnova. 2021. <span>“Effects of Rare Microbiome Taxa Filtering on Statistical Analysis.”</span> <em>Frontiers in Microbiology</em> 11 (January). <a href="https://doi.org/10.3389/fmicb.2020.607325">https://doi.org/10.3389/fmicb.2020.607325</a>.
+</div>
+<div id="ref-edgar2016" class="csl-entry" role="listitem">
+Edgar, Robert C. 2016. <span>“UNOISE2: Improved Error-Correction for Illumina 16S and ITS Amplicon Sequencing.”</span> <a href="http://dx.doi.org/10.1101/081257">http://dx.doi.org/10.1101/081257</a>.
+</div>
+<div id="ref-nikodemova2023" class="csl-entry" role="listitem">
+Nikodemova, Maria, Elizabeth A. Holzhausen, Courtney L. Deblois, Jodi H. Barnet, Paul E. Peppard, Garret Suen, and Kristen M. Malecki. 2023. <span>“The Effect of Low-Abundance OTU Filtering Methods on the Reliability and Variability of Microbial Composition Assessed by 16S rRNA Amplicon Sequencing.”</span> <em>Frontiers in Cellular and Infection Microbiology</em> 13 (June). <a href="https://doi.org/10.3389/fcimb.2023.1165295">https://doi.org/10.3389/fcimb.2023.1165295</a>.
+</div>
+<div id="ref-poos2012" class="csl-entry" role="listitem">
+Poos, Mark S., and Donald A. Jackson. 2012. <span>“Addressing the Removal of Rare Species in Multivariate Bioassessments: The Impact of Methodological Choices.”</span> <em>Ecological Indicators</em> 18 (July): 82–90. <a href="https://doi.org/10.1016/j.ecolind.2011.10.008">https://doi.org/10.1016/j.ecolind.2011.10.008</a>.
+</div>
+<div id="ref-sgarbi2020" class="csl-entry" role="listitem">
+Sgarbi, Luciano F., Luis M. Bini, Jani Heino, Jenny Jyrkänkallio-Mikkola, Victor L. Landeiro, Edineusa P. Santos, Fabiana Schneck, et al. 2020. <span>“Sampling Effort and Information Quality Provided by Rare and Common Species in Estimating Assemblage Structure.”</span> <em>Ecological Indicators</em> 110 (March): 105937. <a href="https://doi.org/10.1016/j.ecolind.2019.105937">https://doi.org/10.1016/j.ecolind.2019.105937</a>.
+</div>
+<div id="ref-simonin2020" class="csl-entry" role="listitem">
+Simonin, Marie, Cindy Dasilva, Valeria Terzi, Eddy L M Ngonkeu, Diégane Diouf, Aboubacry Kane, Gilles Béna, and Lionel Moulin. 2020. <span>“Influence of Plant Genotype and Soil on the Wheat Rhizosphere Microbiome: Evidences for a Core Microbiome Across Eight African and European Soils.”</span> <em>FEMS Microbiology Ecology</em> 96 (6). <a href="https://doi.org/10.1093/femsec/fiaa067">https://doi.org/10.1093/femsec/fiaa067</a>.
+</div>
+<div id="ref-smirnova2018" class="csl-entry" role="listitem">
+Smirnova, Ekaterina, Snehalata Huzurbazar, and Farhad Jafari. 2018. <span>“PERFect: PERmutation Filtering Test for Microbiome Data.”</span> <em>Biostatistics</em> 20 (4): 615–31. <a href="https://doi.org/10.1093/biostatistics/kxy020">https://doi.org/10.1093/biostatistics/kxy020</a>.
+</div>
+<div id="ref-sze2019" class="csl-entry" role="listitem">
+Sze, Marc A., and Patrick D. Schloss. 2019. <span>“The Impact of DNA Polymerase and Number of Rounds of Amplification in PCR on 16S rRNA Gene Sequence Data.”</span> Edited by Katherine McMahon. <em>mSphere</em> 4 (3). <a href="https://doi.org/10.1128/msphere.00163-19">https://doi.org/10.1128/msphere.00163-19</a>.
+</div>
+<div id="ref-tedersoo2022" class="csl-entry" role="listitem">
+Tedersoo, Leho, Mohammad Bahram, Lucie Zinger, R. Henrik Nilsson, Peter G. Kennedy, Teng Yang, Sten Anslan, and Vladimir Mikryukov. 2022. <span>“Best Practices in Metabarcoding of Fungi: From Experimental Design to Results.”</span> <em>Molecular Ecology</em> 31 (10): 2769–95. <a href="https://doi.org/10.1111/mec.16460">https://doi.org/10.1111/mec.16460</a>.
+</div>
+<div id="ref-tedersoo2021" class="csl-entry" role="listitem">
+Tedersoo, Leho, Vladimir Mikryukov, Sten Anslan, Mohammad Bahram, Abdul Nasir Khalid, Adriana Corrales, Ahto Agan, et al. 2021. <span>“The Global Soil Mycobiome Consortium Dataset for Boosting Fungal Diversity Research.”</span> <em>Fungal Diversity</em> 111 (1): 573–88. <a href="https://doi.org/10.1007/s13225-021-00493-7">https://doi.org/10.1007/s13225-021-00493-7</a>.
+</div>
+<div id="ref-yu2017" class="csl-entry" role="listitem">
+Yu, Zhengda, Hui Wang, Jiao Meng, Mingsheng Miao, Qiang Kong, Renqing Wang, and Jian Liu. 2017. <span>“Quantifying the Responses of Biological Indices to Rare Macroinvertebrate Taxa Exclusion: Does Excluding More Rare Taxa Cause More Error?”</span> <em>Ecology and Evolution</em> 7 (5): 1583–91. <a href="https://doi.org/10.1002/ece3.2798">https://doi.org/10.1002/ece3.2798</a>.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -777,8 +908,8 @@ ul.task-list li input[type="checkbox"] {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../otu-tables/filter/singletons.html" class="pagination-link" aria-label="Singletons">
-        <span class="nav-page-text">Singletons</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../otu-tables/filter/singletons-rare.html" class="pagination-link" aria-label="Singletons and rare OTUs">
+        <span class="nav-page-text">Singletons and rare OTUs</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
