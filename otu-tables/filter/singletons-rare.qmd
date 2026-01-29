@@ -2,6 +2,7 @@
 title: "Singletons and rare OTUs"
 format: html
 editor: visual
+bibliography: references.bib
 ---
 
 Singletons and other rare OTUs are predominantly composed of PCR, sequencing, and chimera artefacts, and their removal has been shown to have negligible effects on hypothesis-driven community comparisons while substantially reducing noise [@edgar2016; @nikodemova2023; @sgarbi2020; @cao2021]. Retaining them is mainly justified in studies explicitly targeting rare biosphere diversity and requires careful validation [@brown2015]. Consequently, filtering rare features simplifies microbiome datasets without materially altering ecological inference in most comparative analyses.
@@ -14,7 +15,13 @@ This section documents how to filter out singletons and rare OTUs based on absol
 #| echo: false
 #| output: false
 library(downloadthis)
+library(plotly)
+library(phyloseq)
+library(dplyr)
+library(ggpubr)
+library(microViz)
 load("../../RData/16S/otu_ctrl_pos_clean.RData")
+otu_table_raw <- otu_ctrl_pos_clean
 ```
 
 ```{r}
@@ -45,7 +52,347 @@ download_file(
 
 Removing singletons is as simple as removing anything that has less than 1 read throughout the entire data set.
 
+```{r}
+#| output: false
+# Count OTUs before filtering
+ntaxa(otu_table_raw) # 25390
+
+# Remove singletons
+otu_table_single <- prune_taxa(taxa_sums(otu_table_raw) > 1, otu_table_raw)
+
+# Count OTUs after filtering
+ntaxa(otu_table_single) # 24923 (~2% of the OTUs were singletons)
+```
+
 ### Removing rare OTUs
+
+OTUs are considered rare if their abundance is small compared to other OTUs. They may be present in many samples, but if their total sum across samples is smaller than *k*% of the average sequencing depth (relative abundance), or smaller than *k* reads (absolute abundance) then they are considered rare.
+
+NOTE: When calculating the average sequencing depth, ignore controls and blanks, as they artificially lower the average.
+
+#### Relative abundance
+
+Typically, thresholds between 0.005% and 0.1% relative abundance are found in the literature. For the sake of this demonstration, we've included multiple thresholds between 0.005% and 0.1%, as well as a threshold up to 1% to better illustrate the effects of filtering out rare OTUs on different community analyses.
+
+We define relative thresholds based on the average sequencing depth (assuming that all samples have sufficient sequencing depth).
+
+```{r}
+#| output: false
+# Calculate the average sequencing depth
+seq_depth_avg <- mean(sample_sums(otu_table_raw)) # 150745.2 reads
+
+# Calculate thresholds based on k% of the average sequencing depth
+thresh005 <- ceiling(seq_depth_avg*0.005/100) # 8 reads
+thresh01 <- ceiling(seq_depth_avg*0.01/100) # 16 reads
+thresh05 <- ceiling(seq_depth_avg*0.05/100) # 76 reads
+thresh1 <- ceiling(seq_depth_avg*0.1/100) # 151 reads
+thresh10 <- ceiling(seq_depth_avg*1/100) # 1508 reads
+
+# Remove all OTUs that have a total sum lower than the threshold
+otu_table_rare005 <- otu_table_raw %>% prune_taxa(taxa_sums(.) > thresh005, .)
+otu_table_rare01 <- otu_table_raw %>% prune_taxa(taxa_sums(.) > thresh01, .)
+otu_table_rare05 <- otu_table_raw %>% prune_taxa(taxa_sums(.) > thresh05, .)
+otu_table_rare1 <- otu_table_raw %>% prune_taxa(taxa_sums(.) > thresh1, .)
+otu_table_rare10 <- otu_table_raw %>% prune_taxa(taxa_sums(.) > thresh10, .)
+
+# Compare the number of OTU in each filtering step
+ntaxa(otu_table_raw) #25390 (before filtering)
+ntaxa(otu_table_single) #24923 (~2% singletons)
+ntaxa(otu_table_rare005) #8638 (~66% of OTUs have less than 8 reads; 0.005%)
+ntaxa(otu_table_rare01) #6631 (~74% of OTUs have less than 16 reads; 0.01%)
+ntaxa(otu_table_rare05) #3783 (~85% of OTUs have less than 76 reads; 0.05%)
+ntaxa(otu_table_rare1) #2929 (~88% of OTUs have less than 151 reads; 0.1%)
+ntaxa(otu_table_rare10) #1042 (~96% of OTUs have less than 1508 reads; 1%)
+```
+
+#### Absolute abundance
+
+Typically, thresholds between 5-10 reads are found in the literature. In this example, this roughly corresponds to a relative abundance threshold at 0.005% (8 reads). If the average sequencing depth of your data set is larger than the one presented here, it may be relevant to test removing 5 and 10 reads if those absolute thresholds are significantly lower than a relative threshold at 0.005%.
+
+#### Compare thresholds
+
+To visualize the effect of these different thresholds, we must first create a data frame per filtered OTU table that summarizes the sequencing depth per sample and the Observed OTU (richness).
+
+```{r}
+#| output: false
+# Non-filtered OTU table
+seq_depth_raw <- cbind.data.frame(sample_data(otu_table_raw)) %>%
+  cbind(estimate_richness(otu_table_raw, measures = "Observed")) %>%
+  mutate(LibrarySize = sample_sums(otu_table_raw)) %>%
+  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
+  mutate(seq_depth = "raw")
+
+# Singletons
+seq_depth_single <- cbind.data.frame(sample_data(otu_table_single)) %>%
+  cbind(estimate_richness(otu_table_single, measures = "Observed")) %>%
+  mutate(LibrarySize = sample_sums(otu_table_single)) %>%
+  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
+  mutate(seq_depth = "singletons")
+
+# Rare 0.005% (<8 reads)
+seq_depth_rare005 <- cbind.data.frame(sample_data(otu_table_rare005)) %>%
+  cbind(estimate_richness(otu_table_rare005, measures = "Observed")) %>%
+  mutate(LibrarySize = sample_sums(otu_table_rare005)) %>%
+  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
+  mutate(seq_depth = "rare 0.005%")
+
+# Rare 0.01% (<16 reads)
+seq_depth_rare01 <- cbind.data.frame(sample_data(otu_table_rare01)) %>%
+  cbind(estimate_richness(otu_table_rare01, measures = "Observed")) %>%
+  mutate(LibrarySize = sample_sums(otu_table_rare01)) %>%
+  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
+  mutate(seq_depth = "rare 0.01%")
+
+# Rare 0.05% (<76 reads)
+seq_depth_rare05 <- cbind.data.frame(sample_data(otu_table_rare05)) %>%
+  cbind(estimate_richness(otu_table_rare05, measures = "Observed")) %>%
+  mutate(LibrarySize = sample_sums(otu_table_rare05)) %>%
+  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
+  mutate(seq_depth = "rare 0.05%")
+
+# Rare 0.1% (<151 reads)
+seq_depth_rare1 <- cbind.data.frame(sample_data(otu_table_rare1)) %>%
+  cbind(estimate_richness(otu_table_rare1, measures = "Observed")) %>%
+  mutate(LibrarySize = sample_sums(otu_table_rare1)) %>%
+  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
+  mutate(seq_depth = "rare 0.1%")
+
+# Rare 1% (<1508 reads)
+seq_depth_rare10 <- cbind.data.frame(sample_data(otu_table_rare10)) %>%
+  cbind(estimate_richness(otu_table_rare10, measures = "Observed")) %>%
+  mutate(LibrarySize = sample_sums(otu_table_rare10)) %>%
+  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
+  mutate(seq_depth = "rare 1%")
+
+# Combine data frames
+seq_depth_all <- seq_depth_raw %>% rbind(seq_depth_single) %>%
+  rbind(seq_depth_rare005) %>% rbind(seq_depth_rare01) %>%
+  rbind(seq_depth_rare05) %>% rbind(seq_depth_rare1) %>%
+  rbind(seq_depth_rare10)
+```
+
+##### Effect on library size
+
+```{r}
+#| eval: false
+# Plot the library size of all samples
+ggplot(data = seq_depth_all, aes(x = Index, y = LibrarySize, color = seq_depth)) +
+  geom_point() + geom_line()
+```
+
+```{r}
+#| echo: false
+plot_ly(data = seq_depth_all, x = ~Index, y = ~LibrarySize, color = ~seq_depth,
+        type = 'scatter', mode = 'markers+lines', colors = 'Dark2', 
+        text = ~paste("Library Size: ", LibrarySize, 
+                      '<br>Sample ID: ', Soil_ID))
+```
+
+With this analysis, we can see that the first filtering step (singletons) does not affect LibrarySize, as the points completely overlap (yellow vs brown). Aside from a threshold at 1%, other thresholds barely reduced library size per sample.
+
+::: callout-tip
+Try zooming in on a selection of points with low library size or large library size to better see the effects of the different thresholds. For example, the filtering of rare OTUs at a threshold of 0.01% changes very little in the LibrarySize, even though we lost \~73% of OTUs.
+:::
+
+##### Effect on OTU richness
+
+To confirm our choice of the best filtering threshold, let's compare the effect of filtering on OTU richness.
+
+```{r}
+#| eval: false
+# Plot the OTU richness of all samples
+ggplot(data = seq_depth_all, aes(x = Index, y = Observed, color = seq_depth)) +
+  geom_point() + geom_line()
+```
+
+```{r}
+#| echo: false
+plot_ly(data = seq_depth_all, x = ~Index, y = ~Observed, color = ~seq_depth,
+        type = 'scatter', mode = 'markers+lines', colors = 'Dark2', 
+        text = ~paste("Library Size: ", LibrarySize, 
+                      "<br>Observed OTU: ", Observed, 
+                      '<br>Sample ID: ', Soil_ID))
+```
+
+This plot shows that these different filtering thresholds return the same pattern of OTU richness as a function of library size.
+
+```{r}
+#| echo: false
+#| output: false
+# Non-filtered OTU table
+seq_depth_raw <- cbind.data.frame(sample_data(otu_table_raw)) %>%
+  cbind(estimate_richness(otu_table_raw, measures = "Observed")) %>%
+  cbind(estimate_richness(otu_table_raw, measures = "Shannon")) %>%
+  mutate(LibrarySize = sample_sums(otu_table_raw)) %>%
+  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
+  mutate(seq_depth = "raw")
+
+# Singletons
+seq_depth_single <- cbind.data.frame(sample_data(otu_table_single)) %>%
+  cbind(estimate_richness(otu_table_single, measures = "Observed")) %>%
+  cbind(estimate_richness(otu_table_raw, measures = "Shannon")) %>%
+  mutate(LibrarySize = sample_sums(otu_table_single)) %>%
+  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
+  mutate(seq_depth = "singletons")
+
+# Rare 0.005% (<8 reads)
+seq_depth_rare005 <- cbind.data.frame(sample_data(otu_table_rare005)) %>%
+  cbind(estimate_richness(otu_table_rare005, measures = "Observed")) %>%
+  cbind(estimate_richness(otu_table_raw, measures = "Shannon")) %>%
+  mutate(LibrarySize = sample_sums(otu_table_rare005)) %>%
+  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
+  mutate(seq_depth = "rare 0.005%")
+
+# Rare 0.01% (<16 reads)
+seq_depth_rare01 <- cbind.data.frame(sample_data(otu_table_rare01)) %>%
+  cbind(estimate_richness(otu_table_rare01, measures = "Observed")) %>%
+  cbind(estimate_richness(otu_table_raw, measures = "Shannon")) %>%
+  mutate(LibrarySize = sample_sums(otu_table_rare01)) %>%
+  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
+  mutate(seq_depth = "rare 0.01%")
+
+# Rare 0.05% (<76 reads)
+seq_depth_rare05 <- cbind.data.frame(sample_data(otu_table_rare05)) %>%
+  cbind(estimate_richness(otu_table_rare05, measures = "Observed")) %>%
+  cbind(estimate_richness(otu_table_raw, measures = "Shannon")) %>%
+  mutate(LibrarySize = sample_sums(otu_table_rare05)) %>%
+  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
+  mutate(seq_depth = "rare 0.05%")
+
+# Rare 0.1% (<151 reads)
+seq_depth_rare1 <- cbind.data.frame(sample_data(otu_table_rare1)) %>%
+  cbind(estimate_richness(otu_table_rare1, measures = "Observed")) %>%
+  cbind(estimate_richness(otu_table_raw, measures = "Shannon")) %>%
+  mutate(LibrarySize = sample_sums(otu_table_rare1)) %>%
+  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
+  mutate(seq_depth = "rare 0.1%")
+
+# Rare 1% (<1508 reads)
+seq_depth_rare10 <- cbind.data.frame(sample_data(otu_table_rare10)) %>%
+  cbind(estimate_richness(otu_table_rare10, measures = "Observed")) %>%
+  cbind(estimate_richness(otu_table_raw, measures = "Shannon")) %>%
+  mutate(LibrarySize = sample_sums(otu_table_rare10)) %>%
+  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
+  mutate(seq_depth = "rare 1%")
+
+# Combine data frames
+seq_depth_all <- seq_depth_raw %>% rbind(seq_depth_single) %>%
+  rbind(seq_depth_rare005) %>% rbind(seq_depth_rare01) %>%
+  rbind(seq_depth_rare05) %>% rbind(seq_depth_rare1) %>%
+  rbind(seq_depth_rare10)
+```
+
+::: callout-tip
+Try comparing other alpha diversity indices, such as the Shannon index.
+
+```{r}
+#| eval: false
+# Add Shannon index to each OTU table as such
+seq_depth_raw <- seq_depth_raw %>%
+  cbind(estimate_richness(otu_table_raw, measures = "Shannon"))
+
+# Plot the Shannon index of all samples
+ggplot(data = seq_depth_all, aes(x = Index, y = Shannon, color = seq_depth)) +
+  geom_point() + geom_line()
+```
+
+```{r}
+#| echo: false
+plot_ly(data = seq_depth_all, x = ~Index, y = ~Shannon, color = ~seq_depth,
+        type = 'scatter', mode = 'markers+lines', colors = 'Dark2', 
+        text = ~paste("Library Size: ", LibrarySize, 
+                      "<br>Shannon index: ", Shannon, 
+                      '<br>Sample ID: ', Soil_ID))
+```
+
+Filtering rare OTUs (even up to 1%) has no significant effect on the Shannon index. Note also the lack of a clear relationship between the Shannon index and LibrarySize.
+:::
+
+##### Effect on beta diversity
+
+To confirm our choice of filtering further, we can compare how the different filtering methods affect beta diversity.
+
+```{r}
+# Non-filtered OTU table
+beta_div_raw <- otu_table_raw %>%
+  tax_transform("identity", rank = "taxa_OTU") %>%
+  dist_calc("aitchison") %>%
+  ord_calc("PCoA") %>%
+  ord_plot(color = "Land_use", auto_caption = NA) +
+  stat_ellipse(aes(colour = Land_use))
+
+# Singletons
+beta_div_single <- otu_table_single %>%
+  tax_transform("identity", rank = "taxa_OTU") %>%
+  dist_calc("aitchison") %>%
+  ord_calc("PCoA") %>%
+  ord_plot(color = "Land_use", auto_caption = NA) +
+  stat_ellipse(aes(colour = Land_use))
+
+# Rare 0.005%
+beta_div_rare005 <- otu_table_rare005 %>%
+  tax_transform("identity", rank = "taxa_OTU") %>%
+  dist_calc("aitchison") %>%
+  ord_calc("PCoA") %>%
+  ord_plot(color = "Land_use", auto_caption = NA) +
+  stat_ellipse(aes(colour = Land_use))
+
+# Rare 0.01%
+beta_div_rare01 <- otu_table_rare01 %>%
+  tax_transform("identity", rank = "taxa_OTU") %>%
+  dist_calc("aitchison") %>%
+  ord_calc("PCoA") %>%
+  ord_plot(color = "Land_use", auto_caption = NA) +
+  stat_ellipse(aes(colour = Land_use))
+
+# Rare 0.05%
+beta_div_rare05 <- otu_table_rare05 %>%
+  tax_transform("identity", rank = "taxa_OTU") %>%
+  dist_calc("aitchison") %>%
+  ord_calc("PCoA") %>%
+  ord_plot(color = "Land_use", auto_caption = NA) +
+  stat_ellipse(aes(colour = Land_use))
+
+# Rare 0.1%
+beta_div_rare1 <- otu_table_rare1 %>%
+  tax_transform("identity", rank = "taxa_OTU") %>%
+  dist_calc("aitchison") %>%
+  ord_calc("PCoA") %>%
+  ord_plot(color = "Land_use", auto_caption = NA) +
+  stat_ellipse(aes(colour = Land_use))
+
+# Rare 1%
+beta_div_rare10 <- otu_table_rare10 %>%
+  tax_transform("identity", rank = "taxa_OTU") %>%
+  dist_calc("aitchison") %>%
+  ord_calc("PCoA") %>%
+  ord_plot(color = "Land_use", auto_caption = NA) +
+  stat_ellipse(aes(colour = Land_use))
+
+# Visualize all plots together
+ggarrange(beta_div_raw, beta_div_single, beta_div_rare005, beta_div_rare01,
+          beta_div_rare05, beta_div_rare1, beta_div_rare10,
+          labels = c(
+            "Non-filtered (25390 OTUs)", "Singletons (24923 OTUs)",
+            "0.005% (<8 reads; 9147 OTUs)", "0.01% (<16 reads; 6796 OTUs)",
+            "0.05% (<76 reads; 3798 OTUs)", "0.1% (<151 reads; 2934 OTUs)",
+            "1% (<1508 reads; 1042 OTUs)"
+            ),
+          ncol = 3, nrow = 3, common.legend = TRUE,
+          hjust = 0, label.x = 0.2, font.label = list(size = 10))
+```
+
+With this analysis, we can see that removing rare OTUs reduces the variance within treatment a little bit, but does not affect overall patterns. Overall, all three plots showed that rare OTUs were mostly found in samples with large library size, and filtering out rare OTUs does not affect patterns. Only a threshold as high as 1% considerably affected patterns.
+
+#### Choosing the best threshold
+
+Ultimately, the choice of the "best" threshold is completely arbitrary. Various thresholds are found in the literature and no one is more justified than another. As seen in this demonstration, all thresholds below 1% had little observable effect on library size, alpha diversity and beta diversity. For the sake of being more conservative, let's select the lowest relative abundance threshold (0.005%), which also roughly corresponded to a conservative absolute threshold (5-10 reads).
+
+```{r}
+# Select the best filtering threshold (0.005%)
+# ~64% of OTUs have less than 8 reads
+otu_table_rare <- otu_table_rare005
+```
 
 ### Clean and save OTU table
 
@@ -56,7 +403,4 @@ save(otu_table_single, file = "RData/16S/otu_single_clean.RData")
 
 # OTU table with rare taxa filtered
 save(otu_table_rare, file = "RData/16S/otu_rare_clean.RData")
-
-# OTU table with scarce taxa filtered
-save(otu_table_scarce, file = "RData/16S/otu_scarce_clean.RData")
 ```

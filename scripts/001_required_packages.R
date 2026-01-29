@@ -21,6 +21,15 @@ if (!require("phyloseq", quietly = TRUE))
   BiocManager::install("phyloseq")
 library(phyloseq)
 
+# installed from R Universe ----------------------------------------------------
+
+if (!require("microViz", quietly = TRUE))
+  install.packages(
+    "microViz",
+    repos = c(davidbarnett = "https://david-barnett.r-universe.dev", getOption("repos"))
+  )
+library(microViz)
+
 # CRAN packages ----------------------------------------------------------------
 
 if (!require("Biostrings", quietly = TRUE))
@@ -42,6 +51,10 @@ library(plyr)
 if (!require("ggplot2", quietly = TRUE))
   install.packages("ggplot2")
 library(ggplot2)
+
+if (!require("ggpubr", quietly = TRUE))
+  install.packages("ggpubr")
+library(ggpubr)
 
 if (!require("dplyr", quietly = TRUE))
   install.packages("dplyr")
