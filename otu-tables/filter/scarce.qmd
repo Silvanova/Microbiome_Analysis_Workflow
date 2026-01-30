@@ -93,6 +93,7 @@ Furthermore, only one OTU had a higher read count than the highest threshold at 
 To confirm your choice of threshold with your own data, make sure to check the effect of removing these OTUs on library size, alpha diversity and beta diversity as was done for [removing rare OTUs](singletons-rare.qmd).
 
 ```{r}
+#| eval: false
 # Select the best filtering threshold for scarce OTUs
 # ~66% of OTUs have less than 8 reads + ~4.9% of scarce OTUs with <16 reads
 otu_table_scarce <- otu_table_scarce01
@@ -105,3 +106,4 @@ otu_table_scarce <- otu_table_scarce01
 # OTU table with scarce taxa filtered
 save(otu_table_scarce, file = "RData/16S/otu_scarce_clean.RData")
 ```
+

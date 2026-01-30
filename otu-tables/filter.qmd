@@ -64,9 +64,7 @@ In certain studies, higher thresholds for prevalence (\>25% of samples) may be u
 
 ## Taxonomy filtering
 
-\[INSERT HERE A GENERAL INTRODUCTION TO FILTERING BASED ON TAXONOMY AND BLAST QUALITY RESULTS\]
-
-Filtering based on taxonomy and BLAST quality is applied to remove OTUs with ambiguous or low-confidence taxonomic assignments—typically indicated by low sequence similarity, poor alignment coverage, or inconsistent rank resolution—because such features are frequently artefactual or biologically uninterpretable and can bias ecological inference if retained (Altschul et al., 1990, DOI: 10.1016/S0022-2836(05)80360-2; Tedersoo et al., 2018, DOI: 10.1111/1462-2920.14487; Nilsson et al., 2019, DOI: 10.1111/1755-0998.13070).
+Filtering based on taxonomy and BLAST quality is applied to remove OTUs with ambiguous or low-confidence taxonomic assignments, typically indicated by low sequence similarity, poor alignment coverage, or inconsistent rank resolution. Such features are frequently artefactual or biologically uninterpretable and can bias ecological inference if retained.
 
 -   [Bacteria & Archaea (16S)](filter/16S.qmd)
 -   [Fungi (ITS)](filter/ITS.qmd)
