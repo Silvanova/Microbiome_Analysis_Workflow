@@ -42,3 +42,66 @@ download_file(
 ```
 
 ### Removing scarce OTUs
+
+After filtering out rare OTUs, we can look at scarce OTUs (low-prevalence). Any OTU that occur in less than 3 samples (number of replicates) could be considered scarce, but it is important to verify that they are not abundant before removing them.
+
+```{r}
+#| eval: false
+# Convert OTU table to presence-absence data and relative abundance
+otu_table_rare.pa <- transform_sample_counts(otu_table_rare, function(x) 1*(x>0))
+
+# Calculate prevalence and total read counts of each OTUs
+prevalence <- data.frame(prevalence = taxa_sums(otu_table_rare.pa),
+                         abundance = taxa_sums(otu_table_rare)) %>%
+  # Filter OTUs with low prevalence (occur in less than 3 samples)
+  # 3 samples is the number of replicates used in this experiment
+  filter(prevalence < 3)
+```
+
+2177 OTUs were found in less than 3 samples. However, important OTUs could be removed this way. Some OTUs may be found in few samples, but still be abundant. It is important to verify their abundance before removing them.
+
+We already removed anything with less than 8 reads total, but we could increase this threshold to remove scarce OTUs. To decide whether an OTU is important or not, one can use the same method as used for filtering out the rare OTUs.
+
+```{r}
+#| eval: false
+# Identify scarce OTUs filtered out for each threshold
+scarce01 <- prevalence %>% filter(abundance < thresh01) #1243 OTUs
+scarce05 <- prevalence %>% filter(abundance < thresh05) #2117 OTUs
+scarce1 <- prevalence %>% filter(abundance < thresh1) #2152 OTUs
+scarce10 <- prevalence %>% filter(abundance < thresh10) #2176 OTUs
+
+# Remove all scarce OTUs that have a total sum lower than the threshold
+otu_table_scarce01 <- remove_taxa(rownames(scarce01), otu_table_rare)
+otu_table_scarce05 <- remove_taxa(rownames(scarce05), otu_table_rare)
+otu_table_scarce1 <- remove_taxa(rownames(scarce1), otu_table_rare)
+otu_table_scarce10 <- remove_taxa(rownames(scarce10), otu_table_rare)
+
+# Compare the number of OTU in each filtering step
+ntaxa(otu_table_raw) #25390 (before filtering)
+ntaxa(otu_table_single) #24923 (~2% singletons)
+ntaxa(otu_table_rare) #8638 (~66% of OTUs have less than 8 reads; 0.005%)
+ntaxa(otu_table_scarce01) #7395 (+ ~4.9% of scarce OTUs with <16 reads; 0.01%)
+ntaxa(otu_table_scarce05) #6521 (+ ~8.3% of scarce OTUs with <76 reads; 0.05%)
+ntaxa(otu_table_scarce1) #6486 (+ ~8.5% of scarce OTUs with <151 reads; 0.1%)
+ntaxa(otu_table_scarce10) #6462 (+ ~8.6% of scarce OTUs with <1508 reads; 1%)
+```
+
+Compared to previous methods that were filtering out rare OTUs based on read counts alone, the second highest threshold (0.01% abundance / \<16 reads total) removed \~74% of OTUs and we could barely see any significant effect on library size, alpha diversity and beta diversity. Here, even at the highest threshold, only a total of \~75% of OTUs are removed. We can therefore assume that the patterns would remain intact (or comparable to the effects seen at a threshold of 0.01% / \<16 reads).
+
+Furthermore, only one OTU had a higher read count than the highest threshold at 1% (1508 reads), which had 1894 reads (\~1.3%) across two samples. Therefore, all identified scarce OTUs can be considered rare and removing them could reduce noise in the data. For the sake of staying conservative, we choose to remove only scarce OTUs with an abundance \<0.01% (16 reads).
+
+To confirm your choice of threshold with your own data, make sure to check the effect of removing these OTUs on library size, alpha diversity and beta diversity as was done for [removing rare OTUs](singletons-rare.qmd).
+
+```{r}
+# Select the best filtering threshold for scarce OTUs
+# ~66% of OTUs have less than 8 reads + ~4.9% of scarce OTUs with <16 reads
+otu_table_scarce <- otu_table_scarce01
+```
+
+### Clean and save OTU table
+
+```{r}
+#| eval: false
+# OTU table with scarce taxa filtered
+save(otu_table_scarce, file = "RData/16S/otu_scarce_clean.RData")
+```

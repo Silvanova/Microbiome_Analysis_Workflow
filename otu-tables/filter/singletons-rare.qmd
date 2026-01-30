@@ -5,7 +5,7 @@ editor: visual
 bibliography: references.bib
 ---
 
-Singletons and other rare OTUs are predominantly composed of PCR, sequencing, and chimera artefacts, and their removal has been shown to have negligible effects on hypothesis-driven community comparisons while substantially reducing noise [@edgar2016; @nikodemova2023; @sgarbi2020; @cao2021]. Retaining them is mainly justified in studies explicitly targeting rare biosphere diversity and requires careful validation [@brown2015]. Consequently, filtering rare features simplifies microbiome datasets without materially altering ecological inference in most comparative analyses.
+Singletons and other rare OTUs are predominantly composed of PCR, sequencing, and chimera artefacts, and their removal has been shown to have negligible effects on hypothesis-driven community comparisons while substantially reducing noise [@edgar2016; @nikodemova2023; @sgarbi2020; @cao2021]. Retaining them is mainly justified in studies explicitly targeting rare biosphere diversity and requires careful validation [@brown2015]. Consequently, filtering rare features simplifies microbiome data sets without materially altering ecological inference in most comparative analyses.
 
 In R, singletons are typically removed by excluding OTUs with a total count of one across all samples, while rare OTUs are filtered by applying absolute (e.g. total counts \<5 or \<10) or relative abundance thresholds (e.g. \<0.01%) to the OTU table [@edgar2016; @brown2015; @nikodemova2023], commonly using `phyloseq::prune_taxa()` in combination with `taxa_sums()` or transformed relative abundances.
 
@@ -191,7 +191,7 @@ plot_ly(data = seq_depth_all, x = ~Index, y = ~LibrarySize, color = ~seq_depth,
 With this analysis, we can see that the first filtering step (singletons) does not affect LibrarySize, as the points completely overlap (yellow vs brown). Aside from a threshold at 1%, other thresholds barely reduced library size per sample.
 
 ::: callout-tip
-Try zooming in on a selection of points with low library size or large library size to better see the effects of the different thresholds. For example, the filtering of rare OTUs at a threshold of 0.01% changes very little in the LibrarySize, even though we lost \~73% of OTUs.
+Try zooming in on a selection of points with low library size or large library size to better see the effects of the different thresholds. For example, the filtering of rare OTUs at a threshold of 0.01% changes very little in the LibrarySize, even though we lost \~74% of OTUs.
 :::
 
 ##### Effect on OTU richness
@@ -374,8 +374,8 @@ ggarrange(beta_div_raw, beta_div_single, beta_div_rare005, beta_div_rare01,
           beta_div_rare05, beta_div_rare1, beta_div_rare10,
           labels = c(
             "Non-filtered (25390 OTUs)", "Singletons (24923 OTUs)",
-            "0.005% (<8 reads; 9147 OTUs)", "0.01% (<16 reads; 6796 OTUs)",
-            "0.05% (<76 reads; 3798 OTUs)", "0.1% (<151 reads; 2934 OTUs)",
+            "0.005% (<8 reads; 8638 OTUs)", "0.01% (<16 reads; 6631 OTUs)",
+            "0.05% (<76 reads; 3783 OTUs)", "0.1% (<151 reads; 2929 OTUs)",
             "1% (<1508 reads; 1042 OTUs)"
             ),
           ncol = 3, nrow = 3, common.legend = TRUE,
@@ -390,7 +390,7 @@ Ultimately, the choice of the "best" threshold is completely arbitrary. Various 
 
 ```{r}
 # Select the best filtering threshold (0.005%)
-# ~64% of OTUs have less than 8 reads
+# ~66% of OTUs have less than 8 reads
 otu_table_rare <- otu_table_rare005
 ```
 

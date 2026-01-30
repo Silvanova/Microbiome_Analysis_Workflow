@@ -226,8 +226,8 @@ beta_div_rare10 <- otu_table_rare10 %>%
 ggarrange(beta_div_raw, beta_div_single, beta_div_rare005, beta_div_rare01,
           beta_div_rare05, beta_div_rare1, beta_div_rare10,
           labels = c("Non-filtered (25390 OTUs)", "Singletons (24923 OTUs)",
-                     "0.005% (<8 reads; 9147 OTUs)", "0.01% (<16 reads; 6796 OTUs)",
-                     "0.05% (<76 reads; 3798 OTUs)", "0.1% (<151 reads; 2934 OTUs)",
+                     "0.005% (<8 reads; 8638 OTUs)", "0.01% (<16 reads; 6631 OTUs)",
+                     "0.05% (<76 reads; 3783 OTUs)", "0.1% (<151 reads; 2929 OTUs)",
                      "1% (<1508 reads; 1042 OTUs)"),
           ncol = 3, nrow = 3, common.legend = TRUE,
           hjust = 0, label.x = 0.2, font.label = list(size = 10))
@@ -246,7 +246,7 @@ otu_table_rare <- otu_table_rare005
 
 # After filtering out rare OTUs, we can look at scarce OTUs (low-prevalence).
 # Any OTU that occur in less than 3 samples (number of replicates) could be
-# considered scarce, but it is important to very that they are not abundant
+# considered scarce, but it is important to verify that they are not abundant
 # before removing them.
 
 # Convert OTU table to presence-absence data and relative abundance
