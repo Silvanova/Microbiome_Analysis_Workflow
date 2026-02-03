@@ -9,6 +9,8 @@ author:
     orcid: 0000-0002-4888-7232
   - name: Davide Barsotti
     orcid: 0000-0002-7367-8571
+  - name: Johan P.B. Jørgensen
+    orcid: 0009-0000-4909-5109
 csl: apa-numeric-superscript-brackets.csl
 ---
 

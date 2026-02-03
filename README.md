@@ -14,7 +14,7 @@ Visit [our GitHub web pages](https://silvanova.github.io/Microbiome_Analysis_Wor
 
 ## Community Guidelines
 
-Authors: [Karelle Rheault](https://github.com/Qepanna) and [Davide Barsotti](https://github.com/dbarsotti)
+Authors: [Karelle Rheault](https://github.com/Qepanna), [Johan P.B. Jørgensen](https://github.com/JohanPBJ) and [Davide Barsotti](https://github.com/dbarsotti)
 
 To report problems, seek support or contribute to the workflow, please contact the maintainer, Karelle Rheault ([karh\@ign.ku.dk](mailto:karh@ign.ku.dk)). Suggestions for new features or improvements are always welcome.
 
