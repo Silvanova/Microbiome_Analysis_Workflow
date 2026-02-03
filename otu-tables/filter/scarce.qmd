@@ -106,4 +106,3 @@ otu_table_scarce <- otu_table_scarce01
 # OTU table with scarce taxa filtered
 save(otu_table_scarce, file = "RData/16S/otu_scarce_clean.RData")
 ```
-

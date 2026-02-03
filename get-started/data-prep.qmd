@@ -5,7 +5,7 @@ editor: visual
 bibliography: references.bib
 ---
 
-To get started with the data analysis, you must first ensure that the raw data is in the right format. This script prepares the raw data into a `phyloseq` object and produces the .RData files used in the next steps.
+To get started with the data analysis, you must first ensure that the raw data is in the right format. This script shows an example on how to convert the raw data into a `phyloseq` object and produces the .RData files used in the next steps. For more information about phyloseq, look up [@mcmurdie2013], or their [GitHub pages](https://joey711.github.io/phyloseq/).
 
 To follow the example presented on this page directly on your computer, download the script `002_data_preparation.R` and the example raw data by clicking the buttons below. Alternatively, you may copy the codes below into your own script, and use your own data.
 
@@ -60,7 +60,7 @@ The procedure demonstrated below for 16S can be applied similarly for the other 
 
 #### Taxonomy table
 
-Our 16S taxonomy table was generated using BLASTn search against SILVA v138.1 database [@quast2012]. Make sure your taxonomy table looks similar to this one before continuing to the next steps.
+Our 16S taxonomy table was generated using BLASTn search against SILVA v138.1 database [@quast2012]. Make sure your taxonomy table looks similar to this one before continuing to the next steps. The BLAST results should contain BLAST quality measures (evalue, length, qcov, pident, etc.) for each OTU, and a taxonomy assignment. In this example, the taxonomy assignment is all contained in the same column "X1st_hit" and needs to be divided into BLAST_ID, Kingdom, Phylum, Class, Order, etc. If the example shown here in R does not work with your raw file, you can try to do it in Excel (prone to errors). You may also find other example procedures to convert your raw data into a `phyloseq` object. For more information about phyloseq objects, look up [@mcmurdie2013], or their [GitHub pages](https://joey711.github.io/phyloseq/).
 
 ```{r}
 #| eval: false
@@ -158,15 +158,14 @@ After cleaning the OTU table, make sure the selected columns match your auxiliar
 
 #### Format the data into a phyloseq-class object
 
-Combine your OTU table, auxiliary data, taxonomy table and raw sequences into a phyloseq-class object. For more information about phyloseq, look up [@mcmurdie2013], or their [GitHub pages](https://joey711.github.io/phyloseq/).
+Combine your OTU table, auxiliary data and taxonomy table into a phyloseq-class object. For more information about phyloseq, look up [@mcmurdie2013], or their [GitHub pages](https://joey711.github.io/phyloseq/).
 
 ```{r}
 #| eval: false
 # Combine data into a phyloseq-class object
 otu_table_raw <- phyloseq(otu_table(otu_table_raw, taxa_are_rows = T),
                           sample_data(aux),
-                          tax_table(as.matrix(taxonomy_raw)),
-                          DNAStringSet(refseq_raw))
+                          tax_table(as.matrix(taxonomy_raw)))
 ```
 
 Were your samples part of a larger sequencing run containing other samples? Filter out OTU absent from your data set.
@@ -190,6 +189,5 @@ Save all newly created files as RData for usage with other scripts.
 save(BLAST_raw, file = "RData/16S/BLAST_raw.RData")
 save(taxonomy_raw, file = "RData/16S/taxonomy_raw.RData")
 save(otu_table_raw, file = "RData/16S/otu_table_raw.RData")
-save(refseq_raw, file = "RData/16S/refseq_raw.RData")
 save(aux, file = "RData/auxfile.RData")
 ```

@@ -62,22 +62,30 @@ if (!require("decontam", quietly = TRUE))
 if (!require("phyloseq", quietly = TRUE))
   BiocManager::install("phyloseq")
 
+# installed from R Universe ----------------------------------------------------
+
+if (!require("microViz", quietly = TRUE))
+  install.packages(
+    "microViz",
+    repos = c(davidbarnett = "https://david-barnett.r-universe.dev", getOption("repos"))
+  )
+
 # CRAN packages ----------------------------------------------------------------
+
+if (!require("openxlsx", quietly = TRUE))
+  install.packages("openxlsx")
+
+if (!require("tidyr", quietly = TRUE))
+  install.packages("tidyr")
+
+if (!require("plyr", quietly = TRUE))
+  install.packages("plyr")
 
 if (!require("ggplot2", quietly = TRUE))
   install.packages("ggplot2")
 
 if (!require("ggpubr", quietly = TRUE))
   install.packages("ggpubr")
-
-if (!require("vegan", quietly = TRUE))
-  install.packages("vegan")
-
-if (!require("openxlsx", quietly = TRUE))
-  install.packages("openxlsx")
-
-if (!require("plyr", quietly = TRUE))
-  install.packages("plyr")
 
 if (!require("dplyr", quietly = TRUE))
   install.packages("dplyr")
@@ -90,12 +98,13 @@ if (!require("dplyr", quietly = TRUE))
 # Load packages
 library(decontam)
 library(phyloseq)
+library(microViz)
+library(openxlsx)
+library(tidyr)
+library(plyr)
 library(ggplot2)
 library(ggpubr)
-library(vegan)
-library(openxlsx)
-library(plyr)
-library(dplyr) # always load dplyr last to avoid conflicts between packages
+library(dplyr)  # always load dplyr last to avoid conflicts between packages
 ```
 
 #### Homemade functions

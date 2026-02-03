@@ -32,10 +32,6 @@ library(microViz)
 
 # CRAN packages ----------------------------------------------------------------
 
-if (!require("Biostrings", quietly = TRUE))
-  install.packages("Biostrings")
-library(Biostrings)
-
 if (!require("openxlsx", quietly = TRUE))
   install.packages("openxlsx")
 library(openxlsx)

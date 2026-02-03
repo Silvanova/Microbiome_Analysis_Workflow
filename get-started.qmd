@@ -7,7 +7,7 @@ format:
 bibliography: references.bib
 ---
 
-### [\> Install R and packages](get-started/install.qmd)
+### [Install R and packages](get-started/install.qmd)
 
 All data handling and analyses in this workflow are performed in R. Before you get started,
 
@@ -26,7 +26,7 @@ source("001_required_packages.R")
 ```
 :::
 
-### [\> Data preparation](get-started/data-prep.qmd)
+### [Data preparation](get-started/data-prep.qmd)
 
 Then, to get started with the data analysis, you must first ensure that the raw data is in the right format. Convert raw data into a `phyloseq` object and save them as .RData files.
 

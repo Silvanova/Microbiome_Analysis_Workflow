@@ -219,9 +219,6 @@ taxonomy_raw <- BLAST_raw %>%
   # taxa_OTU names must be moved to row names
   `row.names<-`(.$taxa_OTU)
 
-# Extract sequences from taxonomy raw
-refseq_raw <- taxonomy_raw$query_seq %>% `names<-`(taxonomy_raw$taxa_OTU)
-
 
 ## OTU table ####
 
@@ -257,8 +254,7 @@ otu_table_raw <- otu_table_raw %>%
 # Combine data into a phyloseq-class object
 otu_table_raw <- phyloseq(otu_table(otu_table_raw, taxa_are_rows = T),
                           sample_data(aux),
-                          tax_table(as.matrix(taxonomy_raw)),
-                          DNAStringSet(refseq_raw))
+                          tax_table(as.matrix(taxonomy_raw)))
 
 # Remove all OTUs with sum == 0
 ntaxa(otu_table_raw) # 33027 before filtering
@@ -271,5 +267,4 @@ ntaxa(otu_table_raw) # 22772 (31% of the OTUs are absent from this subset of sam
 save(BLAST_raw, file = "RData/CO1/BLAST_raw.RData")
 save(taxonomy_raw, file = "RData/CO1/taxonomy_raw.RData")
 save(otu_table_raw, file = "RData/CO1/otu_table_raw.RData")
-save(refseq_raw, file = "RData/CO1/refseq_raw.RData")
 save(aux, file = "RData/auxfile.RData")
