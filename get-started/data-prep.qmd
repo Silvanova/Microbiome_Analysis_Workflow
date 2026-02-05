@@ -123,7 +123,9 @@ taxonomy_raw <- BLAST_raw %>%
   # Rename qseqid column to taxa_OTU
   as.data.frame() %>% dplyr::rename(taxa_OTU = qseqid) %>%
   # taxa_OTU names must be moved to row names
-  `row.names<-`(.$taxa_OTU)
+  `row.names<-`(.$taxa_OTU) %>%
+  # Reorder columns: Make sure the largest grouping comes first (kingdom)
+  relocate(any_of(c("query_seq", "taxa_OTU", "BLAST_ID")), .after = x12)
 ```
 
 #### OTU table

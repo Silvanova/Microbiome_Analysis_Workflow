@@ -49,26 +49,25 @@ ggplot(data = seq_depth, aes(x = Index, y = LibrarySize, color = sample_type)) +
 
 ### Inspect small library size sample ####
 
-# Identify sample with a small library size
+# Identify sample with a small library size (X29239)
 subset(seq_depth, sample_type == "sample" & LibrarySize < 10000)
 
-# Subset OTU table with other samples from the same group (replicates)
-# For this example, we will use samples that have roughly the same age (51-52)
-otu_table.Age50 <- prune_samples(
-  between(sample_data(otu_table_raw)$Age, 51,52), otu_table_raw)
+# Add a column to sample data in phyloseq object to identify this sample
+sample_data(otu_table_raw)$low_depth <- sample_data(otu_table_raw)$Soil_ID=="X29239"
 
-# To compare these samples,
-# ... first, convert OTU table from count data to relative abundance
-otu_table.Age50_rel <- transform_sample_counts(otu_table.Age50, function(x) x/sum(x))
+# Plot an ordination of all samples to compare the low seq sample to replicates
+otu_table_raw %>%
+  tax_transform("identity", rank = "taxa_OTU") %>%
+  dist_calc("aitchison") %>%
+  ord_calc("PCoA") %>%
+  ord_plot(color = "SiteID", shape = "low_depth", auto_caption = NA) +
+  stat_ellipse(aes(colour = SiteID))
 
-# ... then, remove taxa with less than 1% abundance (for clarity of the plot)
-otu_table.Age50_rel <- filter_taxa(otu_table.Age50_rel, function(x) sum(x) > .01, TRUE)
-
-# ... and finally, visualize the taxa barcharts of these samples
-plot_bar(otu_table.Age50_rel, fill = "phylum")
-
-# This sample looks quite different compared to the other samples and
-# should therefore be removed.
+# This sample (shown with a triangle) is located far away from samples of the
+# same site (Oak_51, in light blue), and close to the controls (NA, in gray)
+# demonstrating that it harbors a different community composition than samples
+# from the same site. If this difference cannot be explained, this sample
+# should be removed.
 
 ## Prevalence of OTUs in negative controls -------------------------------------
 
@@ -175,7 +174,7 @@ otu_table.pa <- mutate(otu_table.pa, contaminant = contam.prev$contaminant)
 ggplot(data=otu_table.pa, aes(x=pa.neg, y=pa.sam, color=contaminant)) + geom_point() +
   xlab("Prevalence (Negative Controls)") + ylab("Prevalence (True Samples)")
 # The method identified OTUs that were mostly present in negative controls
-# and few true samples (<20%)
+# and few true samples
 
 # Filter OTU table to keep only OTUs suspected of being contaminants
 contaminants <- filter(contam.prev, contaminant == TRUE) %>% rownames()
@@ -198,11 +197,14 @@ otu_table_raw <- prune_samples(
   sample_names(otu_table_raw) != "X29239", otu_table_raw)
 
 # Remove contaminants (note that remove_taxa is a homemade function)
-otu_ctrl_neg_clean <- remove_taxa(contaminants, otu_table_raw)
+otu_ctrl_clean <- remove_taxa(contaminants, otu_table_raw)
 
-# Remove negative controls (and blanks)
-otu_ctrl_neg_clean <- prune_samples(
-  sample_data(otu_ctrl_neg_clean)$sample_type != "negative control", otu_ctrl_neg_clean)
+# Remove all controls
+otu_ctrl_clean <- prune_samples(
+  sample_data(otu_ctrl_clean)$sample_type != "positive control", otu_ctrl_clean)
+
+otu_ctrl_clean <- prune_samples(
+  sample_data(otu_ctrl_clean)$sample_type != "negative control", otu_ctrl_clean)
 
 # Save cleaned OTU table
-save(otu_ctrl_neg_clean, file = "RData/16S/otu_ctrl_neg_clean.RData")
+save(otu_ctrl_clean, file = "RData/16S/otu_ctrl_clean.RData")

@@ -93,10 +93,10 @@ website:
         - section: "Controls"
           file: otu-tables/controls.qmd
           contents:
-          - text: "Negative controls"
-            file: otu-tables/controls-negative.qmd
           - text: "Positive controls"
             file: otu-tables/controls-positive.qmd
+          - text: "Negative controls"
+            file: otu-tables/controls-negative.qmd
 
         - section: "Filtering"
           file: otu-tables/filter.qmd

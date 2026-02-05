@@ -44,15 +44,12 @@ taxonomy_raw <- BLAST_raw %>%
   # Split kingdom column containing a BLAST ID, based on delimiter (space)
   separate_wider_delim(cols = kingdom, delim = " ", names = c("BLAST_ID", "kingdom"),
                        too_few = "align_end") %>%
-  # Filter out OTUs without significant similarity found
-  filter(kingdom != "No_significant_similarity_found" & !is.na(kingdom)) %>%
   # Rename qseqid column to taxa_OTU
   as.data.frame() %>% dplyr::rename(taxa_OTU = qseqid) %>%
   # taxa_OTU names must be moved to row names
-  `row.names<-`(.$taxa_OTU)
-
-# Extract sequences from taxonomy raw
-refseq_raw <- taxonomy_raw$query_seq %>% `names<-`(taxonomy_raw$taxa_OTU)
+  `row.names<-`(.$taxa_OTU) %>%
+  # Reorder columns: Make sure the largest grouping comes first (kingdom)
+  relocate(any_of(c("query_seq", "taxa_OTU", "BLAST_ID")), .after = x12)
 
 
 ## OTU table ####
@@ -89,11 +86,10 @@ otu_table_raw <- otu_table_raw %>%
 # Combine data into a phyloseq-class object
 otu_table_raw <- phyloseq(otu_table(otu_table_raw, taxa_are_rows = T),
                           sample_data(aux),
-                          tax_table(as.matrix(taxonomy_raw)),
-                          DNAStringSet(refseq_raw))
+                          tax_table(as.matrix(taxonomy_raw)))
 
 # Remove all OTUs with sum == 0
-ntaxa(otu_table_raw) # 38500 before filtering
+ntaxa(otu_table_raw) # 38502 before filtering
 otu_table_raw <- prune_taxa(taxa_sums(otu_table_raw) > 0, otu_table_raw)
 ntaxa(otu_table_raw) # 25461 (34% of the OTUs are absent from this subset of samples)
 
@@ -103,7 +99,6 @@ ntaxa(otu_table_raw) # 25461 (34% of the OTUs are absent from this subset of sam
 save(BLAST_raw, file = "RData/16S/BLAST_raw.RData")
 save(taxonomy_raw, file = "RData/16S/taxonomy_raw.RData")
 save(otu_table_raw, file = "RData/16S/otu_table_raw.RData")
-save(refseq_raw, file = "RData/16S/refseq_raw.RData")
 save(aux, file = "RData/auxfile.RData")
 
 
@@ -128,15 +123,12 @@ taxonomy_raw <- BLAST_raw %>%
                                  "x2", "x3", "x4", "x5", "x6", "x7", "x8", "x9",
                                  "x10", "x11", "x12"),
                        too_few = "align_start") %>%
-  # Filter out OTUs without significant similarity found
-  filter(kingdom != "No_significant_similarity_found" & !is.na(kingdom)) %>%
   # Rename qseqid column to taxa_OTU
   as.data.frame() %>% dplyr::rename(taxa_OTU = qseqid) %>%
   # taxa_OTU names must be moved to row names
-  `row.names<-`(.$taxa_OTU)
-
-# Extract sequences from taxonomy raw
-refseq_raw <- taxonomy_raw$query_seq %>% `names<-`(taxonomy_raw$taxa_OTU)
+  `row.names<-`(.$taxa_OTU) %>%
+  # Reorder columns: Make sure the largest grouping comes first (kingdom)
+  relocate(any_of(c("query_seq", "taxa_OTU", "BLAST_ID")), .after = x12)
 
 
 ## OTU table ####
@@ -173,11 +165,10 @@ otu_table_raw <- otu_table_raw %>%
 # Combine data into a phyloseq-class object
 otu_table_raw <- phyloseq(otu_table(otu_table_raw, taxa_are_rows = T),
                           sample_data(aux),
-                          tax_table(as.matrix(taxonomy_raw)),
-                          DNAStringSet(refseq_raw))
+                          tax_table(as.matrix(taxonomy_raw)))
 
 # Remove all OTUs with sum == 0
-ntaxa(otu_table_raw) # 27699 before filtering
+ntaxa(otu_table_raw) # 27701 before filtering
 otu_table_raw <- prune_taxa(taxa_sums(otu_table_raw) > 0, otu_table_raw)
 ntaxa(otu_table_raw) # 16691 (40% of the OTUs are absent from this subset of samples)
 
@@ -187,7 +178,6 @@ ntaxa(otu_table_raw) # 16691 (40% of the OTUs are absent from this subset of sam
 save(BLAST_raw, file = "RData/ITS/BLAST_raw.RData")
 save(taxonomy_raw, file = "RData/ITS/taxonomy_raw.RData")
 save(otu_table_raw, file = "RData/ITS/otu_table_raw.RData")
-save(refseq_raw, file = "RData/ITS/refseq_raw.RData")
 save(aux, file = "RData/auxfile.RData")
 
 
@@ -212,12 +202,12 @@ taxonomy_raw <- BLAST_raw %>%
                                  "x2", "x3", "x4", "x5", "x6", "x7", "x8", "x9",
                                  "x10", "x11", "x12"),
                        too_few = "align_start") %>%
-  # Filter out OTUs without significant similarity found
-  filter(kingdom != "No_significant_similarity_found" & !is.na(kingdom)) %>%
   # Rename qseqid column to taxa_OTU
   as.data.frame() %>% dplyr::rename(taxa_OTU = qseqid) %>%
   # taxa_OTU names must be moved to row names
-  `row.names<-`(.$taxa_OTU)
+  `row.names<-`(.$taxa_OTU) %>%
+  # Reorder columns: Make sure the largest grouping comes first (kingdom)
+  relocate(any_of(c("query_seq", "taxa_OTU", "BLAST_ID")), .after = x12)
 
 
 ## OTU table ####
@@ -257,7 +247,7 @@ otu_table_raw <- phyloseq(otu_table(otu_table_raw, taxa_are_rows = T),
                           tax_table(as.matrix(taxonomy_raw)))
 
 # Remove all OTUs with sum == 0
-ntaxa(otu_table_raw) # 33027 before filtering
+ntaxa(otu_table_raw) # 33029 before filtering
 otu_table_raw <- prune_taxa(taxa_sums(otu_table_raw) > 0, otu_table_raw)
 ntaxa(otu_table_raw) # 22772 (31% of the OTUs are absent from this subset of samples)
 

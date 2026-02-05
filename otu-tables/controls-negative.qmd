@@ -80,11 +80,11 @@ plot_ly(data = seq_depth, x = ~Index, y = ~LibrarySize, color = ~sample_type,
                       '<br>Sample ID:', Soil_ID))
 ```
 
-We can see that, compared to the rest of the samples, all controls have a small library size. Nevertheless, if you zoom in on the negative controls, you can see that all negative controls have a library size larger than zero. Therefore, further analyses are required to know if these OTUs are contaminants.
+We can see that, compared to the rest of the samples, all controls have a small library size. Nevertheless, if you zoom in on the negative controls, you can see that all negative controls have a library size larger than zero. Therefore, further analyses are required to know if the OTUs present in negative controls are contaminants.
 
-Furthermore, one sample has a very small library size compared to other samples (and compared to controls). This sample should be further inspected to determine if the microbial community in this sample resemble that of other samples (i.e., replicates). If not, it should be discarded.
+Note that positive controls have a larger library size than the negative controls, showing that sequencing performed well in these samples. This can be further confirmed in the previous section: [Dealing with positive controls](controls-positive.qmd).
 
-Note that positive controls have a larger library size than the negative controls, showing that sequencing performed well in these samples. This can be further confirmed in the next section: [Dealing with positive controls](controls-positive.qmd).
+Furthermore, one sample has a very small library size compared to other samples (and compared to controls). This sample should be further inspected to determine if its microbial community resemble that of other samples (i.e., replicates). If not, further investigation would be required to determine why this sample is different from other replicates: was there a methodological issue with this sample that resulted in the low sequencing depth; or is this a true biological exception that can occur among your replicates? When in doubt, ask those who collected and processed the samples.
 
 ##### Inspect sample with small library size
 
@@ -92,33 +92,32 @@ Note that positive controls have a larger library size than the negative control
 #| output: false
 # Identify sample with a small library size
 subset(seq_depth, sample_type == "sample" & LibrarySize < 10000)
-
-# Subset OTU table with other samples from the same group (replicates)
-# For this example, we will use samples that have roughly the same age (51-52)
-otu_table.Age50 <- prune_samples(
-  between(sample_data(otu_table_raw)$Age, 51,52), otu_table_raw)
 ```
+
+The sample `X29239` was taken on the site Oak_51.
 
 ```{r}
 #| echo: false
-cbind.data.frame(otu_table.Age50@sam_data[,c(4,5,7:9,11)][6:10]) %>% `rownames<-`(seq(5))
+otu_table.Age51 <- prune_samples(sample_data(otu_table_raw)$Age == 51, otu_table_raw)
+cbind.data.frame(otu_table.Age51@sam_data[,c(3,4,7:9,11)][6:10]) %>% `rownames<-`(seq(5))
 ```
 
-To compare these samples: first, convert OTU table from count data to relative abundance; then, remove taxa with less than 1% abundance (for clarity of the plot); and finally, visualize the taxa barcharts of these samples.
+To compare these samples: first, add a column to the sample data in the phyloseq object to identify this sample; then, visualize the samples in an ordination.
 
 ```{r}
-#| warning: false
-# Convert OTU table from count data to relative abundance
-otu_table.Age50_rel <- transform_sample_counts(otu_table.Age50, function(x) x/sum(x))
+# Add a column to sample data in phyloseq object to identify this sample
+sample_data(otu_table_raw)$low_depth <- sample_data(otu_table_raw)$Soil_ID=="X29239"
 
-# Remove taxa with less than 1% abundance
-otu_table.Age50_rel <- filter_taxa(otu_table.Age50_rel, function(x) sum(x) > .01, TRUE)
-
-# Visualize taxa barcharts
-plot_bar(otu_table.Age50_rel, fill = "phylum")
+# Plot an ordination of all samples to compare the low seq sample to replicates
+otu_table_raw %>%
+  tax_transform("identity", rank = "taxa_OTU") %>%
+  dist_calc("aitchison") %>%
+  ord_calc("PCoA") %>%
+  ord_plot(color = "SiteID", shape = "low_depth", auto_caption = NA) +
+  stat_ellipse(aes(colour = SiteID))
 ```
 
-The sample `X29239` looks quite different compared to the other samples and should therefore be removed.
+The sample `X29239` (shown with a triangle) is located far away from samples of the same site (Oak_51, in light blue), and close to the controls (NA, in gray) demonstrating that it harbors a different community composition than samples from the same site. If this difference cannot be explained, this sample should be removed.
 
 #### Prevalence of OTUs in negative controls
 
@@ -147,7 +146,7 @@ ggplot(data=otu_table.pa, aes(x=pa.neg, y=pa.sam)) + geom_point() +
   xlab("Prevalence (Negative Controls)") + ylab("Prevalence (True Samples)")
 ```
 
-Many OTUs are present in at least one negative control ('Prevalence (Negative Controls)' \>= 1).
+302 OTUs were found in negative controls, and many of them are present in at least one negative control ('Prevalence (Negative Controls)' \>= 1).
 
 We must find out if there was a contamination in our samples from the method, or if the negative samples have been contaminated by the other samples.
 
@@ -202,7 +201,7 @@ contam.prev <- isContaminant(otu_table_raw.noPos, method="prevalence",
 table(contam.prev$contaminant)
 ```
 
-The method found 21 contaminant sequences at a threshold of 0.1 (default).
+The method found 21 contaminant sequences at a threshold of 0.1 (default). In comparison, we had previously identified 302 OTUs present in the negative controls.
 
 Increase the threshold to try and find more contaminants. This more aggressive threshold will identify as contaminants all sequences that are are more prevalent in negative controls than in true samples.
 
@@ -230,7 +229,7 @@ ggplot(data=otu_table.pa, aes(x=pa.neg, y=pa.sam, color=contaminant)) +
   xlab("Prevalence (Negative Controls)") + ylab("Prevalence (True Samples)")
 ```
 
-The method identified OTUs that were mostly present in negative controls and few true samples (\<20%).
+The method identified OTUs that were mostly present in negative controls and few true samples.
 
 ```{r}
 # Filter OTU table to keep only OTUs suspected of being contaminants
@@ -243,7 +242,7 @@ plot_bar(otu_table_contam, fill = "OTU") +
   theme(legend.position = "none")
 ```
 
-After inspection of these OTUs, it is safe to consider them as contaminants and remove them from the data set. The other OTUs present in the negative controls were most likely coming from true samples and are therefore not considered contaminants.
+After inspection of these OTUs, it is safe to consider them as contaminants and remove them from the data set. Indeed, their very low abundance suggests that these OTUs may be artifacts or true contaminants from the method. The other OTUs present in the negative controls were most likely coming from true samples and are therefore not considered contaminants. When in doubt, it is best to investigate these OTUs further (look into the taxonomy) to determine if they are truly contaminants.
 
 ### Clean and save OTU table
 
@@ -269,12 +268,15 @@ otu_table_raw <- prune_samples(
   sample_names(otu_table_raw) != "X29239", otu_table_raw)
 
 # Remove contaminants (note that remove_taxa is a homemade function)
-otu_ctrl_neg_clean <- remove_taxa(contaminants, otu_table_raw)
+otu_ctrl_clean <- remove_taxa(contaminants, otu_table_raw)
 
-# Remove negative controls (and blanks)
-otu_ctrl_neg_clean <- prune_samples(
-  sample_data(otu_ctrl_neg_clean)$sample_type != "negative control", otu_ctrl_neg_clean)
+# Remove all controls
+otu_ctrl_clean <- prune_samples(
+  sample_data(otu_ctrl_clean)$sample_type != "positive control", otu_ctrl_clean)
+
+otu_ctrl_clean <- prune_samples(
+  sample_data(otu_ctrl_clean)$sample_type != "negative control", otu_ctrl_clean)
 
 # Save cleaned OTU table
-save(otu_ctrl_neg_clean, file = "RData/16S/otu_ctrl_neg_clean.RData")
+save(otu_ctrl_clean, file = "RData/16S/otu_ctrl_clean.RData")
 ```
