@@ -3,14 +3,16 @@ title: "Filtering OTU tables"
 format: html
 editor: visual
 bibliography: references.bib
+csl: apa-numeric-superscript-brackets.csl
 ---
 
-This section presents two important ways of cleaning the OTU tables:
+This section presents three important ways of cleaning the OTU tables:
 
--   First, by going through a global filtering to remove singletons, rare or scarce OTUs, which are most often artifacts [@sgarbi2020; @nikodemova2023; @brown2015]. These also usually coincide with the OTUs with lowest BLAST accuracy [@tedersoo2022].
--   Then, by going through a taxonomy filtering, based on BLAST quality thresholds.
+-   First, by doing a simple taxonomy filtering, to keep only relevant taxonomic assignations.
+-   Then, by going through a global filtering to remove singletons, rare or scarce OTUs, which are most often artifacts [@sgarbi2020; @nikodemova2023; @brown2015]. These also usually coincide with the OTUs with lowest BLAST accuracy [@tedersoo2022].
+-   Finally, by filtering based on BLAST quality thresholds, and cleaning the taxonomic assignations.
 
-The two downloadable scripts below (`004_global_filter.R` and `005_taxonomy_filter.R`) implement a standard approach for cleaning OTU tables based on abundance and prevalence, or based on taxonomy and BLAST quality, in a `phyloseq` object.
+The two downloadable scripts below (`004_global_filter.R` and `005_BLAST_filter.R`) implement a standard approach for cleaning OTU tables based on taxonomy, abundance and prevalence, or based on BLAST quality, in a `phyloseq` object.
 
 ```{r}
 #| echo: false
@@ -32,9 +34,9 @@ download_file(
 )
 
 download_file(
-  path = "../scripts/005_taxonomy_filter.R",
-  output_name = "005_taxonomy_filter",
-  button_label = "Download script 005_taxonomy_filter",
+  path = "../scripts/005_BLAST_filter.R",
+  output_name = "005_BLAST_filter",
+  button_label = "Download script 005_BLAST_filter",
   button_type = "success",
   has_icon = TRUE,
   icon = "fa fa-save",
@@ -44,11 +46,15 @@ download_file(
 
 For a step-by-step explanation of each filtering procedure, see the sections below:
 
-## Global filtering
+## [Global filtering](filter/global.qmd)
 
-A global filtering - based on abundance of OTUs across all samples (singletons and rare features), or based on the prevalence of OTUs across samples (scarcity) - is typically applied early to remove very low-count and low-prevalence features that are disproportionately driven by sequencing/PCR error and index misassignment, thereby reducing noise and improving downstream compositional and multivariate analyses.
+A global filtering - based on taxonomic assignations, abundance of OTUs across all samples (singletons and rare features), or based on the prevalence of OTUs across samples (scarcity) - is typically applied early to remove very low-count and low-prevalence features that are disproportionately driven by sequencing/PCR error and index misassignment, thereby reducing noise and improving downstream compositional and multivariate analyses.
 
-### [Singletons and rare OTUs](filter/singletons-rare.qmd)
+### Taxonomy filtering
+
+This first simple step serves to target only the relevant OTUs that were targeted with each primer sets: i.e., Bacteria for 16S, Fungi for ITS and Metazoa for CO1.
+
+### Singletons and rare OTUs
 
 Singleton OTUs have been shown to be overwhelmingly composed of artefacts arising from PCR and sequencing errors, including chimeric molecules that are typically low-abundance and sample-restricted [@tedersoo2021; @sze2019]. Their removal has repeatedly been shown to have negligible effects on hypothesis-driven community comparisons while substantially reducing noise [@edgar2016; @nikodemova2023; @sgarbi2020]. On the other hand, retaining them is justifiable in studies explicitly targeting rare biosphere diversity, but requires careful manual curation [@brown2015].
 
@@ -56,15 +62,19 @@ Rare OTUs (beyond singletons) can hardly be distinguished from artefacts, thus, 
 
 Rare OTUs are frequently removed using absolute abundance thresholds (e.g. \<5 or \<10 reads) [@edgar2016; @brown2015], or based on relative abundance thresholds (e.g. \<0.01%) [@nikodemova2023], while others filter rare OTUs based on statistical methods [@smirnova2018].
 
-### [Scarce OTUs](filter/scarce.qmd)
+### Scarce OTUs
 
 Scarce (low-prevalence) OTUs are features detected in only a small fraction of samples (\<5%). The extreme sparsity of microbiome data sets poses a major analytical challenge and is largely attributable to sequencing artefacts, contamination, and/or sequencing errors [@cao2021]. Thus, scarce OTUs are commonly filtered using simple rule-of-thumb criteria (e.g. presence in at least k samples or k% of samples), which reduces noise and improves statistical stability [@cao2021]. This criterion does not relate to the relative abundance of the OTUs, and as such, rare OTUs may be prevalent microbial taxa.
 
 In certain studies, higher thresholds for prevalence (\>25% of samples) may be used to define, for instance, the core microbiome [@simonin2020].
 
-## Taxonomy filtering
+## BLAST quality check
 
-Filtering based on taxonomy and BLAST quality is applied to remove OTUs with ambiguous or low-confidence taxonomic assignments, typically indicated by low sequence similarity, poor alignment coverage, or inconsistent rank resolution. Such features are frequently artefactual or biologically uninterpretable and can bias ecological inference if retained.
+Filtering based on BLAST accuracy is applied to remove OTUs with low-confidence taxonomic assignments, typically indicated by low sequence similarity (`pident`), poor alignment coverage (`qcovs`), or poor fit of the rank resolution (`evalue`). Such features are frequently artefactual or biologically uninterpretable and can bias ecological inference if retained.
+
+### BLAST filtering
+
+### BLAST cleaning
 
 -   [Bacteria & Archaea (16S)](filter/16S.qmd)
 -   [Fungi (ITS)](filter/ITS.qmd)

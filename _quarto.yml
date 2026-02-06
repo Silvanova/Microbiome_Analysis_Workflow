@@ -101,12 +101,14 @@ website:
         - section: "Filtering"
           file: otu-tables/filter.qmd
           contents:
-          - section: "Global filtering"
-            contents:
-            - text: "Singletons and rare OTUs"
-              file: otu-tables/filter/singletons-rare.qmd
-            - text: "Scarce features"
-              file: otu-tables/filter/scarce.qmd
+          - text: "Global filtering"
+            file: otu-tables/filter/global.qmd
+          # - section: "Global filtering"
+          #   contents:
+          #   - text: "Singletons and rare OTUs"
+          #     file: otu-tables/filter/singletons-rare.qmd
+          #   - text: "Scarce features"
+          #     file: otu-tables/filter/scarce.qmd
 
           - section: "Taxonomy filtering"
             contents:
