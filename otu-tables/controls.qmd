@@ -3,6 +3,7 @@ title: "Dealing with controls"
 format: html
 editor: visual
 bibliography: references.bib
+csl: apa-numeric-superscript-brackets.csl
 ---
 
 During DNA extraction, library preparation and sequencing, technical blanks, negative controls and positive controls may be added to detect contamination, confirm successful amplification of target genes, detect false results, and overall, verify that the full workflow (from extraction to bioinformatics) behaves as expected [@lear2018]. Field blanks (e.g., empty tubes left opened at the site or extraction of sample storage buffer) may also be included to enable removal of site or sampling material contaminants *a posteriori* [@tedersoo2022].

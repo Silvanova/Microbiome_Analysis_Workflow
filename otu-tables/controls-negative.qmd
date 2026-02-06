@@ -3,6 +3,7 @@ title: "Dealing with negative controls"
 format: html
 editor: visual
 bibliography: references.bib
+csl: apa-numeric-superscript-brackets.csl
 ---
 
 This section documents how to inspect negative controls (or blanks) and remove contaminant DNA sequences using the R package `decontam` [@davis2018].
@@ -17,6 +18,7 @@ library(plotly)
 library(phyloseq)
 library(decontam)
 library(dplyr)
+library(microViz)
 load("../RData/16S/otu_table_raw.RData")
 ```
 

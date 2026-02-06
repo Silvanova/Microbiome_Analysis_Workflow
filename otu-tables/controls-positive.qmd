@@ -3,6 +3,7 @@ title: "Dealing with positive controls"
 format: html
 editor: visual
 bibliography: references.bib
+csl: apa-numeric-superscript-brackets.csl
 ---
 
 This section documents how to inspect positive controls to confirm successful amplification of target genes, detect false results, and overall, verify that the full workflow (from extraction to bioinformatics) behaves as expected [@lear2018].

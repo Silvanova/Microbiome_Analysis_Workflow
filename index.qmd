@@ -11,7 +11,6 @@ author:
     orcid: 0000-0002-7367-8571
   - name: Johan P.B. Jørgensen
     orcid: 0009-0000-4909-5109
-csl: apa-numeric-superscript-brackets.csl
 ---
 
 This workflow was created for microbiome analyses within the Silva Nova project, to ensure that all publications related to the Silva Nova project use the same data processing, and avoid inconsistencies between sub-projects. This workflow should also make microbial analyses more accessible and streamlined.

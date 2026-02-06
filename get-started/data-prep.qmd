@@ -3,9 +3,10 @@ title: "Data preparation"
 format: html
 editor: visual
 bibliography: references.bib
+csl: apa-numeric-superscript-brackets.csl
 ---
 
-To get started with the data analysis, you must first ensure that the raw data is in the right format. This script shows an example on how to convert the raw data into a `phyloseq` object and produces the .RData files used in the next steps. For more information about phyloseq, look up [@mcmurdie2013], or their [GitHub pages](https://joey711.github.io/phyloseq/).
+To get started with the data analysis, you must first ensure that the raw data is in the right format. This script shows an example on how to convert the raw data into a `phyloseq` object and produces the .RData files used in the next steps. More information about phyloseq can be found [here](https://joey711.github.io/phyloseq/).
 
 To follow the example presented on this page directly on your computer, download the script `002_data_preparation.R` and the example raw data by clicking the buttons below. Alternatively, you may copy the codes below into your own script, and use your own data.
 
@@ -60,7 +61,7 @@ The procedure demonstrated below for 16S can be applied similarly for the other 
 
 #### Taxonomy table
 
-Our 16S taxonomy table was generated using BLASTn search against SILVA v138.1 database [@quast2012]. Make sure your taxonomy table looks similar to this one before continuing to the next steps. The BLAST results should contain BLAST quality measures (evalue, length, qcov, pident, etc.) for each OTU, and a taxonomy assignment. In this example, the taxonomy assignment is all contained in the same column "X1st_hit" and needs to be divided into BLAST_ID, Kingdom, Phylum, Class, Order, etc. If the example shown here in R does not work with your raw file, you can try to do it in Excel (prone to errors). You may also find other example procedures to convert your raw data into a `phyloseq` object. For more information about phyloseq objects, look up [@mcmurdie2013], or their [GitHub pages](https://joey711.github.io/phyloseq/).
+Our 16S taxonomy table was generated using BLASTn search against SILVA v138.1 database [@quast2012]. Make sure your taxonomy table looks similar to this one before continuing to the next steps. The BLAST results should contain BLAST quality measures (evalue, length, qcov, pident, etc.) for each OTU, and a taxonomy assignment. In this example, the taxonomy assignment is all contained in the same column "X1st_hit" and needs to be divided into BLAST_ID, Kingdom, Phylum, Class, Order, etc. If the example shown here in R does not work with your raw file, you can try to do it in Excel (prone to errors). You may also find other example procedures to convert your raw data into a `phyloseq` object. More information about phyloseq can be found [here](https://joey711.github.io/phyloseq/https://joey711.github.io/phyloseq/).
 
 ```{r}
 #| eval: false

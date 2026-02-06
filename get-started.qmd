@@ -30,7 +30,7 @@ source("001_required_packages.R")
 
 Then, to get started with the data analysis, you must first ensure that the raw data is in the right format. Convert raw data into a `phyloseq` object and save them as .RData files.
 
-For more information about phyloseq, look up [@mcmurdie2013], or their [GitHub pages](https://joey711.github.io/phyloseq/).
+For more information about phyloseq, look up @mcmurdie2013, or their [GitHub pages](https://joey711.github.io/phyloseq/).
 
 -   [Load auxiliary data (e.g. Excel sheet)](get-started/data-prep.qmd#auxfile)
 -   [Construct a phyloseq object from BLAST results](get-started/data-prep.qmd#phyloseq)
