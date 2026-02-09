@@ -3,7 +3,6 @@ title: "Filtering OTU tables"
 format: html
 editor: visual
 bibliography: references.bib
-csl: apa-numeric-superscript-brackets.csl
 ---
 
 This section presents three important ways of cleaning the OTU tables:
@@ -70,11 +69,15 @@ In certain studies, higher thresholds for prevalence (\>25% of samples) may be u
 
 ## BLAST quality check
 
-Filtering based on BLAST accuracy is applied to remove OTUs with low-confidence taxonomic assignments, typically indicated by low sequence similarity (`pident`), poor alignment coverage (`qcovs`), or poor fit of the rank resolution (`evalue`). Such features are frequently artefactual or biologically uninterpretable and can bias ecological inference if retained.
+Filtering based on BLAST accuracy is applied to remove OTUs with low-confidence taxonomic assignments, typically indicated by low sequence similarity (`pident`), poor alignment coverage (`qcovs`), or poor fit of the rank resolution (`evalue`) [@tedersoo2022]. Such features are frequently artefactual or biologically uninterpretable and can bias ecological inference if retained.
 
 ### BLAST filtering
 
+Filtering out OTUs based on BLAST results is normally done during bioinformatic processing, but if it was not the case for your OTU table, simple filters can be used to further remove artefacts. For instance, sequences that are too short (e.g., \<250 bp, depending on primers) to be a proper amplicon, or sequences with less than 15% query coverage (`qcovs`), which are assumed to be fully synthetic [@kunjapur2018].
+
 ### BLAST cleaning
+
+After filtering out any remaining potential artefacts, BLAST statistics (such as `pident` and `evalue`) can also be used to confirm taxonomic assignments. There is a lack of objective criteria (such as numerical thresholds) for taxonomic assignations of uncultured microorganisms, which are identified only by sequence data. Few studies have attempted to determine universal thresholds for each taxonomic group: some have determined some completely arbitrary rule of thumb [@tedersoo2014], and others have identified thresholds that can be applied in specific cases [@yarza2014; @vu2019; @tedersoo2021; @pappalardo2025; @ransome2017].
 
 -   [Bacteria & Archaea (16S)](filter/16S.qmd)
 -   [Fungi (ITS)](filter/ITS.qmd)

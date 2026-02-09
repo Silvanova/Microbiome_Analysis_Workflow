@@ -50,18 +50,18 @@ This first simple step serves to preserve only the relevant OTUs that were targe
 
 Note that the 16S primers amplifying the V4-V5 regions are also suitable for Archaea. The choice to include them or not in the following filtering depends on the hypotheses of your study. Similarly, primers targeting the internal transcribed spacer (ITS1 and ITS2) regions, while commonly used as the universal barcoding marker for fungi, often co-amplify DNA from a wide variety of other Eukaryotes due to the conserved nature of the flanking ribosomal RNA genes (18S, 5.8S, and 28S). For example, DNA from plants and protists is often amplified using these primers. It is recommended to filter them out when the hypotheses of the study are focused on Fungi. Finally, CO1 primers may also amplify Prokaryotes or other Eukaryotes, but these are not specificly targeted and should be filtered out.
 
-+------+------------------------------------+-----------------------------------------+-----------+-------------+---------------------------+
-| Name | Target                             | Primers (sequence 5’-3’)                | Regions   | Lenght      | Reference                 |
-+======+====================================+=========================================+===========+=============+===========================+
-| 16S  | Prokaryotes (Bacteria and Archaea) | 515F-Y (GTGYCAGCMGCCGCGGTAA)\           | V4-V5     | 360-500 bp  | [@parada2015]             |
-|      |                                    | 926RB (CCGYCAATTYMTTTRAGTTT)            |           |             |                           |
-+------+------------------------------------+-----------------------------------------+-----------+-------------+---------------------------+
-| ITS  | Fungi                              | ITS9MUN (TGTACACACCGCCCGTCG)\           | ITS1-ITS2 | 300-1200 bp | [@tedersoo2016]           |
-|      |                                    | ITS4ngsUni (CCTSCSCTTANTDATATGC)        |           |             |                           |
-+------+------------------------------------+-----------------------------------------+-----------+-------------+---------------------------+
-| CO1  | Metazoa                            | mlCOIintF (GGWACWGGWTGAACWGTWTAYCCYCC)\ | 320-345\  | \~313 bp    | [@leray2013; @geller2013] |
-|      |                                    | jgHCO2198 (TAIACYTCIGGRTGICCRAARAAYCA)  | 658       |             |                           |
-+------+------------------------------------+-----------------------------------------+-----------+-------------+---------------------------+
++----------+------------------------------------+-----------------------------------------+-----------+-------------+---------------------------+
+| Name     | Target                             | Primers (sequence 5’-3’)                | Regions   | Lenght      | Reference                 |
++==========+====================================+=========================================+===========+=============+===========================+
+| 16S      | Prokaryotes (Bacteria and Archaea) | 515F-Y (GTGYCAGCMGCCGCGGTAA)\           | V4-V5     | 360-500 bp  | [@parada2015]             |
+|          |                                    | 926RB (CCGYCAATTYMTTTRAGTTT)            |           |             |                           |
++----------+------------------------------------+-----------------------------------------+-----------+-------------+---------------------------+
+| ITS      | Fungi                              | ITS9MUN (TGTACACACCGCCCGTCG)\           | ITS1-ITS2 | 300-1200 bp | [@tedersoo2016]           |
+|          |                                    | ITS4ngsUni (CCTSCSCTTANTDATATGC)        |           |             |                           |
++----------+------------------------------------+-----------------------------------------+-----------+-------------+---------------------------+
+| CO1      | Metazoa                            | mlCOIintF (GGWACWGGWTGAACWGTWTAYCCYCC)\ | 320-345\  | \~313 bp    | [@leray2013; @geller2013] |
+|          |                                    | jgHCO2198 (TAIACYTCIGGRTGICCRAARAAYCA)  | 658       |             |                           |
++----------+------------------------------------+-----------------------------------------+-----------+-------------+---------------------------+
 
 : Table 1. Primer sets used for this data set
 
