@@ -2,8 +2,6 @@
 title: "Data preparation"
 format: html
 editor: visual
-bibliography: references.bib
-csl: apa-numeric-superscript-brackets.csl
 ---
 
 To get started with the data analysis, you must first ensure that the raw data is in the right format. This script shows an example on how to convert the raw data into a `phyloseq` object and produces the .RData files used in the next steps. More information about phyloseq can be found [here](https://joey711.github.io/phyloseq/).

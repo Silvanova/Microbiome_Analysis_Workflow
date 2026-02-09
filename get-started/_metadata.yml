@@ -1,1 +1,4 @@
 bread-crumbs: false
+
+bibliography: references.bib
+csl: ../apa-numeric-superscript-brackets.csl
