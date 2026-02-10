@@ -1,31 +1,70 @@
 ---
-title: "Global filtering"
+title: "BLAST quality check"
 format: html
 editor: visual
+bibliography: references.bib
 ---
 
-A global filtering is typically applied early to preserve only relevant taxonomic assignations and remove very low-count OTUs that are disproportionately driven by sequencing/PCR error and index misassignment, thereby reducing noise and improving downstream compositional and multivariate analyses.
+Filtering based on BLAST accuracy is applied to remove OTUs with low-confidence taxonomic assignments, typically indicated by low sequence similarity (`pident`), poor alignment coverage (`qcovs`), or poor fit of the rank resolution (`evalue`) [@tedersoo2022]. Such features are frequently artefactual or biologically uninterpretable and can bias ecological inference if retained.
 
-This section documents how to filter OTUs based on taxonomic assignations and filter out singletons and rare OTUs based on absolute or relative abundance thresholds in `phyloseq` objects. To follow the example presented on this page directly on your computer, download the script `004_global_filter.R` and the example raw data by clicking the buttons below. Alternatively, you may copy the codes below into your own script, and use your own data.
++-------------+------------------------------------------------------------------------------------------------+
+| Column name | Definition                                                                                     |
++=============+================================================================================================+
+| query_seq   | DNA sequence                                                                                   |
++-------------+------------------------------------------------------------------------------------------------+
+| X1st_hit    | first BLAST hit: best match against the database                                               |
++-------------+------------------------------------------------------------------------------------------------+
+| qlen        | query length: length of the DNA sequence                                                       |
++-------------+------------------------------------------------------------------------------------------------+
+| slen        | length of the matching sequence in the database                                                |
++-------------+------------------------------------------------------------------------------------------------+
+| qstart      | start point on the query sequence that matches with the database sequence                      |
++-------------+------------------------------------------------------------------------------------------------+
+| qend        | end point on the query sequence that matches with the database sequence                        |
++-------------+------------------------------------------------------------------------------------------------+
+| sstart      | start point on the database sequence that matches with the query sequence                      |
++-------------+------------------------------------------------------------------------------------------------+
+| send        | end point on the database sequence that matches with the query sequence                        |
++-------------+------------------------------------------------------------------------------------------------+
+| evalue      | summary statistic that estimate the goodness of match between the query and database sequences |
++-------------+------------------------------------------------------------------------------------------------+
+| length      | length of the match between the query and database sequences                                   |
++-------------+------------------------------------------------------------------------------------------------+
+| nident      | number of pairbase that match within the matching length                                       |
++-------------+------------------------------------------------------------------------------------------------+
+| mismatch    | number of pairbase that do not match within the matching length (length - nident)              |
++-------------+------------------------------------------------------------------------------------------------+
+| gapopen     | number of gap openings                                                                         |
++-------------+------------------------------------------------------------------------------------------------+
+| gaps        | gap size: number of pairbase inside gaps                                                       |
++-------------+------------------------------------------------------------------------------------------------+
+| sstrand     | orientation of the database sequence (plus or minus)                                           |
++-------------+------------------------------------------------------------------------------------------------+
+| qcovs       | percentage of coverage of the query sequence over the database sequence (length/qlen)          |
++-------------+------------------------------------------------------------------------------------------------+
+| pident      | percentage of identity between the two sequences (nident/length)                               |
++-------------+------------------------------------------------------------------------------------------------+
+
+: Table 1. Definitions of BLAST results
+
+This section documents how to filter OTUs based on BLAST results (see table above), and clean the taxonomy assignations based on BLAST accuracy, in `phyloseq` objects. To follow the example presented on this page directly on your computer, download the script `005_BLAST_filter.R` and the example raw data by clicking the buttons below. Alternatively, you may copy the codes below into your own script, and use your own data.
 
 ```{r}
 #| echo: false
 #| output: false
 library(downloadthis)
-library(plotly)
-library(phyloseq)
 library(dplyr)
-library(ggpubr)
-library(microViz)
-load("../../RData/16S/otu_ctrl_clean.RData")
+library(phyloseq)
+library(DT)
+load("../../RData/16S/otu_rare_clean.RData")
 ```
 
 ```{r}
 #| layout: [[-10,35,-5,40,-10]]
 #| echo: false
 download_file(
-  path = "../../scripts/004_global_filter.R",
-  output_name = "004_global_filter",
+  path = "../../scripts/005_BLAST_filter.R",
+  output_name = "005_BLAST_filter",
   button_label = "Download script",
   button_type = "success",
   has_icon = TRUE,
@@ -34,8 +73,8 @@ download_file(
 )
 
 download_file(
-  path = "../../RData/16S/otu_ctrl_clean.RData",
-  output_name = "otu_ctrl_clean",
+  path = "../../RData/16S/otu_rare_clean.RData",
+  output_name = "otu_rare_clean",
   button_label = "Download example RData",
   button_type = "success",
   has_icon = TRUE,
@@ -44,401 +83,231 @@ download_file(
 )
 ```
 
-## Taxonomy filtering
-
-This first simple step serves to preserve only the relevant OTUs that were targeted with each primer sets: i.e., Bacteria for 16S, Fungi for ITS and Metazoa for CO1.
-
-Note that the 16S primers amplifying the V4-V5 regions are also suitable for Archaea. The choice to include them or not in the following filtering depends on the hypotheses of your study. Similarly, primers targeting the internal transcribed spacer (ITS1 and ITS2) regions, while commonly used as the universal barcoding marker for fungi, often co-amplify DNA from a wide variety of other Eukaryotes due to the conserved nature of the flanking ribosomal RNA genes (18S, 5.8S, and 28S). For example, DNA from plants and protists is often amplified using these primers. It is recommended to filter them out when the hypotheses of the study are focused on Fungi. Finally, CO1 primers may also amplify Prokaryotes or other Eukaryotes, but these are not specificly targeted and should be filtered out.
-
-+----------+------------------------------------+-----------------------------------------+-----------+-------------+---------------------------+
-| Name     | Target                             | Primers (sequence 5’-3’)                | Regions   | Lenght      | Reference                 |
-+==========+====================================+=========================================+===========+=============+===========================+
-| 16S      | Prokaryotes (Bacteria and Archaea) | 515F-Y (GTGYCAGCMGCCGCGGTAA)\           | V4-V5     | 360-500 bp  | [@parada2015]             |
-|          |                                    | 926RB (CCGYCAATTYMTTTRAGTTT)            |           |             |                           |
-+----------+------------------------------------+-----------------------------------------+-----------+-------------+---------------------------+
-| ITS      | Fungi                              | ITS9MUN (TGTACACACCGCCCGTCG)\           | ITS1-ITS2 | 300-1200 bp | [@tedersoo2016]           |
-|          |                                    | ITS4ngsUni (CCTSCSCTTANTDATATGC)        |           |             |                           |
-+----------+------------------------------------+-----------------------------------------+-----------+-------------+---------------------------+
-| CO1      | Metazoa                            | mlCOIintF (GGWACWGGWTGAACWGTWTAYCCYCC)\ | 320-345\  | \~313 bp    | [@leray2013; @geller2013] |
-|          |                                    | jgHCO2198 (TAIACYTCIGGRTGICCRAARAAYCA)  | 658       |             |                           |
-+----------+------------------------------------+-----------------------------------------+-----------+-------------+---------------------------+
-
-: Table 1. Primer sets used for this data set
-
-This demonstration is done with the 16S data, and we choose to keep only Bacteria.
-
-```{r}
-#| output: false
-# Count OTUs before filtering
-ntaxa(otu_ctrl_clean) # 25390
-
-# Filter Bacteria
-otu_table_tax <- subset_taxa(otu_ctrl_clean, kingdom == "Bacteria")
-
-# Count OTUs after filtering
-ntaxa(otu_table_tax) # 24790 (~2% of the OTUs were not Bacteria)
-```
-
-## Singletons and rare OTUs
-
-Singletons and other rare OTUs are predominantly composed of PCR, sequencing, and chimera artefacts, and their removal has been shown to have negligible effects on hypothesis-driven community comparisons while substantially reducing noise [@edgar2016; @nikodemova2023; @sgarbi2020; @cao2021]. Retaining them is mainly justified in studies explicitly targeting rare biosphere diversity and requires careful validation [@brown2015]. Consequently, filtering rare features simplifies microbiome data sets without materially altering ecological inference in most comparative analyses.
-
-In R, singletons are typically removed by excluding OTUs with a total count of one across all samples, while rare OTUs are filtered by applying absolute (e.g. total counts \<5 or \<10) or relative abundance thresholds (e.g. \<0.01%) to the OTU table [@edgar2016; @brown2015; @nikodemova2023], commonly using `phyloseq::prune_taxa()` in combination with `taxa_sums()`.
-
-### Removing singletons
-
-Removing singletons is as simple as keeping anything that has more than 1 read throughout the entire data set.
-
-```{r}
-#| output: false
-# Remove singletons
-otu_table_single <- prune_taxa(taxa_sums(otu_table_tax) > 1, otu_table_tax)
-
-# Count OTUs after filtering
-ntaxa(otu_table_single) # 24339 (~2% of the remaining OTUs were singletons)
-```
-
-### Removing rare OTUs
-
-OTUs are considered rare if their abundance is small compared to other OTUs. They may be present in many samples, but if their total sum across samples is smaller than *k*% of the average sequencing depth (relative abundance), or smaller than *k* reads (absolute abundance) then they are considered rare.
-
-NOTE: When calculating the average sequencing depth, ignore controls and blanks, as they artificially lower the average.
-
-#### Relative abundance
-
-Typically, thresholds between 0.005% and 0.1% relative abundance are found in the literature. For the sake of this demonstration, we've included multiple thresholds between 0.005% and 0.1%, as well as a threshold up to 1% to better illustrate the effects of filtering out rare OTUs on different community analyses.
-
-We define relative thresholds based on the average sequencing depth (assuming that all samples have sufficient sequencing depth).
-
-```{r}
-#| output: false
-# Calculate the average sequencing depth
-seq_depth_avg <- mean(sample_sums(otu_table_tax)) # 148149.9 reads
-
-# Calculate thresholds based on k% of the average sequencing depth
-# For the sake of this exercise, multiple thresholds between 0.005% and 1% are
-# tested to compare their effects on various community analyses.
-thresh005 <- ceiling(seq_depth_avg*0.005/100) # 8 reads
-thresh01 <- ceiling(seq_depth_avg*0.01/100) # 15 reads
-thresh05 <- ceiling(seq_depth_avg*0.05/100) # 75 reads
-thresh1 <- ceiling(seq_depth_avg*0.1/100) # 149 reads
-thresh10 <- ceiling(seq_depth_avg*1/100) # 1482 reads
-
-# Remove all OTUs that have a total sum lower than the threshold
-otu_table_rare005 <- otu_table_tax %>% prune_taxa(taxa_sums(.) > thresh005, .)
-otu_table_rare01 <- otu_table_tax %>% prune_taxa(taxa_sums(.) > thresh01, .)
-otu_table_rare05 <- otu_table_tax %>% prune_taxa(taxa_sums(.) > thresh05, .)
-otu_table_rare1 <- otu_table_tax %>% prune_taxa(taxa_sums(.) > thresh1, .)
-otu_table_rare10 <- otu_table_tax %>% prune_taxa(taxa_sums(.) > thresh10, .)
-
-# Compare the number of OTU in each filtering step
-ntaxa(otu_ctrl_clean) #25390 (before filtering)
-ntaxa(otu_table_tax) #24790 (~98% are Bacteria)
-ntaxa(otu_table_single) #24339 (~2% singletons)
-ntaxa(otu_table_rare005) #8548 (~66% of OTUs have less than 8 reads; 0.005%)
-ntaxa(otu_table_rare01) #6735 (~73% of OTUs have less than 15 reads; 0.01%)
-ntaxa(otu_table_rare05) #3765 (~85% of OTUs have less than 75 reads; 0.05%)
-ntaxa(otu_table_rare1) #2913 (~88% of OTUs have less than 149 reads; 0.1%)
-ntaxa(otu_table_rare10) #1032 (~96% of OTUs have less than 1482 reads; 1%)
-```
-
-#### Absolute abundance
-
-Typically, thresholds between 5-10 reads are found in the literature. In this example, this roughly corresponds to a relative abundance threshold at 0.005% (8 reads). If the average sequencing depth of your data set is larger than the one presented here, it may be relevant to test removing 5 and 10 reads if those absolute thresholds are significantly lower than a relative threshold at 0.005%.
-
-#### Compare thresholds
-
-To visualize the effect of these different thresholds, we must first create a data frame per filtered OTU table that summarizes the sequencing depth per sample and the Observed OTU (richness).
-
-```{r}
-#| output: false
-# Non-filtered OTU table
-seq_depth_raw <- cbind.data.frame(sample_data(otu_table_tax)) %>%
-  cbind(estimate_richness(otu_table_tax, measures = "Observed")) %>%
-  mutate(LibrarySize = sample_sums(otu_table_tax)) %>%
-  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
-  mutate(seq_depth = "raw")
-
-# Singletons
-seq_depth_single <- cbind.data.frame(sample_data(otu_table_single)) %>%
-  cbind(estimate_richness(otu_table_single, measures = "Observed")) %>%
-  mutate(LibrarySize = sample_sums(otu_table_single)) %>%
-  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
-  mutate(seq_depth = "singletons")
-
-# Rare 0.005% (<8 reads)
-seq_depth_rare005 <- cbind.data.frame(sample_data(otu_table_rare005)) %>%
-  cbind(estimate_richness(otu_table_rare005, measures = "Observed")) %>%
-  mutate(LibrarySize = sample_sums(otu_table_rare005)) %>%
-  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
-  mutate(seq_depth = "rare 0.005%")
-
-# Rare 0.01% (<15 reads)
-seq_depth_rare01 <- cbind.data.frame(sample_data(otu_table_rare01)) %>%
-  cbind(estimate_richness(otu_table_rare01, measures = "Observed")) %>%
-  mutate(LibrarySize = sample_sums(otu_table_rare01)) %>%
-  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
-  mutate(seq_depth = "rare 0.01%")
-
-# Rare 0.05% (<75 reads)
-seq_depth_rare05 <- cbind.data.frame(sample_data(otu_table_rare05)) %>%
-  cbind(estimate_richness(otu_table_rare05, measures = "Observed")) %>%
-  mutate(LibrarySize = sample_sums(otu_table_rare05)) %>%
-  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
-  mutate(seq_depth = "rare 0.05%")
-
-# Rare 0.1% (<149 reads)
-seq_depth_rare1 <- cbind.data.frame(sample_data(otu_table_rare1)) %>%
-  cbind(estimate_richness(otu_table_rare1, measures = "Observed")) %>%
-  mutate(LibrarySize = sample_sums(otu_table_rare1)) %>%
-  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
-  mutate(seq_depth = "rare 0.1%")
-
-# Rare 1% (<1482 reads)
-seq_depth_rare10 <- cbind.data.frame(sample_data(otu_table_rare10)) %>%
-  cbind(estimate_richness(otu_table_rare10, measures = "Observed")) %>%
-  mutate(LibrarySize = sample_sums(otu_table_rare10)) %>%
-  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
-  mutate(seq_depth = "rare 1%")
-
-# Combine data frames
-seq_depth_all <- seq_depth_raw %>% rbind(seq_depth_single) %>%
-  rbind(seq_depth_rare005) %>% rbind(seq_depth_rare01) %>%
-  rbind(seq_depth_rare05) %>% rbind(seq_depth_rare1) %>%
-  rbind(seq_depth_rare10)
-```
-
-##### Effect on library size
+To get started on this demonstration, load the necessary data and source the script `001_required_packages.R` to load the homemade function `remove_taxa`.
 
 ```{r}
 #| eval: false
-# Plot the library size of all samples
-ggplot(data = seq_depth_all, aes(x = Index, y = LibrarySize, color = seq_depth)) +
-  geom_point() + geom_line()
+# Load OTU table
+load("RData/16S/otu_rare_clean.RData")
+
+# Load packages and homemade functions
+source("001_required_packages.R")
 ```
 
-```{r}
-#| echo: false
-plot_ly(data = seq_depth_all, x = ~Index, y = ~LibrarySize, color = ~seq_depth,
-        type = 'scatter', mode = 'markers+lines', colors = 'Dark2', 
-        text = ~paste("Library Size: ", LibrarySize, 
-                      '<br>Sample ID: ', Soil_ID))
-```
+## BLAST filtering
 
-With this analysis, we can see that the first filtering step (singletons) does not affect LibrarySize, as the points completely overlap (yellow vs brown). Aside from a threshold at 1%, other thresholds barely reduced library size per sample.
+Filtering out OTUs based on BLAST results is normally done during bioinformatic processing, but if it was not the case for your OTU table, simple filters can be used to further remove artefacts.
+
+Depending on primers, the expected length of amplicons varies greatly, thus it is impossible to determine a universal threshold for sequence length. However, most studies set this threshold to rougly half of the expected length (see table below).
+
++--------+------------------------------------+-----------------------------------------+-----------+--------------+------------------------+---------------------------+
+| Name   | Target                             | Primers (sequence 5’-3’)                | Regions   | Length\      | Threshold query length | References                |
+|        |                                    |                                         |           | (average)    |                        |                           |
++========+====================================+=========================================+===========+==============+========================+===========================+
+| 16S    | Prokaryotes (Bacteria and Archaea) | 515F-Y (GTGYCAGCMGCCGCGGTAA)\           | V4-V5     | 360-500 bp\  | 250 bp                 | [@parada2015]             |
+|        |                                    | 926RB (CCGYCAATTYMTTTRAGTTT)            |           | (\~460 bp)   |                        |                           |
++--------+------------------------------------+-----------------------------------------+-----------+--------------+------------------------+---------------------------+
+| ITS    | Fungi                              | ITS9MUN (TGTACACACCGCCCGTCG)\           | ITS1-ITS2 | 150-1200 bp\ | 100 bp                 | [@tedersoo2016]           |
+|        |                                    | ITS4ngsUni (CCTSCSCTTANTDATATGC)        |           | (\~280 bp)   |                        |                           |
++--------+------------------------------------+-----------------------------------------+-----------+--------------+------------------------+---------------------------+
+| CO1    | Metazoa                            | mlCOIintF (GGWACWGGWTGAACWGTWTAYCCYCC)\ | 320-345\  | 250-700\     | 200 bp                 | [@leray2013; @geller2013] |
+|        |                                    | jgHCO2198 (TAIACYTCIGGRTGICCRAARAAYCA)  | 658       | (\~313 bp)   |                        |                           |
++--------+------------------------------------+-----------------------------------------+-----------+--------------+------------------------+---------------------------+
+
+: Table 2. Primer sets used for this data set
+
+Alternatively, some studies also suggest to filter out sequences with less than 15% query coverage (`qcovs`), which are assumed to be fully synthetic [@kunjapur2018]. In these cases, even tough the query sequence may be large, if it has such a low alignment with the sequences in the database, it cannot be considered natural.
+
+This demonstration is done with the 16S data, and we choose to remove sequences with a length (`qlen`) shorter than 250 bp or a query cover (`qcovs`) smaller than 15%.
+
+Note that the threshold at a query cover of 15% was determined arbitrarily. The authors denote: "This was guided by not wanting to pick too high a level, lest we exclude natural sequences \[...\]. Similarly, we did not want to pick too low a level, since BLASTn searches preferentially for highly identical regions, and thus might cut off the end of a synthetic sequence yielding a maximal-scoring segment pair with lower query coverage and higher percentage identity (thus falsely classified as natural)" [@kunjapur2018].
 
 ::: callout-tip
-Try zooming in on a selection of points with low library size or large library size to better see the effects of the different thresholds. For example, the filtering of rare OTUs at a threshold of 0.01% changes very little in the LibrarySize, even though we lost \~74% of OTUs.
+## remove_taxa
+
+Homemade function `remove_taxa`: a simplified way of removing a selection of OTU from a `phyloseq` object.
+
+```{r}
+remove_taxa <- function(badTaxa, physeq){
+  allTaxa <- taxa_names(physeq)
+  cleanTaxa <- allTaxa[!(allTaxa %in% badTaxa)]
+  return(prune_taxa(cleanTaxa, physeq))
+}
+```
 :::
 
-##### Effect on OTU richness
-
-To confirm our choice of the best filtering threshold, let's compare the effect of filtering on OTU richness.
-
 ```{r}
-#| eval: false
-# Plot the OTU richness of all samples
-ggplot(data = seq_depth_all, aes(x = Index, y = Observed, color = seq_depth)) +
-  geom_point() + geom_line()
-```
-
-```{r}
-#| echo: false
-plot_ly(data = seq_depth_all, x = ~Index, y = ~Observed, color = ~seq_depth,
-        type = 'scatter', mode = 'markers+lines', colors = 'Dark2', 
-        text = ~paste("Library Size: ", LibrarySize, 
-                      "<br>Observed OTU: ", Observed, 
-                      '<br>Sample ID: ', Soil_ID))
-```
-
-This plot shows that these different filtering thresholds return the same pattern of OTU richness as a function of library size.
-
-```{r}
-#| echo: false
 #| output: false
-# Non-filtered OTU table
-seq_depth_raw <- cbind.data.frame(sample_data(otu_table_tax)) %>%
-  cbind(estimate_richness(otu_table_tax, measures = "Observed")) %>%
-  cbind(estimate_richness(otu_table_tax, measures = "Shannon")) %>%
-  mutate(LibrarySize = sample_sums(otu_table_tax)) %>%
-  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
-  mutate(seq_depth = "raw")
+# Extract BLAST results from OTU table
+BLAST_rare <- as.data.frame(otu_table_rare@tax_table) %>%
+  # Convert column class automatically
+  type.convert(as.is = TRUE)
 
-# Singletons
-seq_depth_single <- cbind.data.frame(sample_data(otu_table_single)) %>%
-  cbind(estimate_richness(otu_table_single, measures = "Observed")) %>%
-  cbind(estimate_richness(otu_table_single, measures = "Shannon")) %>%
-  mutate(LibrarySize = sample_sums(otu_table_single)) %>%
-  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
-  mutate(seq_depth = "singletons")
+# Identify synthetic sequences based on BLAST results
+otu_qlen <- filter(BLAST_rare, qlen < 250)[["taxa_OTU"]] # no sequence identified
+otu_qcovs <- filter(BLAST_rare, qcovs < 15)[["taxa_OTU"]] # no sequence identified
 
-# Rare 0.005% (<8 reads)
-seq_depth_rare005 <- cbind.data.frame(sample_data(otu_table_rare005)) %>%
-  cbind(estimate_richness(otu_table_rare005, measures = "Observed")) %>%
-  cbind(estimate_richness(otu_table_rare005, measures = "Shannon")) %>%
-  mutate(LibrarySize = sample_sums(otu_table_rare005)) %>%
-  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
-  mutate(seq_depth = "rare 0.005%")
+# Filter synthetic sequences
+BLAST_filter <- filter(BLAST_rare, !taxa_OTU %in% c(otu_qlen, otu_qcovs))
+otu_BLAST_filter <- remove_taxa(c(otu_qlen, otu_qcovs), otu_table_rare)
 
-# Rare 0.01% (<16 reads)
-seq_depth_rare01 <- cbind.data.frame(sample_data(otu_table_rare01)) %>%
-  cbind(estimate_richness(otu_table_rare01, measures = "Observed")) %>%
-  cbind(estimate_richness(otu_table_rare01, measures = "Shannon")) %>%
-  mutate(LibrarySize = sample_sums(otu_table_rare01)) %>%
-  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
-  mutate(seq_depth = "rare 0.01%")
-
-# Rare 0.05% (<76 reads)
-seq_depth_rare05 <- cbind.data.frame(sample_data(otu_table_rare05)) %>%
-  cbind(estimate_richness(otu_table_rare05, measures = "Observed")) %>%
-  cbind(estimate_richness(otu_table_rare05, measures = "Shannon")) %>%
-  mutate(LibrarySize = sample_sums(otu_table_rare05)) %>%
-  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
-  mutate(seq_depth = "rare 0.05%")
-
-# Rare 0.1% (<151 reads)
-seq_depth_rare1 <- cbind.data.frame(sample_data(otu_table_rare1)) %>%
-  cbind(estimate_richness(otu_table_rare1, measures = "Observed")) %>%
-  cbind(estimate_richness(otu_table_rare1, measures = "Shannon")) %>%
-  mutate(LibrarySize = sample_sums(otu_table_rare1)) %>%
-  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
-  mutate(seq_depth = "rare 0.1%")
-
-# Rare 1% (<1508 reads)
-seq_depth_rare10 <- cbind.data.frame(sample_data(otu_table_rare10)) %>%
-  cbind(estimate_richness(otu_table_rare10, measures = "Observed")) %>%
-  cbind(estimate_richness(otu_table_rare10, measures = "Shannon")) %>%
-  mutate(LibrarySize = sample_sums(otu_table_rare10)) %>%
-  arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
-  mutate(seq_depth = "rare 1%")
-
-# Combine data frames
-seq_depth_all <- seq_depth_raw %>% rbind(seq_depth_single) %>%
-  rbind(seq_depth_rare005) %>% rbind(seq_depth_rare01) %>%
-  rbind(seq_depth_rare05) %>% rbind(seq_depth_rare1) %>%
-  rbind(seq_depth_rare10)
+# Count OTUs before and after filtering
+ntaxa(otu_table_rare) # 8064
+ntaxa(otu_BLAST_filter) # 8064
 ```
 
-::: callout-tip
-Try comparing other alpha diversity indices, such as the Shannon index.
+In this demonstration, we found no sequences that were either too short or had a poor alignment. These were either previously removed during bioinformatic processing or while filtering out singletons or rare OTUs.
+
+With your own data, if you identify potential artefacts this way, inspect them before removing them to make sure that they are indeed artefacts.
+
+## BLAST cleaning
+
+After filtering out any remaining potential artefacts, BLAST statistics (such as `pident` and `evalue`) can also be used to confirm taxonomic assignations. At this stage, OTUs are not removed, as they are not considered artefacts anymore, but simply unknown species. This means that, based on specific thresholds for each target gene and taxonomic rank (Table 3), any taxonomic assignation below these thresholds is replaced with `NA`.
+
+### Unknown organisms
+
+There are a few exceptions to this rule. As a rule of thumb (arbitrary thresholds):
+
+1.  Any OTU with an identity (`pident`) below 70% cannot be identified, even up to the kingdom level [@tedersoo2014].
+2.  Any OTU with an e-value (`evalue`) above e^-20^ cannot be identified, even up to the kingdom level [@tedersoo2014].
+3.  Any OTU with a query coverage (`qcovs`) below 50% must be investigated [@kunjapur2018].
+4.  OTUs with an e-value between e^-20^ and e^-50^ should be manually checked against the 10 best BLAST matches for accurate assignment [@tedersoo2014].
+
+These OTUs should be further investigated to determine if they should be removed or preserved.
 
 ```{r}
-#| eval: false
-# Add Shannon index to each OTU table as such
-seq_depth_raw <- seq_depth_raw %>%
-  cbind(estimate_richness(otu_table_tax, measures = "Shannon"))
-
-# Plot the Shannon index of all samples
-ggplot(data = seq_depth_all, aes(x = Index, y = Shannon, color = seq_depth)) +
-  geom_point() + geom_line()
+#| output: false
+# Identify unknown OTUs
+BLAST_unknown <- filter(BLAST_filter, pident < 70 | evalue > 1e-50 | qcovs < 50)
+View(BLAST_unknown)
 ```
 
 ```{r}
 #| echo: false
-plot_ly(data = seq_depth_all, x = ~Index, y = ~Shannon, color = ~seq_depth,
-        type = 'scatter', mode = 'markers+lines', colors = 'Dark2', 
-        text = ~paste("Library Size: ", LibrarySize, 
-                      "<br>Shannon index: ", Shannon, 
-                      '<br>Sample ID: ', Soil_ID))
+BLAST_unknown_vis <- select(BLAST_unknown, kingdom:species, query_seq:pident)
+
+truncate_cols <- c("query_seq", "taxa_OTU")
+idx <- match(truncate_cols, names(BLAST_unknown_vis)) - 1  # DT uses 0-based indices
+
+datatable(
+  head(BLAST_unknown_vis, n=100),
+  options = list(
+    scrollX = TRUE,
+    pageLength = 10,
+    columnDefs = list(
+      list(
+        targets = idx,
+        render = JS(
+          "function(data, type, row, meta) {",
+          "  if (type !== 'display' || data === null) return data;",
+          "  data = data.toString();",
+          "  return data.length > 8 ?",
+          "    '<span title=\"' + data.replace(/\"/g, '&quot;') + '\">' + data.substr(0, 8) + '…</span>' :",
+          "    data;",
+          "}"
+        )
+      )
+    )
+  ),
+  rownames = FALSE
+)
 ```
 
-Filtering rare OTUs has no significant effect on the Shannon index. Note also the lack of a clear relationship between the Shannon index and LibrarySize.
-:::
-
-##### Effect on beta diversity
-
-To confirm our choice of filtering further, we can compare how the different filtering methods affect beta diversity.
+A [manual BLASTn search](https://blast.ncbi.nlm.nih.gov/Blast.cgi) of these 44 OTUs revealed that some of them could not be confidently identified as Bacteria and should be removed. The rest of the OTUs could not be assigned a higher taxonomic level than kingdom.
 
 ```{r}
-# Non-filtered OTU table
-beta_div_raw <- otu_table_tax %>%
-  tax_transform("identity", rank = "taxa_OTU") %>%
-  dist_calc("aitchison") %>%
-  ord_calc("PCoA") %>%
-  ord_plot(color = "Land_use", auto_caption = NA) +
-  stat_ellipse(aes(colour = Land_use))
+# Identify OTUs to remove after manual BLASTn
+otu_BLAST_remove <- c("1d27c83d9692aab8c80bf374e70e6bd36ab107db",
+                      "97fd840ad5b43b3e40763cb0f286c7f12482b5aa",
+                      "a247774bebc7f5d0d55919174fa28717fde309c0",
+                      "b32bc6dc7e56daabd7cbb16d6e64d75f5bbf1be7",
+                      "c2273056078eeba2d2a2efc1cb351e5290d7bb91",
+                      "fc6386fb30284b857e60f04b2101e43d368f60a1",
+                      "501c4d4b723af4468417d493ca4fadbb1d6bfe4c",
+                      "8767164c7b5703151beba4829286c69a6124f4e4")
 
-# Singletons
-beta_div_single <- otu_table_single %>%
-  tax_transform("identity", rank = "taxa_OTU") %>%
-  dist_calc("aitchison") %>%
-  ord_calc("PCoA") %>%
-  ord_plot(color = "Land_use", auto_caption = NA) +
-  stat_ellipse(aes(colour = Land_use))
-
-# Rare 0.005%
-beta_div_rare005 <- otu_table_rare005 %>%
-  tax_transform("identity", rank = "taxa_OTU") %>%
-  dist_calc("aitchison") %>%
-  ord_calc("PCoA") %>%
-  ord_plot(color = "Land_use", auto_caption = NA) +
-  stat_ellipse(aes(colour = Land_use))
-
-# Rare 0.01%
-beta_div_rare01 <- otu_table_rare01 %>%
-  tax_transform("identity", rank = "taxa_OTU") %>%
-  dist_calc("aitchison") %>%
-  ord_calc("PCoA") %>%
-  ord_plot(color = "Land_use", auto_caption = NA) +
-  stat_ellipse(aes(colour = Land_use))
-
-# Rare 0.05%
-beta_div_rare05 <- otu_table_rare05 %>%
-  tax_transform("identity", rank = "taxa_OTU") %>%
-  dist_calc("aitchison") %>%
-  ord_calc("PCoA") %>%
-  ord_plot(color = "Land_use", auto_caption = NA) +
-  stat_ellipse(aes(colour = Land_use))
-
-# Rare 0.1%
-beta_div_rare1 <- otu_table_rare1 %>%
-  tax_transform("identity", rank = "taxa_OTU") %>%
-  dist_calc("aitchison") %>%
-  ord_calc("PCoA") %>%
-  ord_plot(color = "Land_use", auto_caption = NA) +
-  stat_ellipse(aes(colour = Land_use))
-
-# Rare 1%
-beta_div_rare10 <- otu_table_rare10 %>%
-  tax_transform("identity", rank = "taxa_OTU") %>%
-  dist_calc("aitchison") %>%
-  ord_calc("PCoA") %>%
-  ord_plot(color = "Land_use", auto_caption = NA) +
-  stat_ellipse(aes(colour = Land_use))
-
-# Visualize all plots together
-ggarrange(beta_div_raw, beta_div_single, beta_div_rare005, beta_div_rare01,
-          beta_div_rare05, beta_div_rare1, beta_div_rare10,
-          labels = c(
-            "Non-filtered (24790 OTUs)", "Singletons (24339 OTUs)",
-            "0.005% (<8 reads; 8548 OTUs)", "0.01% (<15 reads; 6735 OTUs)",
-            "0.05% (<75 reads; 3765 OTUs)", "0.1% (<149 reads; 2913 OTUs)",
-            "1% (<1482 reads; 1032 OTUs)"),
-          ncol = 3, nrow = 3, common.legend = TRUE,
-          hjust = 0, label.x = 0.2, font.label = list(size = 10))
+# Identify OTUs that should only be assigned to the kingdom level
+otu_BLAST_assign <- setdiff(BLAST_unknown[["taxa_OTU"]], otu_BLAST_remove)
 ```
 
-With this analysis, we can see that removing rare OTUs reduces the variance within treatment a little bit, but does not affect overall patterns. Overall, all three plots showed that rare OTUs were mostly found in samples with large library size, and filtering out rare OTUs does not affect patterns. Only a threshold as high as 1% considerably affected patterns.
-
-#### Choosing the best threshold
-
-Ultimately, the choice of the "best" threshold is completely arbitrary. Various thresholds are found in the literature and no one is more justified than another. As a reminder: singletons and other rare OTUs have been previously found to be predominantly composed of artefacts, thus, their removal has been shown to have negligible effects on hypothesis-driven community comparisons while substantially reducing noise [@edgar2016; @nikodemova2023; @sgarbi2020; @cao2021]. Retaining them is only justified in studies explicitly targeting rare biosphere diversity and requires careful validation [@brown2015].
-
-As seen in this demonstration, all thresholds below 1% had little observable effect on library size, alpha diversity and beta diversity. For the sake of being more conservative, let's select the lowest relative abundance threshold (0.005%), which also roughly corresponded to a conservative absolute threshold (5-10 reads).
+Before removing OTUs, let's check their abundance and prevalence across samples:
 
 ```{r}
-# Select the best filtering threshold (0.005%)
-# ~66% of OTUs have less than 8 reads
-otu_table_rare <- otu_table_rare005
+#| warning: false
+# Filter OTU table to keep manually BLASTed OTUs to remove
+otu_table_BLAST_remove <- prune_taxa(otu_BLAST_remove, otu_BLAST_filter)
+
+# Visualize the abundance and prevalence of these OTUs across samples
+plot_bar(otu_table_BLAST_remove, fill = "OTU")
+```
+
+All OTUs identified are both scarce (low prevalence) and rare (low abundance), thus removing them will not affect community analyses.
+
+```{r}
+# Remove remaining non-bacterial OTUs
+BLAST_filter2 <- filter(BLAST_filter, !taxa_OTU %in% otu_BLAST_remove)
+otu_BLAST_filter2 <- remove_taxa(otu_BLAST_remove, otu_BLAST_filter)
+```
+
+### Rank-level confidence
+
+Now that we are confident about our OTU selection, it is time to clean the taxonomy assignation. BLASTn searches preferentially for highly identical regions, and thus might cut off the ends of a synthetic sequence (not a real 16S fragment) yielding a maximal-scoring segment pair with lower query coverage and higher percentage identity, thus falsely classifying it as a real 16S match. Therefore, we must verify the `pident` to decide if we can trust the BLAST results. The table below summarizes thresholds for each target gene and taxonomic rank found in the literature.
+
++----------------+----------------+--------------------+-------------------+-------------------------+--------------------+
+| Taxonomic rank | ITS\           | ITS\               | 16S\              | CO1\                    | CO1\               |
+|                | (cons.)        | (rot)              | (cons.)           | (cons.)                 | (cons.)            |
++================+================+====================+===================+=========================+====================+
+| Kingdom        |                | 70 [@tedersoo2019] |                   |                         |                    |
++----------------+----------------+--------------------+-------------------+-------------------------+--------------------+
+| Phylum         |                | 75 [@tedersoo2019] | 75.0 [@yarza2014] | 78\* [@pappalardo2025]  | 85 [@ransome2017]  |
++----------------+----------------+--------------------+-------------------+-------------------------+--------------------+
+| Class          | 80.9 [@vu2019] | 75 [@tedersoo2014] | 78.5 [@yarza2014] | 78\* [@pappalardo2025]  | 90 [@timmers2020]  |
++----------------+----------------+--------------------+-------------------+-------------------------+--------------------+
+| Order          | 81.2 [@vu2019] | 80 [@tedersoo2014] | 82.0 [@yarza2014] | 87\* [@pappalardo2025]  | 92 [@timmers2020]  |
++----------------+----------------+--------------------+-------------------+-------------------------+--------------------+
+| Family         | 88.5 [@vu2019] | 85 [@tedersoo2014] | 86.5 [@yarza2014] | 90^†^ [@pappalardo2025] | 96 [@timmers2020]  |
++----------------+----------------+--------------------+-------------------+-------------------------+--------------------+
+| Genus          | 94.3 [@vu2019] | 90 [@tedersoo2014] | 94.5 [@yarza2014] | 95^†^ [@pappalardo2025] | 98 [@timmers2020]  |
++----------------+----------------+--------------------+-------------------+-------------------------+--------------------+
+| Species        |                | 98 [@tedersoo2021] | 98.7 [@kim2014]   | 98^†^ [@pappalardo2025] | 100 [@timmers2020] |
++----------------+----------------+--------------------+-------------------+-------------------------+--------------------+
+
+: Table 3. Thresholds for taxonomy identification. "cons." = conservative threshold identified in a study; "rot" = arbitrarily defined rule of thumb. Notes: \* Thresholds with 1-5% error rates; ^†^ Thresholds with \>5% error rates.
+
+Based on the thresholds identified in Table 3, any taxonomic assignation below these thresholds will be changed to `NA`. For example, for an OTU identified to the species level, but that only has a `pident` of 95%, there is no certainty on the taxonomic assignation up to that rank. However, a `pident` of 95% allows for certainty up to the genus level. Thus, for this OTU, we would simply remove the assignation at the species level (replace it with `NA`) and preserve the other ranks.
+
+```{r}
+#| output: false
+# Clean the OTU table based on taxonomy thresholds
+# (remove assignation if confidence is too low).
+BLAST_clean <- BLAST_filter2 %>%
+  mutate(species = if_else(pident < 98.7, "NA", species),
+         genus = if_else(pident < 94.5, "NA", genus),
+         family = if_else(pident < 86.5, "NA", family),
+         order = if_else(pident < 82.0, "NA", order),
+         class = if_else(pident < 78.5, "NA", class),
+         phylum = if_else(pident < 75.0, "NA", phylum)) %>%
+  # Remove uncultured assignation
+  mutate(across(phylum:species, ~ gsub(".*uncultured.*", "NA", .x))) %>%
+  # Remove metagenome assignation
+  mutate(across(phylum:species, ~ gsub(".*metagenome.*", "NA", .x))) %>%
+  # Remove assignation above kingdom for previously identified OTUs
+  mutate(across(phylum:species, ~ if_else(taxa_OTU %in% otu_BLAST_assign, "NA", .x)))
+```
+
+The cleaned taxonomy table (`BLAST_clean`) should now be put back into the OTU table (`phyloseq` object).
+
+```{r}
+# Replace taxonomy table in the phyloseq object
+otu_BLAST_clean <- otu_BLAST_filter2
+otu_BLAST_clean@tax_table <- tax_table(as.matrix(BLAST_clean))
 ```
 
 ### Clean and save OTU table
 
 ```{r}
 #| eval: false
-# OTU table with singletons filtered
-save(otu_table_single, file = "RData/16S/otu_single_clean.RData")
-
-# OTU table with rare taxa filtered
-save(otu_table_rare, file = "RData/16S/otu_rare_clean.RData")
+# OTU table with cleaned taxonomy, based on BLAST accuracy
+save(otu_BLAST_clean, file = "RData/16S/otu_BLAST_clean.RData")
 ```
+

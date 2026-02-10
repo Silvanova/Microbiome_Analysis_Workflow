@@ -110,14 +110,16 @@ website:
           #   - text: "Scarce features"
           #     file: otu-tables/filter/scarce.qmd
 
-          - section: "Taxonomy filtering"
-            contents:
-            - text: "Bacteria and Archaea (16S)"
-              href: otu-tables/filter/16S.qmd
-            - text: "Fungi (ITS)"
-              href: otu-tables/filter/ITS.qmd
-            - text: "Soil animals (CO1)"
-              href: otu-tables/filter/CO1.qmd
+          - text: "BLAST quality check"
+            file: otu-tables/filter/BLAST.qmd
+          # - section: "Taxonomy filtering"
+          #   contents:
+          #   - text: "Bacteria and Archaea (16S)"
+          #     href: otu-tables/filter/16S.qmd
+          #   - text: "Fungi (ITS)"
+          #     href: otu-tables/filter/ITS.qmd
+          #   - text: "Soil animals (CO1)"
+          #     href: otu-tables/filter/CO1.qmd
 
         - section: "Rarefaction & Normalization"
           file: otu-tables/rare-norm.qmd

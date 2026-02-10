@@ -9,7 +9,7 @@
 # Set working directory (modify the path below to match your own)
 setwd("some_folder_path/my_working_directory")
 
-# Load packages
+# Load packages and homemade functions
 source("scripts/001_required_packages.R")
 
 # Load raw OTU table
