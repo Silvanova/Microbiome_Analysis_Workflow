@@ -9,7 +9,7 @@
 # Set working directory (modify the path below to match your own)
 setwd("some_folder_path/my_working_directory")
 
-# Load packages
+# Load packages and homemade functions
 source("scripts/001_required_packages.R")
 
 # Load the cleaned OTU table from previous scripts
@@ -21,14 +21,16 @@ load("RData/16S/otu_ctrl_clean.RData")
 # targeted with each primer sets: i.e., Bacteria for 16S, Fungi for ITS and
 # Metazoa for CO1.
 
-# Count OTUs before filtering
-ntaxa(otu_ctrl_clean) # 25390
-
-# Filter Bacteria
+# Select organisms that should be included in the analysis
 otu_table_tax <- subset_taxa(otu_ctrl_clean, kingdom == "Bacteria")
 
-# Count OTUs after filtering
-ntaxa(otu_table_tax) # 24790 (~2% of the OTUs were not Bacteria)
+# Remove organisms that should not be included in the analysis
+otu_table_tax <- subset_taxa(otu_table_tax, order != "Chloroplast" &
+                               family != "Mitochondria")
+
+# Count OTUs before and after filtering
+ntaxa(otu_ctrl_clean) # 25390
+ntaxa(otu_table_tax) # 22046 (~13% of the OTUs were not Bacteria)
 
 # Singletons -------------------------------------------------------------------
 
@@ -36,7 +38,7 @@ ntaxa(otu_table_tax) # 24790 (~2% of the OTUs were not Bacteria)
 otu_table_single <- prune_taxa(taxa_sums(otu_table_tax) > 1, otu_table_tax)
 
 # Count OTUs after filtering
-ntaxa(otu_table_single) # 24339 (~2% of the OTUs were singletons)
+ntaxa(otu_table_single) # 21632 (~2% of the remaining OTUs were singletons)
 
 # Rare OTUs --------------------------------------------------------------------
 
@@ -51,16 +53,16 @@ ntaxa(otu_table_single) # 24339 (~2% of the OTUs were singletons)
 ## Relative abundance ####
 
 # Calculate the average sequencing depth
-seq_depth_avg <- mean(sample_sums(otu_table_tax)) # 148149.9 reads
+seq_depth_avg <- mean(sample_sums(otu_table_tax)) # 139853.2 reads
 
 # Calculate thresholds based on k% of the average sequencing depth
 # For the sake of this exercise, multiple thresholds between 0.005% and 1% are
 # tested to compare their effects on various community analyses.
-thresh005 <- ceiling(seq_depth_avg*0.005/100) # 8 reads
-thresh01 <- ceiling(seq_depth_avg*0.01/100) # 15 reads
-thresh05 <- ceiling(seq_depth_avg*0.05/100) # 75 reads
-thresh1 <- ceiling(seq_depth_avg*0.1/100) # 149 reads
-thresh10 <- ceiling(seq_depth_avg*1/100) # 1482 reads
+thresh005 <- ceiling(seq_depth_avg*0.005/100) # 7 reads
+thresh01 <- ceiling(seq_depth_avg*0.01/100) # 14 reads
+thresh05 <- ceiling(seq_depth_avg*0.05/100) # 70 reads
+thresh1 <- ceiling(seq_depth_avg*0.1/100) # 140 reads
+thresh10 <- ceiling(seq_depth_avg*1/100) # 1399 reads
 
 # Remove all OTUs that have a total sum lower than the threshold
 otu_table_rare005 <- otu_table_tax %>% prune_taxa(taxa_sums(.) > thresh005, .)
@@ -71,13 +73,13 @@ otu_table_rare10 <- otu_table_tax %>% prune_taxa(taxa_sums(.) > thresh10, .)
 
 # Compare the number of OTU in each filtering step
 ntaxa(otu_ctrl_clean) #25390 (before filtering)
-ntaxa(otu_table_tax) #24790 (~98% of OTUs are Bacteria)
-ntaxa(otu_table_single) #24339 (~2% singletons)
-ntaxa(otu_table_rare005) #8548 (~66% of OTUs have less than 8 reads; 0.005%)
-ntaxa(otu_table_rare01) #6735 (~73% of OTUs have less than 15 reads; 0.01%)
-ntaxa(otu_table_rare05) #3765 (~85% of OTUs have less than 75 reads; 0.05%)
-ntaxa(otu_table_rare1) #2913 (~88% of OTUs have less than 149 reads; 0.1%)
-ntaxa(otu_table_rare10) #1032 (~96% of OTUs have less than 1482 reads; 1%)
+ntaxa(otu_table_tax) #22046 (~87% of OTUs are Bacteria)
+ntaxa(otu_table_single) #21632 (~2% singletons)
+ntaxa(otu_table_rare005) #8064 (~63% of OTUs have less than 7 reads; 0.005%)
+ntaxa(otu_table_rare01) #6183 (~72% of OTUs have less than 14 reads; 0.01%)
+ntaxa(otu_table_rare05) #3467 (~84% of OTUs have less than 70 reads; 0.05%)
+ntaxa(otu_table_rare1) #2710 (~88% of OTUs have less than 140 reads; 0.1%)
+ntaxa(otu_table_rare10) #979 (~96% of OTUs have less than 1399 reads; 1%)
 
 ### Compare thresholds ####
 
@@ -99,35 +101,35 @@ seq_depth_single <- cbind.data.frame(sample_data(otu_table_single)) %>%
   arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
   mutate(seq_depth = "singletons")
 
-# Rare 0.005% (<8 reads)
+# Rare 0.005% (<7 reads)
 seq_depth_rare005 <- cbind.data.frame(sample_data(otu_table_rare005)) %>%
   cbind(estimate_richness(otu_table_rare005, measures = "Observed")) %>%
   mutate(LibrarySize = sample_sums(otu_table_rare005)) %>%
   arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
   mutate(seq_depth = "rare 0.005%")
 
-# Rare 0.01% (<15 reads)
+# Rare 0.01% (<14 reads)
 seq_depth_rare01 <- cbind.data.frame(sample_data(otu_table_rare01)) %>%
   cbind(estimate_richness(otu_table_rare01, measures = "Observed")) %>%
   mutate(LibrarySize = sample_sums(otu_table_rare01)) %>%
   arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
   mutate(seq_depth = "rare 0.01%")
 
-# Rare 0.05% (<75 reads)
+# Rare 0.05% (<70 reads)
 seq_depth_rare05 <- cbind.data.frame(sample_data(otu_table_rare05)) %>%
   cbind(estimate_richness(otu_table_rare05, measures = "Observed")) %>%
   mutate(LibrarySize = sample_sums(otu_table_rare05)) %>%
   arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
   mutate(seq_depth = "rare 0.05%")
 
-# Rare 0.1% (<149 reads)
+# Rare 0.1% (<140 reads)
 seq_depth_rare1 <- cbind.data.frame(sample_data(otu_table_rare1)) %>%
   cbind(estimate_richness(otu_table_rare1, measures = "Observed")) %>%
   mutate(LibrarySize = sample_sums(otu_table_rare1)) %>%
   arrange(LibrarySize) %>% mutate(Index = row_number()) %>%
   mutate(seq_depth = "rare 0.1%")
 
-# Rare 1% (<1482 reads)
+# Rare 1% (<1399 reads)
 seq_depth_rare10 <- cbind.data.frame(sample_data(otu_table_rare10)) %>%
   cbind(estimate_richness(otu_table_rare10, measures = "Observed")) %>%
   mutate(LibrarySize = sample_sums(otu_table_rare10)) %>%
@@ -155,7 +157,7 @@ seq_depth_all %>% filter(Index > 85) %>%
 # does not affect LibrarySize, as the points completely overlap (purple vs pink).
 
 # In addition, the filtering of the rare OTUs at a threshold of 0.01% or less
-# changes very little in the LibrarySize, even though we lost ~73% of OTUs
+# changes very little in the LibrarySize, even though we lost ~72% of OTUs
 
 #### Effect on OTU richness ####
 
@@ -233,10 +235,11 @@ beta_div_rare10 <- otu_table_rare10 %>%
 # Visualize all plots together
 ggarrange(beta_div_raw, beta_div_single, beta_div_rare005, beta_div_rare01,
           beta_div_rare05, beta_div_rare1, beta_div_rare10,
-          labels = c("Non-filtered (24790 OTUs)", "Singletons (24339 OTUs)",
-                     "0.005% (<8 reads; 8548 OTUs)", "0.01% (<15 reads; 6735 OTUs)",
-                     "0.05% (<75 reads; 3765 OTUs)", "0.1% (<149 reads; 2913 OTUs)",
-                     "1% (<1482 reads; 1032 OTUs)"),
+          labels = c(
+            "Non-filtered (22046 OTUs)", "Singletons (21632 OTUs)",
+            "0.005% (<7 reads; 8064 OTUs)", "0.01% (<14 reads; 6183 OTUs)",
+            "0.05% (<70 reads; 3467 OTUs)", "0.1% (<140 reads; 2710 OTUs)",
+            "1% (<1399 reads; 979 OTUs)"),
           ncol = 3, nrow = 3, common.legend = TRUE,
           hjust = 0, label.x = 0.2, font.label = list(size = 10))
 
