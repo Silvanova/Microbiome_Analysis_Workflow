@@ -176,10 +176,15 @@ There are a few exceptions to this rule. As a rule of thumb (arbitrary threshold
 These OTUs should be further investigated to determine if they should be removed or preserved.
 
 ```{r}
-#| output: false
+#| eval: false
 # Identify unknown OTUs
 BLAST_unknown <- filter(BLAST_filter, pident < 70 | evalue > 1e-50 | qcovs < 50)
 View(BLAST_unknown)
+```
+
+```{r}
+#| include: false
+BLAST_unknown <- filter(BLAST_filter, pident < 70 | evalue > 1e-50 | qcovs < 50)
 ```
 
 ```{r}
