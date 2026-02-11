@@ -62,3 +62,6 @@ README.qmd
 **/*.utf8.md
 .quarto/
 _site/
+
+# trash folder
+**/**/trash/

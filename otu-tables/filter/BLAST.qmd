@@ -2,7 +2,6 @@
 title: "BLAST quality check"
 format: html
 editor: visual
-bibliography: references.bib
 ---
 
 Filtering based on BLAST accuracy is applied to remove OTUs with low-confidence taxonomic assignments, typically indicated by low sequence similarity (`pident`), poor alignment coverage (`qcovs`), or poor fit of the rank resolution (`evalue`) [@tedersoo2022]. Such features are frequently artefactual or biologically uninterpretable and can bias ecological inference if retained.
