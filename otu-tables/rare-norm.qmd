@@ -19,7 +19,6 @@ To our knowledge, rarefying can more effectively mitigate the artifact of sample
 
 This section documents how to apply either method to your data and in which cases one may be better suited than another. To follow the example presented on this page directly on your computer, download the script `006_normalization.R` and the example raw data by clicking the buttons below. Alternatively, you may copy the codes below into your own script, and use your own data.
 
-
 ```{r}
 #| layout: [[-10,40,-5,35,-10]]
 #| echo: false

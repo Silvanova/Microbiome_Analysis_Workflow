@@ -89,11 +89,6 @@ website:
 
         - section: "Rarefaction & Normalization"
           file: otu-tables/rare-norm.qmd
-          contents:
-          - text: "Rarefaction"
-            file: otu-tables/rarefy.qmd
-          - text: "Normalizations"
-            file: otu-tables/normalize.qmd
 
 
     - title: "Statistical Analyses"
