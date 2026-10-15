@@ -197,10 +197,10 @@ summary(BLAST_raw)
 taxonomy_raw <- BLAST_raw %>%
   # Split columns based on delimiter (;)
   separate_wider_delim(cols = X1st_hit, delim = ";",
-                       names = c("BLAST_ID","kingdom", "phylum", "class",
-                                 "order", "family", "genus", "species", "x1",
-                                 "x2", "x3", "x4", "x5", "x6", "x7", "x8", "x9",
-                                 "x10", "x11", "x12"),
+                       names = c("BLAST_ID", "domain", "kingdom", "phylum",
+                                 "class", "order", "family", "genus", "species",
+                                 "x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8",
+                                 "x9", "x10", "x11", "x12"),
                        too_few = "align_start") %>%
   # Rename qseqid column to taxa_OTU
   as.data.frame() %>% dplyr::rename(taxa_OTU = qseqid) %>%

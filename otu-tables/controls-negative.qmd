@@ -84,7 +84,7 @@ We can see that, compared to the rest of the samples, all controls have a small 
 
 Note that positive controls have a larger library size than the negative controls, showing that sequencing performed well in these samples. This can be further confirmed in the previous section: [Dealing with positive controls](controls-positive.qmd).
 
-Furthermore, one sample has a very small library size compared to other samples (and compared to controls). This sample should be further inspected to determine if its microbial community resemble that of other samples (i.e., replicates). If not, further investigation would be required to determine why this sample is different from other replicates: was there a methodological issue with this sample that resulted in the low sequencing depth; or is this a true biological exception that can occur among your replicates? When in doubt, ask those who collected and processed the samples.
+Furthermore, one sample has a very small library size compared to other samples (and compared to controls). This sample should be further inspected to determine if its microbial community resembles that of other samples (i.e., replicates). If not, further investigation would be required to determine why this sample is different from other replicates: was there a methodological issue with this sample that resulted in the low sequencing depth; or is this a true biological exception that can occur among your replicates? When in doubt, ask those who collected and processed the samples.
 
 ##### Inspect sample with small library size
 
@@ -151,8 +151,9 @@ ggplot(data=otu_table.pa, aes(x=pa.neg, y=pa.sam)) + geom_point() +
 We must find out if there was a contamination in our samples from the method, or if the negative samples have been contaminated by the other samples.
 
 ```{r}
-# For further analyses, convert OTU table from count data to relative abundance
-otu_table_rel <- transform_sample_counts(otu_table_raw.noPos, function(x) x/sum(x))
+# Cnvert OTU table from count data to relative abundance
+otu_table_rel <- transform_sample_counts(
+  otu_table_raw.noPos, function(x) x/sum(x))
 
 # Identify OTUs present in negative controls
 otu_neg <- filter(otu_table.pa, pa.neg > 0) %>% rownames()
@@ -162,7 +163,8 @@ otu_table_neg <- prune_taxa(otu_neg, otu_table_rel)
 
 # Visualize the abundance of these OTUs in all samples
 plot_bar(otu_table_neg, fill = "phylum") +
-  facet_grid(~sample_type, scales = "free", space = "free")
+  facet_grid(~sample_type, scales = "free", space = "free") +
+  theme(legend.position = "none")
 ```
 
 A commonly recommended practice with negative controls is to remove any OTU found in negative controls from the rest of the data set [@nguyen2014]. However, as you can see in this demonstration, the OTUs found in the negative controls are found in all samples and represent \~25% of the community in all samples. Therefore, it is most likely that the OTUs found in the negative controls are present due to a contamination from the rest of the samples and not the other way around.
@@ -175,7 +177,8 @@ otu_table_neg <- prune_taxa(otu_neg, otu_table_raw.noPos)
 
 # Visualize the abundance of these OTUs in all samples
 plot_bar(otu_table_neg, fill = "phylum") +
-  facet_grid(~sample_type, scales = "free", space = "free")
+  facet_grid(~sample_type, scales = "free", space = "free") +
+  theme(legend.position = "none")
 ```
 
 Here we can see that the abundance of these contaminants in the negative controls is very small compared to true samples.
@@ -271,11 +274,11 @@ otu_table_raw <- prune_samples(
 otu_ctrl_clean <- remove_taxa(contaminants, otu_table_raw)
 
 # Remove all controls
-otu_ctrl_clean <- prune_samples(
-  sample_data(otu_ctrl_clean)$sample_type != "positive control", otu_ctrl_clean)
+otu_ctrl_clean <- prune_samples(sample_data(
+  otu_ctrl_clean)$sample_type != "positive control", otu_ctrl_clean)
 
-otu_ctrl_clean <- prune_samples(
-  sample_data(otu_ctrl_clean)$sample_type != "negative control", otu_ctrl_clean)
+otu_ctrl_clean <- prune_samples(sample_data(
+  otu_ctrl_clean)$sample_type != "negative control", otu_ctrl_clean)
 
 # Save cleaned OTU table
 save(otu_ctrl_clean, file = "RData/16S/otu_ctrl_clean.RData")

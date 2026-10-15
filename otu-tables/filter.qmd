@@ -7,9 +7,9 @@ bibliography: references.bib
 
 This section presents three important ways of cleaning the OTU tables:
 
--   First, by doing a simple taxonomy filtering, to keep only relevant taxonomic assignations.
--   Then, by going through a global filtering to remove singletons, rare or scarce OTUs, which are most often artifacts [@sgarbi2020; @nikodemova2023; @brown2015]. These also usually coincide with the OTUs with lowest BLAST accuracy [@tedersoo2022].
--   Finally, by filtering based on BLAST quality thresholds, and cleaning the taxonomic assignations.
+- First, by doing a simple taxonomy filtering, to keep only relevant taxonomic assignations.
+- Then, by going through a global filtering to remove singletons, rare or scarce OTUs, which are most often artifacts [@sgarbi2020; @nikodemova2023; @brown2015]. These also usually coincide with the OTUs with lowest BLAST accuracy [@tedersoo2022].
+- Finally, by filtering based on BLAST quality thresholds, and cleaning the taxonomic assignations.
 
 The two downloadable scripts below (`004_global_filter.R` and `005_BLAST_filter.R`) implement a standard approach for cleaning OTU tables based on taxonomy, abundance and prevalence, or based on BLAST quality, in a `phyloseq` object.
 

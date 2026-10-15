@@ -40,7 +40,7 @@ download_file(
 )
 ```
 
-For a step-by-step explanation of how each control type is handled, see the sections below:
+For a step-by-step explanation of how each control type is handled, explore the two sections below:
 
--   [Dealing with positive controls](controls-positive.qmd)
--   [Dealing with negative controls (and blanks)](controls-negative.qmd)
+- [Dealing with positive controls](controls-positive.qmd)
+- [Dealing with negative controls (and blanks)](controls-negative.qmd)

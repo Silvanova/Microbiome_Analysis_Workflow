@@ -55,7 +55,7 @@ BLAST_unknown <- filter(BLAST_filter, pident < 70 | evalue > 1e-50 | qcovs < 50)
 View(BLAST_unknown)
 
 # These OTUs should be investigated. A manual check against the 10 best BLAST
-# matches allow for accurate assignment https://blast.ncbi.nlm.nih.gov/Blast.cgi
+# matches allow for accurate assignment https://www.arb-silva.de
 
 # After manual BLAST of these 44 OTUs, 8 could not be confidently
 # identified as Bacteria. Before removing them, let's inspect them.

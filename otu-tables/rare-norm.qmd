@@ -1,5 +1,5 @@
 ---
-title: "Normalization and rarefaction"
+title: "Rarefaction and other normalization methods"
 format: html
 editor: visual
 ---
@@ -8,13 +8,17 @@ editor: visual
 #| echo: false
 #| output: false
 library(downloadthis)
+library(phyloseq)
+library(dplyr)
+load("../../RData/16S/otu_BLAST_clean.RData")
 ```
 
-Scripts used to perform data transformation. This is an alternative to thinning which preserves all the data. Rather than removing information, this method recognised the compositional nature of the data and transforms it in the logarithm of the ratio of counts within each sample. The data changes but the transformation allows comparability between samples. The script includes both the transformation and extra checks.
+The most commonly used methods to standardize sequencing depth across samples are rarefaction and data transformation. These two strategies are currently at the center of an ongoing debate in the field, as they rely on fundamentally different statistical assumptions about amplicon data. Rarefaction equalizes library sizes by subsampling reads to a common depth and has long been used in ecology, but it discards data and reduces statistical power, leading some to argue that it is statistically inadmissible [@mcmurdie2014]. Proponents of compositional data analysis emphasize that sequencing data are inherently compositional and should be analyzed using log-ratio transformations (e.g., CLR) and Aitchison geometry, rather than through subsampling (rarefaction) or count-based normalization (relative abundance) [@gloor2017]. However, rarefaction has recently been defended as a pragmatic and robust approach for controlling uneven sequencing effort in diversity analyses, emphasizing its interpretability and long-standing use in ecology [@schloss2024]. Ultimately, the debate centers on a fundamental statistical question: whether sequencing counts should be treated as compositional data requiring ratio-based transformations, or as sampling-based counts for which subsampling remains an acceptable ecological standardization strategy.
 
-Scripts used to perform data thinning. That is, randomly resampling a subset of the data so that all samples have the same sampling/sequencing depth. This "ensures" comparability between samples but also causes a significant loss of data. Included are notes on how to evaluate thinning threshold and how to assess the effects of the data loss.
+To our knowledge, rarefying can more effectively mitigate the artifact of sample library size than other normalization techniques, especially for small (\<1000 sequences per sample) and very uneven (\>\~10× on average) library sizes [@weiss2017]. Other normalization approaches are prone to generation of artifactual clusters based on sequencing depth in beta diversity analysis, and higher false discovery rates in differential abundance testing. When sequencing depth is sufficient and balanced, other compositional methods are generally better suited because they preserve statistical power [@mcmurdie2014]. For alpha diversity comparisons, rarefaction is always recommended [@schloss2024]. In any case, researchers should proceed with caution and check for library size effects if the count data was not rarefied, as demonstrated below \[INSERT LINK\].
 
-Download the scripts `006_normalization.R` and `007_rarefaction.R`, or copy the codes below into your own script.
+This section documents how to apply either method to your data and in which cases one may be better suited than another. To follow the example presented on this page directly on your computer, download the script `006_normalization.R` and the example raw data by clicking the buttons below. Alternatively, you may copy the codes below into your own script, and use your own data.
+
 
 ```{r}
 #| layout: [[-10,40,-5,35,-10]]
@@ -30,9 +34,9 @@ download_file(
 )
 
 download_file(
-  path = "../scripts/007_rarefaction.R",
-  output_name = "007_rarefaction",
-  button_label = "Download rarefaction script",
+  path = "../RData/16S/otu_BLAST_clean.RData",
+  output_name = "otu_BLAST_clean",
+  button_label = "Download example RData",
   button_type = "success",
   has_icon = TRUE,
   icon = "fa fa-save",
@@ -40,12 +44,70 @@ download_file(
 )
 ```
 
-#### how to decide if the data is suitable for thinning
+For reproducibility, set seeds (random number generation) at the start of this script to always obtain the same results with rarefaction.
 
-The rarefaction curve reaches a plateau.
+```{r}
+set.seed(42)
+```
 
-#### how to decide on the threshold
+## Rarefaction
 
-Set a threshold that gets as close as possible to the plateau, removing max N samples
+Rarefaction normalizes sequencing depth by randomly subsampling reads so that all samples have the same library size, thereby facilitating direct comparison of diversity metrics across samples. While this approach improves comparability, it inevitably discards valid observations and can lead to substantial data loss depending on the chosen rarefaction threshold.
 
-15th percentile of mean sequencing depth (Karelle's previous lab)
+To assess whether the data are suitable for rarefaction, we can draw rarefaction curves. These curves plot the expected number of observed taxa as a function of sequencing depth for each sample, allowing us to evaluate whether diversity approaches a plateau. If most curves level off near the chosen threshold, sequencing depth is likely sufficient; if they continue to rise steeply, rarefaction at that depth may lead to substantial information loss.
+
+```{r}
+# vegan::rarecurve() expects a samples x taxa matrix
+# Transpose the OTU table if taxa_are_rows is TRUE
+otu_mat <- as(otu_table(otu_BLAST_clean), "matrix")
+if (taxa_are_rows(otu_BLAST_clean)) otu_mat <- t(otu_mat)
+
+rarecurve(otu_mat, step = 100, label = FALSE)
+
+# What is the smallest library size across samples? Is it sufficient?
+min(sample_sums(otu_BLAST_clean))
+```
+
+In this example, we found that the smallest library size is 24663 reads, which is sufficient. Indeed, all samples reach a plateau before a depth of 24663. If some samples had a small library size (e.g., \<1000), you could choose to rarefy to the size of the second, third, etc. lowest library size, until you find a sufficient depth. Rarefaction depth selection is inherently a trade-off between retaining samples and retaining reads per sample, and no published study provides a universally valid cutoff for the acceptable proportion of discarded samples.
+
+```{r}
+#| output: false
+# Rarefy to the library size of the sample with the lowest library size (default)
+otu_table_rarefy <- rarefy_even_depth(otu_BLAST_clean, replace = F)
+
+# Rarefy to a chosen library size
+chosen_depth <- 24663
+otu_table_rarefy <- rarefy_even_depth(otu_BLAST_clean, replace = F,
+                                      sample.size = chosen_depth)
+```
+
+Finally, to verify that rarefaction is needed, we can compare library sizes between groups.
+
+```{r}
+# Extract sample metadata
+meta <- as(sample_data(otu_BLAST_clean), "data.frame")
+
+# Add library size
+meta$library_size <- sample_sums(otu_BLAST_clean)
+
+# Plot results
+ggplot(meta, aes(x = SiteID, y = library_size)) +
+  geom_boxplot() +
+  theme_bw()
+```
+
+As shown in the boxplot above, even though we found a large difference in library size across samples, this variance is equally distributed among groups. Simple statistical tests can support this observation.
+
+```{r}
+# Test for homogeneity of variances
+bartlett.test(library_size ~ SiteID, data = meta)
+
+# Test for analysis of variance
+kruskal.test(library_size ~ SiteID, data = meta)
+```
+
+These results show that each group contain equal variance and their mean are not different. Thus, for this dataset, we have demonstrated that sequencing depth is sufficient (\>1000 reads per sample) and balanced (homogeneity of variance and equal means), which means that other compositional methods for normalization would be better suited than rarefaction because they preserve statistical power.
+
+## Transformations
+
+Scripts used to perform data transformation. This is an alternative to thinning which preserves all the data. Rather than removing information, this method recognizes the compositional nature of the data and transforms it in the logarithm of the ratio of counts within each sample. The data changes but the transformation allows comparability between samples. The script includes both the transformation and extra checks.

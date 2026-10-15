@@ -11,8 +11,8 @@ bibliography: references.bib
 
 All data handling and analyses in this workflow are performed in R. Before you get started,
 
--   [Install R and RStudio](get-started/install.qmd#r-and-rstudio)
--   [Install and load required packages](get-started/install.qmd#required-packages)
+- [Install R and RStudio](get-started/install.qmd#r-and-rstudio)
+- [Install and load required packages](get-started/install.qmd#required-packages)
 
 ::: callout-tip
 ### Source another script {.callout-tip}
@@ -32,6 +32,6 @@ Then, to get started with the data analysis, you must first ensure that the raw 
 
 For more information about phyloseq, look up @mcmurdie2013, or their [GitHub pages](https://joey711.github.io/phyloseq/).
 
--   [Load auxiliary data (e.g. Excel sheet)](get-started/data-prep.qmd#auxfile)
--   [Construct a phyloseq object from BLAST results](get-started/data-prep.qmd#phyloseq)
--   [Save data as .RData](get-started/data-prep.qmd#save)
+- [Load auxiliary data (e.g. Excel sheet)](get-started/data-prep.qmd#auxfile)
+- [Construct a phyloseq object from BLAST results](get-started/data-prep.qmd#phyloseq)
+- [Save data as .RData](get-started/data-prep.qmd#save)

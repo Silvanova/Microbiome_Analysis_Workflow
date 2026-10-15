@@ -6,43 +6,25 @@ editor: visual
 
 Filtering based on BLAST accuracy is applied to remove OTUs with low-confidence taxonomic assignments, typically indicated by low sequence similarity (`pident`), poor alignment coverage (`qcovs`), or poor fit of the rank resolution (`evalue`) [@tedersoo2022]. Such features are frequently artefactual or biologically uninterpretable and can bias ecological inference if retained.
 
-+-------------+------------------------------------------------------------------------------------------------+
-| Column name | Definition                                                                                     |
-+=============+================================================================================================+
-| query_seq   | DNA sequence                                                                                   |
-+-------------+------------------------------------------------------------------------------------------------+
-| X1st_hit    | first BLAST hit: best match against the database                                               |
-+-------------+------------------------------------------------------------------------------------------------+
-| qlen        | query length: length of the DNA sequence                                                       |
-+-------------+------------------------------------------------------------------------------------------------+
-| slen        | length of the matching sequence in the database                                                |
-+-------------+------------------------------------------------------------------------------------------------+
-| qstart      | start point on the query sequence that matches with the database sequence                      |
-+-------------+------------------------------------------------------------------------------------------------+
-| qend        | end point on the query sequence that matches with the database sequence                        |
-+-------------+------------------------------------------------------------------------------------------------+
-| sstart      | start point on the database sequence that matches with the query sequence                      |
-+-------------+------------------------------------------------------------------------------------------------+
-| send        | end point on the database sequence that matches with the query sequence                        |
-+-------------+------------------------------------------------------------------------------------------------+
-| evalue      | summary statistic that estimate the goodness of match between the query and database sequences |
-+-------------+------------------------------------------------------------------------------------------------+
-| length      | length of the match between the query and database sequences                                   |
-+-------------+------------------------------------------------------------------------------------------------+
-| nident      | number of pairbase that match within the matching length                                       |
-+-------------+------------------------------------------------------------------------------------------------+
-| mismatch    | number of pairbase that do not match within the matching length (length - nident)              |
-+-------------+------------------------------------------------------------------------------------------------+
-| gapopen     | number of gap openings                                                                         |
-+-------------+------------------------------------------------------------------------------------------------+
-| gaps        | gap size: number of pairbase inside gaps                                                       |
-+-------------+------------------------------------------------------------------------------------------------+
-| sstrand     | orientation of the database sequence (plus or minus)                                           |
-+-------------+------------------------------------------------------------------------------------------------+
-| qcovs       | percentage of coverage of the query sequence over the database sequence (length/qlen)          |
-+-------------+------------------------------------------------------------------------------------------------+
-| pident      | percentage of identity between the two sequences (nident/length)                               |
-+-------------+------------------------------------------------------------------------------------------------+
+| Column name | Definition |
+|----|----|
+| query_seq | DNA sequence |
+| X1st_hit | first BLAST hit: best match against the database |
+| qlen | query length: length of the DNA sequence |
+| slen | length of the matching sequence in the database |
+| qstart | start point on the query sequence that matches with the database sequence |
+| qend | end point on the query sequence that matches with the database sequence |
+| sstart | start point on the database sequence that matches with the query sequence |
+| send | end point on the database sequence that matches with the query sequence |
+| evalue | summary statistic that estimate the goodness of match between the query and database sequences |
+| length | length of the match between the query and database sequences |
+| nident | number of pairbase that match within the matching length |
+| mismatch | number of pairbase that do not match within the matching length (length - nident) |
+| gapopen | number of gap openings |
+| gaps | gap size: number of pairbase inside gaps |
+| sstrand | orientation of the database sequence (plus or minus) |
+| qcovs | percentage of coverage of the query sequence over the database sequence (length/qlen) |
+| pident | percentage of identity between the two sequences (nident/length) |
 
 : Table 1. Definitions of BLAST results
 
@@ -99,19 +81,19 @@ Filtering out OTUs based on BLAST results is normally done during bioinformatic 
 
 Depending on primers, the expected length of amplicons varies greatly, thus it is impossible to determine a universal threshold for sequence length. However, most studies set this threshold to rougly half of the expected length (see table below).
 
-+--------+------------------------------------+-----------------------------------------+-----------+--------------+------------------------+---------------------------+
-| Name   | Target                             | Primers (sequence 5’-3’)                | Regions   | Length\      | Threshold query length | References                |
-|        |                                    |                                         |           | (average)    |                        |                           |
-+========+====================================+=========================================+===========+==============+========================+===========================+
-| 16S    | Prokaryotes (Bacteria and Archaea) | 515F-Y (GTGYCAGCMGCCGCGGTAA)\           | V4-V5     | 360-500 bp\  | 250 bp                 | [@parada2015]             |
-|        |                                    | 926RB (CCGYCAATTYMTTTRAGTTT)            |           | (\~460 bp)   |                        |                           |
-+--------+------------------------------------+-----------------------------------------+-----------+--------------+------------------------+---------------------------+
-| ITS    | Fungi                              | ITS9MUN (TGTACACACCGCCCGTCG)\           | ITS1-ITS2 | 150-1200 bp\ | 100 bp                 | [@tedersoo2016]           |
-|        |                                    | ITS4ngsUni (CCTSCSCTTANTDATATGC)        |           | (\~280 bp)   |                        |                           |
-+--------+------------------------------------+-----------------------------------------+-----------+--------------+------------------------+---------------------------+
-| CO1    | Metazoa                            | mlCOIintF (GGWACWGGWTGAACWGTWTAYCCYCC)\ | 320-345\  | 250-700\     | 200 bp                 | [@leray2013; @geller2013] |
-|        |                                    | jgHCO2198 (TAIACYTCIGGRTGICCRAARAAYCA)  | 658       | (\~313 bp)   |                        |                           |
-+--------+------------------------------------+-----------------------------------------+-----------+--------------+------------------------+---------------------------+
++------+------------------------------------+-----------------------------------------+-----------+--------------+------------------------+---------------------------+
+| Name | Target                             | Primers (sequence 5’-3’)                | Regions   | Length\      | Threshold query length | References                |
+|      |                                    |                                         |           | (average)    |                        |                           |
++======+====================================+=========================================+===========+==============+========================+===========================+
+| 16S  | Prokaryotes (Bacteria and Archaea) | 515F-Y (GTGYCAGCMGCCGCGGTAA)\           | V4-V5     | 360-500 bp\  | 250 bp                 | [@parada2015]             |
+|      |                                    | 926RB (CCGYCAATTYMTTTRAGTTT)            |           | (\~460 bp)   |                        |                           |
++------+------------------------------------+-----------------------------------------+-----------+--------------+------------------------+---------------------------+
+| ITS  | Fungi                              | ITS9MUN (TGTACACACCGCCCGTCG)\           | ITS1-ITS2 | 150-1200 bp\ | 100 bp                 | [@tedersoo2016]           |
+|      |                                    | ITS4ngsUni (CCTSCSCTTANTDATATGC)        |           | (\~280 bp)   |                        |                           |
++------+------------------------------------+-----------------------------------------+-----------+--------------+------------------------+---------------------------+
+| CO1  | Metazoa                            | mlCOIintF (GGWACWGGWTGAACWGTWTAYCCYCC)\ | 320-345\  | 250-700\     | 200 bp                 | [@leray2013; @geller2013] |
+|      |                                    | jgHCO2198 (TAIACYTCIGGRTGICCRAARAAYCA)  | 658       | (\~313 bp)   |                        |                           |
++------+------------------------------------+-----------------------------------------+-----------+--------------+------------------------+---------------------------+
 
 : Table 2. Primer sets used for this data set
 
@@ -217,7 +199,31 @@ datatable(
 )
 ```
 
-A [manual BLASTn search](https://blast.ncbi.nlm.nih.gov/Blast.cgi) of these 44 OTUs revealed that some of them could not be confidently identified as Bacteria and should be removed. The rest of the OTUs could not be assigned a higher taxonomic level than kingdom.
+To do a manual BLAST of these sequences, make sure to use the same database as the one used to generate your OTU table in the first place. For example, the OTU tables for each target gene were generated using the following databases:
+
+- [SILVA](https://www.arb-silva.de) for Bacteria and Archaea (16S)
+- [UNITE](https://unite.ut.ee/analysis.php) for the eukaryotic nuclear ribosomal ITS region
+- [BOLD](https://id.boldsystems.org/) identification engine for animal identification (CO1)
+
+::: callout-tip
+**Create a FASTA file**
+
+To manually BLAST all sequences at once, create a FASTA file from your sequences and OTU ID, using the R package `Biostrings`.
+
+```{r}
+#| eval: false
+# Extract sequences
+fasta_seqs <- DNAStringSet(BLAST_unknown$query_seq)
+
+# Name sequences with OTU ID
+names(fasta_seqs) <- BLAST_unknown$taxa_OTU
+
+# Write FASTA file
+writeXStringSet(fasta_seqs, "BLAST_unknown.fasta")
+```
+:::
+
+A [manual BLASTn search](https://www.arb-silva.de/aligner) of these 44 OTUs revealed that some of them could not be confidently identified as Bacteria and should be removed. The rest of the OTUs could not be assigned a higher taxonomic level than kingdom.
 
 ```{r}
 # Identify OTUs to remove after manual BLASTn
@@ -242,7 +248,8 @@ Before removing OTUs, let's check their abundance and prevalence across samples:
 otu_table_BLAST_remove <- prune_taxa(otu_BLAST_remove, otu_BLAST_filter)
 
 # Visualize the abundance and prevalence of these OTUs across samples
-plot_bar(otu_table_BLAST_remove, fill = "OTU")
+plot_bar(otu_table_BLAST_remove, fill = "OTU") +
+  theme(legend.position = "none")
 ```
 
 All OTUs identified are both scarce (low prevalence) and rare (low abundance), thus removing them will not affect community analyses.
@@ -296,7 +303,8 @@ BLAST_clean <- BLAST_filter2 %>%
   # Remove metagenome assignation
   mutate(across(phylum:species, ~ gsub(".*metagenome.*", "NA", .x))) %>%
   # Remove assignation above kingdom for previously identified OTUs
-  mutate(across(phylum:species, ~ if_else(taxa_OTU %in% otu_BLAST_assign, "NA", .x)))
+  mutate(across(phylum:species, 
+                ~ if_else(taxa_OTU %in% otu_BLAST_assign, "NA", .x)))
 ```
 
 The cleaned taxonomy table (`BLAST_clean`) should now be put back into the OTU table (`phyloseq` object).
@@ -314,4 +322,3 @@ otu_BLAST_clean@tax_table <- tax_table(as.matrix(BLAST_clean))
 # OTU table with cleaned taxonomy, based on BLAST accuracy
 save(otu_BLAST_clean, file = "RData/16S/otu_BLAST_clean.RData")
 ```
-

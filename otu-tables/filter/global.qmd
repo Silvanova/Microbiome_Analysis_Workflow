@@ -219,7 +219,7 @@ seq_depth_all <- seq_depth_raw %>% rbind(seq_depth_single) %>%
 ```{r}
 #| eval: false
 # Plot the library size of all samples
-ggplot(data = seq_depth_all, aes(x = Index, y = LibrarySize, color = seq_depth)) +
+ggplot(seq_depth_all, aes(x = Index, y = LibrarySize, color = seq_depth)) +
   geom_point() + geom_line()
 ```
 
@@ -244,7 +244,7 @@ To confirm our choice of the best filtering threshold, let's compare the effect 
 ```{r}
 #| eval: false
 # Plot the OTU richness of all samples
-ggplot(data = seq_depth_all, aes(x = Index, y = Observed, color = seq_depth)) +
+ggplot(seq_depth_all, aes(x = Index, y = Observed, color = seq_depth)) +
   geom_point() + geom_line()
 ```
 
@@ -335,7 +335,7 @@ seq_depth_raw <- seq_depth_raw %>%
   cbind(estimate_richness(otu_table_tax, measures = "Shannon"))
 
 # Plot the Shannon index of all samples
-ggplot(data = seq_depth_all, aes(x = Index, y = Shannon, color = seq_depth)) +
+ggplot(seq_depth_all, aes(x = Index, y = Shannon, color = seq_depth)) +
   geom_point() + geom_line()
 ```
 
@@ -430,7 +430,7 @@ With this analysis, we can see that removing rare OTUs reduces the variance with
 
 Ultimately, the choice of the "best" threshold is completely arbitrary. Various thresholds are found in the literature and no one is more justified than another. As a reminder: singletons and other rare OTUs have been previously found to be predominantly composed of artefacts, thus, their removal has been shown to have negligible effects on hypothesis-driven community comparisons while substantially reducing noise [@edgar2016; @nikodemova2023; @sgarbi2020; @cao2021]. Retaining them is only justified in studies explicitly targeting rare biosphere diversity and requires careful validation [@brown2015].
 
-As seen in this demonstration, all thresholds below 1% had little observable effect on library size, alpha diversity and beta diversity. For the sake of being more conservative, let's select the lowest relative abundance threshold (0.005%), which also roughly corresponded to a conservative absolute threshold (5-10 reads).
+As seen in this demonstration, all thresholds below 1% had little observable effect on library size, alpha diversity and beta diversity. Nevertheless, for the sake of being more conservative, let's select the lowest relative abundance threshold (0.005%), which also roughly corresponded to a conservative absolute threshold (5-10 reads).
 
 ```{r}
 # Select the best filtering threshold (0.005%)

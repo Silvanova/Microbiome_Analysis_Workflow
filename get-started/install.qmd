@@ -72,6 +72,9 @@ if (!require("microViz", quietly = TRUE))
 
 # CRAN packages ----------------------------------------------------------------
 
+if (!require("vegan", quietly = TRUE))
+  install.packages("vegan")
+
 if (!require("openxlsx", quietly = TRUE))
   install.packages("openxlsx")
 
@@ -96,6 +99,7 @@ if (!require("dplyr", quietly = TRUE))
 ```{r}
 #| eval: false
 # Load packages
+library(vegan)
 library(decontam)
 library(phyloseq)
 library(microViz)

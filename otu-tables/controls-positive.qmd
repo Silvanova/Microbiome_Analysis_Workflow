@@ -22,8 +22,8 @@ load("../RData/16S/otu_table_raw.RData")
 #| layout: [[-10,35,-5,40,-10]]
 #| echo: false
 download_file(
-  path = "../scripts/003_negative_control.R",
-  output_name = "003_negative_control",
+  path = "../scripts/003_positive_control.R",
+  output_name = "003_positive_control",
   button_label = "Download script",
   button_type = "success",
   has_icon = TRUE,
@@ -82,7 +82,7 @@ plot_bar(otu_table_pos, fill = "kingdom") +
   facet_grid(~sample_type, scales = "free", space = "free")
 ```
 
-As can be seen on this graph, the synthetic community added to these samples was composed of Eukaryota, but some additional contaminants (probably from true samples) can also be found in the positive controls. The issue of contaminants can be dealt with using the R package `decontam` as demonstrated in the previous section: [Dealing with negative controls](controls-negative.qmd).
+As can be seen on this graph, the synthetic community added to these samples was composed of Eukaryota, but some additional contaminants (probably from true samples) can also be found in the positive controls. The issue of contaminants can be dealt with using the R package `decontam` as demonstrated in the next section: [Dealing with negative controls](controls-negative.qmd).
 
 The rest of the synthetic community will be automatically removed from our data sets while performing [taxonomic filtering](filter.qmd).
 
