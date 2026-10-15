@@ -2,17 +2,23 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.27">
+<meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Filtering OTU tables – Silva Nova MAW</title>
 <style>
-code{white-space: pre-wrap;}
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -53,15 +59,14 @@ div.csl-indent {
 <link href="../otu-tables/controls-negative.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-eeba5ed4e7b862b439362aad387f8aa0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-ad2976cc7b57b88562625389cc21abde.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -438,16 +443,16 @@ div.csl-indent {
 2. Nikodemova, M., Holzhausen, E. A., Deblois, C. L., Barnet, J. H., Peppard, P. E., Suen, G., &amp; Malecki, K. M. (2023). The effect of low-abundance OTU filtering methods on the reliability and variability of microbial composition assessed by 16S rRNA amplicon sequencing. <em>Frontiers in Cellular and Infection Microbiology</em>, <em>13</em>. <a href="https://doi.org/10.3389/fcimb.2023.1165295">https://doi.org/10.3389/fcimb.2023.1165295</a>
 </div>
 <div id="ref-brown2015" class="csl-entry" role="listitem">
-3. Brown, S. P., Veach, A. M., Rigdon-Huss, A. R., Grond, K., Lickteig, S. K., Lothamer, K., Oliver, A. K., &amp; Jumpponen, A. (2015). Scraping the bottom of the barrel: are rare high throughput sequences artifacts? <em>Fungal Ecology</em>, <em>13</em>, 221–225. <a href="https://doi.org/10.1016/j.funeco.2014.08.006">https://doi.org/10.1016/j.funeco.2014.08.006</a>
+3. Brown, S. P., Veach, A. M., Rigdon-Huss, A. R., Grond, K., Lickteig, S. K., Lothamer, K., Oliver, A. K., &amp; Jumpponen, A. (2015). Scraping the bottom of the barrel: Are rare high throughput sequences artifacts? <em>Fungal Ecology</em>, <em>13</em>, 221–225. <a href="https://doi.org/10.1016/j.funeco.2014.08.006">https://doi.org/10.1016/j.funeco.2014.08.006</a>
 </div>
 <div id="ref-tedersoo2022" class="csl-entry" role="listitem">
 4. Tedersoo, L., Bahram, M., Zinger, L., Nilsson, R. H., Kennedy, P. G., Yang, T., Anslan, S., &amp; Mikryukov, V. (2022). Best practices in metabarcoding of fungi: From experimental design to results. <em>Molecular Ecology</em>, <em>31</em>(10), 2769–2795. <a href="https://doi.org/10.1111/mec.16460">https://doi.org/10.1111/mec.16460</a>
 </div>
 <div id="ref-tedersoo2021" class="csl-entry" role="listitem">
-5. Tedersoo, L., Mikryukov, V., Anslan, S., Bahram, M., Khalid, A. N., Corrales, A., Agan, A., Vasco-Palacios, A.-M., Saitta, A., Antonelli, A., Rinaldi, A. C., Verbeken, A., Sulistyo, B. P., Tamgnoue, B., Furneaux, B., Ritter, C. D., Nyamukondiwa, C., Sharp, C., Marín, C., … Abarenkov, K. (2021). The Global Soil Mycobiome consortium dataset for boosting fungal diversity research. <em>Fungal Diversity</em>, <em>111</em>(1), 573–588. <a href="https://doi.org/10.1007/s13225-021-00493-7">https://doi.org/10.1007/s13225-021-00493-7</a>
+5. <span class="nocase">Tedersoo, L., Mikryukov, V., Anslan, S., Bahram, M., Khalid, A. N., Corrales, A., Agan, A., Vasco-Palacios, A.-M., Saitta, A., Antonelli, A., Rinaldi, A. C., Verbeken, A., Sulistyo, B. P., Tamgnoue, B., Furneaux, B., Ritter, C. D., Nyamukondiwa, C., Sharp, C., Marín, C., … Abarenkov, K.</span> (2021). The global soil mycobiome consortium dataset for boosting fungal diversity research. <em>Fungal Diversity</em>, <em>111</em>(1), 573–588. <a href="https://doi.org/10.1007/s13225-021-00493-7">https://doi.org/10.1007/s13225-021-00493-7</a>
 </div>
 <div id="ref-sze2019" class="csl-entry" role="listitem">
-6. Sze, M. A., &amp; Schloss, P. D. (2019). The Impact of DNA Polymerase and Number of Rounds of Amplification in PCR on 16S rRNA Gene Sequence Data. <em>mSphere</em>, <em>4</em>(3). <a href="https://doi.org/10.1128/msphere.00163-19">https://doi.org/10.1128/msphere.00163-19</a>
+6. Sze, M. A., &amp; Schloss, P. D. (2019). The impact of DNA polymerase and number of rounds of amplification in PCR on 16S rRNA gene sequence data. <em>mSphere</em>, <em>4</em>(3). <a href="https://doi.org/10.1128/msphere.00163-19">https://doi.org/10.1128/msphere.00163-19</a>
 </div>
 <div id="ref-edgar2016" class="csl-entry" role="listitem">
 7. Edgar, R. C. (2016). <em>UNOISE2: Improved error-correction for illumina 16S and ITS amplicon sequencing</em>. <a href="http://dx.doi.org/10.1101/081257">http://dx.doi.org/10.1101/081257</a>
@@ -462,10 +467,10 @@ div.csl-indent {
 10. Cao, Q., Sun, X., Rajesh, K., Chalasani, N., Gelow, K., Katz, B., Shah, V. H., Sanyal, A. J., &amp; Smirnova, E. (2021). Effects of rare microbiome taxa filtering on statistical analysis. <em>Frontiers in Microbiology</em>, <em>11</em>. <a href="https://doi.org/10.3389/fmicb.2020.607325">https://doi.org/10.3389/fmicb.2020.607325</a>
 </div>
 <div id="ref-smirnova2018" class="csl-entry" role="listitem">
-11. Smirnova, E., Huzurbazar, S., &amp; Jafari, F. (2018). PERFect: PERmutation Filtering test for microbiome data. <em>Biostatistics</em>, <em>20</em>(4), 615–631. <a href="https://doi.org/10.1093/biostatistics/kxy020">https://doi.org/10.1093/biostatistics/kxy020</a>
+11. Smirnova, E., Huzurbazar, S., &amp; Jafari, F. (2018). PERFect: PERmutation filtering test for microbiome data. <em>Biostatistics</em>, <em>20</em>(4), 615–631. <a href="https://doi.org/10.1093/biostatistics/kxy020">https://doi.org/10.1093/biostatistics/kxy020</a>
 </div>
 <div id="ref-simonin2020" class="csl-entry" role="listitem">
-12. Simonin, M., Dasilva, C., Terzi, V., Ngonkeu, E. L. M., Diouf, D., Kane, A., Béna, G., &amp; Moulin, L. (2020). Influence of plant genotype and soil on the wheat rhizosphere microbiome: evidences for a core microbiome across eight African and European soils. <em>FEMS Microbiology Ecology</em>, <em>96</em>(6). <a href="https://doi.org/10.1093/femsec/fiaa067">https://doi.org/10.1093/femsec/fiaa067</a>
+12. Simonin, M., Dasilva, C., Terzi, V., Ngonkeu, E. L. M., Diouf, D., Kane, A., Béna, G., &amp; Moulin, L. (2020). Influence of plant genotype and soil on the wheat rhizosphere microbiome: Evidences for a core microbiome across eight african and european soils. <em>FEMS Microbiology Ecology</em>, <em>96</em>(6). <a href="https://doi.org/10.1093/femsec/fiaa067">https://doi.org/10.1093/femsec/fiaa067</a>
 </div>
 <div id="ref-kunjapur2018" class="csl-entry" role="listitem">
 13. Kunjapur, A. M., Pfingstag, P., &amp; Thompson, N. C. (2018). Gene synthesis allows biologists to source genes from farther away in the tree of life. <em>Nature Communications</em>, <em>9</em>(1). <a href="https://doi.org/10.1038/s41467-018-06798-7">https://doi.org/10.1038/s41467-018-06798-7</a>
@@ -483,7 +488,7 @@ div.csl-indent {
 17. Pappalardo, P., Hemmi, J. M., Machida, R. J., Leray, M., Collins, A. G., &amp; Osborn, K. J. (2025). Taxon<span>-</span>specific BLAST percent identity thresholds for identification of unknown sequences using metabarcoding. <em>Methods in Ecology and Evolution</em>, <em>16</em>(10), 2380–2394. <a href="https://doi.org/10.1111/2041-210x.70147">https://doi.org/10.1111/2041-210x.70147</a>
 </div>
 <div id="ref-ransome2017" class="csl-entry" role="listitem">
-18. Ransome, E., Geller, J. B., Timmers, M., Leray, M., Mahardini, A., Sembiring, A., Collins, A. G., &amp; Meyer, C. P. (2017). The importance of standardization for biodiversity comparisons: A case study using autonomous reef monitoring structures (ARMS) and metabarcoding to measure cryptic diversity on Mo<span>’</span>orea coral reefs, French Polynesia. <em>PLOS ONE</em>, <em>12</em>(4), e0175066. <a href="https://doi.org/10.1371/journal.pone.0175066">https://doi.org/10.1371/journal.pone.0175066</a>
+18. Ransome, E., Geller, J. B., Timmers, M., Leray, M., Mahardini, A., Sembiring, A., Collins, A. G., &amp; Meyer, C. P. (2017). The importance of standardization for biodiversity comparisons: A case study using autonomous reef monitoring structures (ARMS) and metabarcoding to measure cryptic diversity on mo<span>’</span>orea coral reefs, french polynesia. <em>PLOS ONE</em>, <em>12</em>(4), e0175066. <a href="https://doi.org/10.1371/journal.pone.0175066">https://doi.org/10.1371/journal.pone.0175066</a>
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
