@@ -35,7 +35,7 @@ library(microViz)
 if (!require("vegan", quietly = TRUE))
   install.packages("vegan")
 library(vegan)
-s
+
 if (!require("openxlsx", quietly = TRUE))
   install.packages("openxlsx")
 library(openxlsx)
