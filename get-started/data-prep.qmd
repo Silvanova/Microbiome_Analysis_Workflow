@@ -4,6 +4,8 @@ format: html
 editor: visual
 ---
 
+TEST
+
 To get started with the data analysis, you must first ensure that the raw data is in the right format. This script shows an example on how to convert the raw data into a `phyloseq` object and produces the .RData files used in the next steps. More information about phyloseq can be found [here](https://joey711.github.io/phyloseq/).
 
 To follow the example presented on this page directly on your computer, download the script `002_data_preparation.R` and the example raw data by clicking the buttons below. Alternatively, you may copy the codes below into your own script, and use your own data.
