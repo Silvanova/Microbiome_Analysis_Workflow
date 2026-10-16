@@ -76,7 +76,7 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body class="nav-fixed quarto-light">
+<body class="nav-fixed fullcontent quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -118,9 +118,7 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
-    </div>
+    
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
@@ -143,9 +141,67 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Handling OTU tables</p>
+<p>Before any statistical analysis, the raw OTU tables must be cleaned so that the downstream results reflect the true biological signal rather than technical noise. The steps below should be applied in the order presented, since each script loads the <code>phyloseq</code> object saved by the previous one (e.g., <code>otu_ctrl_clean</code> → <code>otu_rare_clean</code> → <code>otu_BLAST_clean</code>).</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Start from the data preparation step
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>All scripts in this section assume that your raw data has already been converted to a <code>phyloseq</code> object and saved as .RData. If this is not the case, go through <a href="./get-started/data-prep.html">Data preparation</a> first, and make sure that the <a href="./get-started/install.html#required-packages">required packages</a> are installed and loaded.</p>
+</div>
+</div>
+<section id="dealing-with-controls" class="level3">
+<h3 class="anchored" data-anchor-id="dealing-with-controls"><a href="./otu-tables/controls.html">Dealing with controls</a></h3>
+<p>Negative controls, blanks and positive controls are used to verify that the full workflow (from DNA extraction to bioinformatics) behaved as expected. Inspect them, remove contaminants, and then remove the controls themselves from the data set.</p>
+<ul>
+<li><a href="./otu-tables/controls-positive.html">Dealing with positive controls</a>: identify the synthetic community and confirm that taxonomic profiles match expectations</li>
+<li><a href="./otu-tables/controls-negative.html">Dealing with negative controls (and blanks)</a>: inspect library sizes, find contaminants with the R package <code>decontam</code>, and remove low-quality samples</li>
+</ul>
+</section>
+<section id="filtering-otu-tables" class="level3">
+<h3 class="anchored" data-anchor-id="filtering-otu-tables"><a href="./otu-tables/filter.html">Filtering OTU tables</a></h3>
+<p>Remove OTUs that are artefacts or that cannot be reliably identified, and clean the taxonomic assignations.</p>
+<ul>
+<li><a href="./otu-tables/filter/global.html">Global filtering</a>
+<ul>
+<li><a href="./otu-tables/filter/global.html#taxonomy-filtering">Taxonomy filtering</a>: keep only the organisms targeted by the primers</li>
+<li><a href="./otu-tables/filter/global.html#singletons-and-rare-otus">Singletons and rare OTUs</a>: remove OTUs based on absolute or relative abundance thresholds</li>
+</ul></li>
+<li><a href="./otu-tables/filter/BLAST.html">BLAST quality check</a>
+<ul>
+<li><a href="./otu-tables/filter/BLAST.html#blast-filtering">BLAST filtering</a>: remove short or poorly aligned sequences</li>
+<li><a href="./otu-tables/filter/BLAST.html#blast-cleaning">BLAST cleaning</a>: remove unknown organisms and replace low-confidence taxonomic assignations with <code>NA</code></li>
+</ul></li>
+</ul>
+</section>
+<section id="rarefaction-and-normalization" class="level3">
+<h3 class="anchored" data-anchor-id="rarefaction-and-normalization"><a href="./otu-tables/rare-norm.html">Rarefaction and normalization</a></h3>
+<p>Account for differing sequencing depths across samples before comparing communities.</p>
+<ul>
+<li><a href="./otu-tables/rare-norm.html#rarefaction">Rarefaction</a>: draw rarefaction curves, choose a sufficient depth, and check whether library sizes are balanced between groups</li>
+<li><a href="./otu-tables/rare-norm.html#transformations">Transformations</a>: alternatives that preserve all reads, such as relative abundance, Hellinger, CLR and robust CLR</li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Download all scripts
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Each page of this section offers a download button for its own script and example data. All pre-made scripts can also be downloaded at once from the <a href="./index.html#download-all-scripts-and-data">home page</a>.</p>
+</div>
+</div>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
