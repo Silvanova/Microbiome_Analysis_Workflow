@@ -9,6 +9,7 @@ editor: visual
 #| output: false
 library(downloadthis)
 library(vegan)
+library(ggplot2)
 library(phyloseq)
 library(dplyr)
 load("../RData/16S/otu_BLAST_clean.RData")
