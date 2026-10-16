@@ -10,7 +10,7 @@ editor: visual
 library(downloadthis)
 library(phyloseq)
 library(dplyr)
-load("../../RData/16S/otu_BLAST_clean.RData")
+load("../RData/16S/otu_BLAST_clean.RData")
 ```
 
 The most commonly used methods to standardize sequencing depth across samples are rarefaction and data transformation. These two strategies are currently at the center of an ongoing debate in the field, as they rely on fundamentally different statistical assumptions about amplicon data. Rarefaction equalizes library sizes by subsampling reads to a common depth and has long been used in ecology, but it discards data and reduces statistical power, leading some to argue that it is statistically inadmissible [@mcmurdie2014]. Proponents of compositional data analysis emphasize that sequencing data are inherently compositional and should be analyzed using log-ratio transformations (e.g., CLR) and Aitchison geometry, rather than through subsampling (rarefaction) or count-based normalization (relative abundance) [@gloor2017]. However, rarefaction has recently been defended as a pragmatic and robust approach for controlling uneven sequencing effort in diversity analyses, emphasizing its interpretability and long-standing use in ecology [@schloss2024]. Ultimately, the debate centers on a fundamental statistical question: whether sequencing counts should be treated as compositional data requiring ratio-based transformations, or as sampling-based counts for which subsampling remains an acceptable ecological standardization strategy.
