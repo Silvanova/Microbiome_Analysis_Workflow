@@ -1,7 +1,46 @@
 ---
 title: "Handling OTU tables"
-format: html
 editor: visual
+format: 
+  html: 
+    toc: false
 ---
 
-Handling OTU tables
+Before any statistical analysis, the raw OTU tables must be cleaned so that the downstream results reflect the true biological signal rather than technical noise. The steps below should be applied in the order presented, since each script loads the `phyloseq` object saved by the previous one (e.g., `otu_ctrl_clean` → `otu_rare_clean` → `otu_BLAST_clean`).
+
+::: callout-tip
+### Start from the data preparation step
+
+All scripts in this section assume that your raw data has already been converted to a `phyloseq` object and saved as .RData. If this is not the case, go through [Data preparation](get-started/data-prep.qmd) first, and make sure that the [required packages](get-started/install.qmd#required-packages) are installed and loaded.
+:::
+
+### [Dealing with controls](otu-tables/controls.qmd)
+
+Negative controls, blanks and positive controls are used to verify that the full workflow (from DNA extraction to bioinformatics) behaved as expected. Inspect them, remove contaminants, and then remove the controls themselves from the data set.
+
+- [Dealing with positive controls](otu-tables/controls-positive.qmd): identify the synthetic community and confirm that taxonomic profiles match expectations
+- [Dealing with negative controls (and blanks)](otu-tables/controls-negative.qmd): inspect library sizes, find contaminants with the R package `decontam`, and remove low-quality samples
+
+### [Filtering OTU tables](otu-tables/filter.qmd)
+
+Remove OTUs that are artefacts or that cannot be reliably identified, and clean the taxonomic assignations.
+
+- [Global filtering](otu-tables/filter/global.qmd)
+  - [Taxonomy filtering](otu-tables/filter/global.qmd#taxonomy-filtering): keep only the organisms targeted by the primers
+  - [Singletons and rare OTUs](otu-tables/filter/global.qmd#singletons-and-rare-otus): remove OTUs based on absolute or relative abundance thresholds
+- [BLAST quality check](otu-tables/filter/BLAST.qmd)
+  - [BLAST filtering](otu-tables/filter/BLAST.qmd#blast-filtering): remove short or poorly aligned sequences
+  - [BLAST cleaning](otu-tables/filter/BLAST.qmd#blast-cleaning): remove unknown organisms and replace low-confidence taxonomic assignations with `NA`
+
+### [Rarefaction and normalization](otu-tables/rare-norm.qmd)
+
+Account for differing sequencing depths across samples before comparing communities.
+
+- [Rarefaction](otu-tables/rare-norm.qmd#rarefaction): draw rarefaction curves, choose a sufficient depth, and check whether library sizes are balanced between groups
+- [Transformations](otu-tables/rare-norm.qmd#transformations): alternatives that preserve all reads, such as relative abundance, Hellinger, CLR and robust CLR
+
+::: callout-tip
+### Download all scripts
+
+Each page of this section offers a download button for its own script and example data. All pre-made scripts can also be downloaded at once from the [home page](index.qmd#download-all-scripts-and-data).
+:::

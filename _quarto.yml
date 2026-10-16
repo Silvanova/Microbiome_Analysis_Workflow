@@ -68,7 +68,7 @@ website:
               file: get-started/data-prep.qmd
 
     - title: "Handling OTU tables"
-      file: otu-table.qmd
+      file: otu-tables.qmd
       contents:
 
         - section: "Dealing with controls"
@@ -89,6 +89,8 @@ website:
 
         - section: "Rarefaction & Normalization"
           file: otu-tables/rare-norm.qmd
+          contents:
+          - text: " "
 
 
     - title: "Statistical Analyses"
