@@ -61,7 +61,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="../site_libs/quarto-nav/quarto-nav.js"></script>
@@ -135,7 +155,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">Get started</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../otu-tables.html"> 
+    <a class="nav-link active" href="../otu-tables.html" aria-current="page"> 
 <span class="menu-text">Handling OTU tables</span></a>
   </li>  
   <li class="nav-item">
@@ -155,7 +175,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../otu-tables/rare-norm.html">Rarefaction &amp; Normalization</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../otu-tables.html">Handling OTU tables</a></li><li class="breadcrumb-item"><a href="../otu-tables/rare-norm.html">Rarefaction &amp; Normalization</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -175,13 +195,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
-            <a href="../otu-tables/controls.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Dealing with controls</span></a>
+            <a href="../otu-tables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Handling OTU tables</span></a>
           <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a href="../otu-tables/controls.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Dealing with controls</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth2 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../otu-tables/controls-positive.html" class="sidebar-item-text sidebar-link">
@@ -196,15 +225,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
       </ul>
   </li>
-        <li class="sidebar-item sidebar-item-section">
+          <li class="sidebar-item sidebar-item-section">
       <div class="sidebar-item-container"> 
             <a href="../otu-tables/filter.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Filtering OTU tables</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
             <i class="bi bi-chevron-right ms-2"></i>
           </a> 
       </div>
-      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth2 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="../otu-tables/filter/global.html" class="sidebar-item-text sidebar-link">
@@ -219,18 +248,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
       </ul>
   </li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="../otu-tables/rare-norm.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Rarefaction &amp; Normalization</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
- <span class="menu-text"> </span>
-  </li>
+  <div class="sidebar-item-container"> 
+  <a href="../otu-tables/rare-norm.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Rarefaction &amp; Normalization</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -251,7 +274,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../otu-tables.html">Handling OTU tables</a></li><li class="breadcrumb-item"><a href="../otu-tables/rare-norm.html">Rarefaction &amp; Normalization</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Rarefaction and other normalization methods</h1>
 </div>
@@ -270,8 +293,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>The most commonly used methods to standardize sequencing depth across samples are rarefaction and data transformation. These two strategies are currently at the center of an ongoing debate in the field, as they rely on fundamentally different statistical assumptions about amplicon data. Rarefaction equalizes library sizes by subsampling reads to a common depth and has long been used in ecology, but it discards data and reduces statistical power, leading some to argue that it is statistically inadmissible<span class="citation" data-cites="mcmurdie2014"><sup>[<a href="#ref-mcmurdie2014" role="doc-biblioref"><strong>mcmurdie2014?</strong></a>]</sup></span>. Proponents of compositional data analysis emphasize that sequencing data are inherently compositional and should be analyzed using log-ratio transformations (e.g., CLR) and Aitchison geometry, rather than through subsampling (rarefaction) or count-based normalization (relative abundance)<span class="citation" data-cites="gloor2017"><sup>[<a href="#ref-gloor2017" role="doc-biblioref"><strong>gloor2017?</strong></a>]</sup></span>. However, rarefaction has recently been defended as a pragmatic and robust approach for controlling uneven sequencing effort in diversity analyses, emphasizing its interpretability and long-standing use in ecology<span class="citation" data-cites="schloss2024"><sup>[<a href="#ref-schloss2024" role="doc-biblioref"><strong>schloss2024?</strong></a>]</sup></span>. Ultimately, the debate centers on a fundamental statistical question: whether sequencing counts should be treated as compositional data requiring ratio-based transformations, or as sampling-based counts for which subsampling remains an acceptable ecological standardization strategy.</p>
-<p>To our knowledge, rarefying can more effectively mitigate the artifact of sample library size than other normalization techniques, especially for small (&lt;1000 sequences per sample) and very uneven (&gt;~10× on average) library sizes<span class="citation" data-cites="weiss2017"><sup>[<a href="#ref-weiss2017" role="doc-biblioref"><strong>weiss2017?</strong></a>]</sup></span>. Other normalization approaches are prone to generation of artifactual clusters based on sequencing depth in beta diversity analysis, and higher false discovery rates in differential abundance testing. When sequencing depth is sufficient and balanced, other compositional methods are generally better suited because they preserve statistical power<span class="citation" data-cites="mcmurdie2014"><sup>[<a href="#ref-mcmurdie2014" role="doc-biblioref"><strong>mcmurdie2014?</strong></a>]</sup></span>. For alpha diversity comparisons, rarefaction is always recommended<span class="citation" data-cites="schloss2024"><sup>[<a href="#ref-schloss2024" role="doc-biblioref"><strong>schloss2024?</strong></a>]</sup></span>. In any case, researchers should proceed with caution and check for library size effects if the count data was not rarefied, as demonstrated below [INSERT LINK].</p>
+<p>The most commonly used methods to standardize sequencing depth across samples are rarefaction and data transformation. These two strategies are currently at the center of an ongoing debate in the field, as they rely on fundamentally different statistical assumptions about amplicon data. Rarefaction equalizes library sizes by subsampling reads to a common depth and has long been used in ecology, but it discards data and reduces statistical power, leading some to argue that it is statistically inadmissible<span class="citation" data-cites="mcmurdie2014"><sup>[<a href="#ref-mcmurdie2014" role="doc-biblioref">1</a>]</sup></span>. Proponents of compositional data analysis emphasize that sequencing data are inherently compositional and should be analyzed using log-ratio transformations (e.g., CLR) and Aitchison geometry, rather than through subsampling (rarefaction) or count-based normalization (relative abundance)<span class="citation" data-cites="gloor2017"><sup>[<a href="#ref-gloor2017" role="doc-biblioref">2</a>]</sup></span>. However, rarefaction has recently been defended as a pragmatic and robust approach for controlling uneven sequencing effort in diversity analyses, emphasizing its interpretability and long-standing use in ecology<span class="citation" data-cites="schloss2024"><sup>[<a href="#ref-schloss2024" role="doc-biblioref">3</a>]</sup></span>. Ultimately, the debate centers on a fundamental statistical question: whether sequencing counts should be treated as compositional data requiring ratio-based transformations, or as sampling-based counts for which subsampling remains an acceptable ecological standardization strategy.</p>
+<p>To our knowledge, rarefying can more effectively mitigate the artifact of sample library size than other normalization techniques, especially for small (&lt;1000 sequences per sample) and very uneven (&gt;~10× on average) library sizes<span class="citation" data-cites="weiss2017"><sup>[<a href="#ref-weiss2017" role="doc-biblioref">4</a>]</sup></span>. Other normalization approaches are prone to generation of artifactual clusters based on sequencing depth in beta diversity analysis, and higher false discovery rates in differential abundance testing. When sequencing depth is sufficient and balanced, other compositional methods are generally better suited because they preserve statistical power<span class="citation" data-cites="mcmurdie2014"><sup>[<a href="#ref-mcmurdie2014" role="doc-biblioref">1</a>]</sup></span>. For alpha diversity comparisons, rarefaction is always recommended<span class="citation" data-cites="schloss2024"><sup>[<a href="#ref-schloss2024" role="doc-biblioref">3</a>]</sup></span>. In any case, researchers should proceed with caution and check for library size effects if the count data was not rarefied, as demonstrated below [INSERT LINK].</p>
 <p>This section documents how to apply either method to your data and in which cases one may be better suited than another. To follow the example presented on this page directly on your computer, download the script <code>006_normalization.R</code> and the example raw data by clicking the buttons below. Alternatively, you may copy the codes below into your own script, and use your own data.</p>
 <div class="cell quarto-layout-panel" data-layout="[[-10,40,-5,35,-10]]">
 <div class="quarto-layout-row">
@@ -428,9 +451,23 @@ Kruskal-Wallis chi-squared = 12.196, df = 9, p-value = 0.2025</code></pre>
 <p>Scripts used to perform data transformation. This is an alternative to thinning which preserves all the data. Rather than removing information, this method recognizes the compositional nature of the data and transforms it in the logarithm of the ratio of counts within each sample. The data changes but the transformation allows comparability between samples. The script includes both the transformation and extra checks.</p>
 
 
+
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-mcmurdie2014" class="csl-entry" role="listitem">
+1. McMurdie, P. J., &amp; Holmes, S. (2014). Waste not, want not: Why rarefying microbiome data is inadmissible. <em>PLoS Computational Biology</em>, <em>10</em>(4), e1003531. <a href="https://doi.org/10.1371/journal.pcbi.1003531">https://doi.org/10.1371/journal.pcbi.1003531</a>
+</div>
+<div id="ref-gloor2017" class="csl-entry" role="listitem">
+2. Gloor, G. B., Macklaim, J. M., Pawlowsky-Glahn, V., &amp; Egozcue, J. J. (2017). Microbiome datasets are compositional: And this is not optional. <em>Frontiers in Microbiology</em>, <em>8</em>. <a href="https://doi.org/10.3389/fmicb.2017.02224">https://doi.org/10.3389/fmicb.2017.02224</a>
+</div>
+<div id="ref-schloss2024" class="csl-entry" role="listitem">
+3. Schloss, P. D. (2024). Rarefaction is currently the best approach to control for uneven sequencing effort in amplicon sequence analyses. <em>mSphere</em>, <em>9</em>(2). <a href="https://doi.org/10.1128/msphere.00354-23">https://doi.org/10.1128/msphere.00354-23</a>
+</div>
+<div id="ref-weiss2017" class="csl-entry" role="listitem">
+4. Weiss, S., Xu, Z. Z., Peddada, S., Amir, A., Bittinger, K., Gonzalez, A., Lozupone, C., Zaneveld, J. R., Vázquez-Baeza, Y., Birmingham, A., Hyde, E. R., &amp; Knight, R. (2017). Normalization and microbial differential abundance strategies depend upon data characteristics. <em>Microbiome</em>, <em>5</em>(1). <a href="https://doi.org/10.1186/s40168-017-0237-y">https://doi.org/10.1186/s40168-017-0237-y</a>
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
