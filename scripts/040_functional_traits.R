@@ -214,7 +214,7 @@ otu_table_ranks %>%
 
 # Functional groups in bacteria ------------------------------------------------
 
-# Bacterial functional groups are covered in a separate practical.
+# This section will be added in a later update.
 
 
 # Guilds in fungi --------------------------------------------------------------
