@@ -13,7 +13,7 @@ setwd("some_folder_path/my_working_directory")
 source("scripts/001_required_packages.R")
 
 # Load raw OTU table
-load("RData/16S/otu_table_raw.RData")
+load("RData/ITS/otu_table_raw.RData")
 
 # Inspect samples --------------------------------------------------------------
 
@@ -59,15 +59,23 @@ ggsave("figures/003_pos_control_profiles.png", p_pos_profiles, width = 7, height
 
 # Clean and save OTU table -----------------------------------------------------
 
-# In this example, no obvious issues were detected in positive controls and
-# the synthetic community will be automatically removed when performing
-# taxonomic filtering. Therefore, positive controls can simply be removed.
+# In this example, the positive controls contain a synthetic ITS sequence
+# (a "spike-in", assigned to the kingdom "Unispike1"). Nearly all reads in the
+# positive controls belong to the spike-in, as expected, plus a few reads (1-2)
+# of soil fungi that most likely come from the true samples. The spike-in is
+# absent from the true samples, so there was no contamination from the positive
+# controls into the samples.
+
+# No obvious issues were detected in the positive controls, and the spike-in
+# will be automatically removed when performing taxonomic filtering (keeping
+# only Fungi, see 004_global_filter.R). Therefore, positive controls can simply
+# be removed.
 
 # Remove positive controls
 otu_ctrl_pos_clean <- prune_samples(
   sample_data(otu_table_raw)$sample_type != "positive control", otu_table_raw)
 
 # Save cleaned OTU table
-save(otu_ctrl_pos_clean, file = "RData/16S/otu_ctrl_pos_clean.RData")
+save(otu_ctrl_pos_clean, file = "RData/ITS/otu_ctrl_pos_clean.RData")
 
 
