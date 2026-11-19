@@ -1,9 +1,27 @@
 on:
   workflow_dispatch:
   push:
-    branches: main
+    # Publish automatically when changes reach the course branch (e.g. when a
+    # pull request is merged). Only changes that affect the ITS website
+    # trigger a new publication.
+    branches:
+      - main
+      - 2026-PhD-course
+    paths:
+      - 'website-ITS/**'
+      - 'scripts/**'
+      - 'RData/ITS/**'
+      - 'raw data/**'
+      - 'renv.lock'
+      - '.github/workflows/publish.yml'
 
 name: Quarto Publish
+
+# If several pushes happen in a row, cancel the older run that is still in
+# progress: only the latest version of the website is published
+concurrency:
+  group: publish-website
+  cancel-in-progress: true
 
 jobs:
   build-deploy:
