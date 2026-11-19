@@ -1,0 +1,98 @@
+# 16S version of the website (archive, not published).
+# Render from this folder: quarto render
+
+project:
+  type: website
+  render:
+    - index.qmd
+    - get-started.qmd
+    - get-started/**/*.qmd
+    - otu-tables.qmd
+    - otu-tables/**/*.qmd
+    - stats.qmd
+    - stats/**/*.qmd
+
+format:
+  html:
+    theme: minty
+    toc: true
+    toc-expand: 4
+    toc-depth: 4
+    link-external-newwindow: true
+    link-external-filter: '^(?:http:|https:)\/\/(?:www\.)*(silvanova\.github\.io)\/.*$'
+
+website:
+  title: "Silva Nova MAW (16S archive)"
+  page-navigation: true
+  navbar:
+    background: primary
+    search: true
+    pinned: true
+    tools:
+      - icon: twitter
+        href: https://twitter.com/SilvaNova_NNF
+      - icon: github
+        href: https://github.com/Silvanova/Microbiome_Analysis_Workflow
+
+    left:
+      - text: "Get started"
+        href: get-started.qmd
+      - text: "Handling OTU tables"
+        href: otu-tables.qmd
+      - text: "Statistical Analyses"
+        href: stats.qmd
+
+  sidebar:
+    - title: "Silva Nova MAW"
+      style: "docked"
+      background: light
+      logo: images/Silva Nova MAW logo.png
+      collapse-level: 3
+      align: left
+      contents:
+        - file: index.qmd
+          text: " "
+
+    - title: "Get started"
+      contents:
+        - section: "Get started"
+          file: get-started.qmd
+          contents:
+            - text: "Install R and packages"
+              file: get-started/install.qmd
+            - text: "Data preparation"
+              file: get-started/data-prep.qmd
+
+    - title: "Handling OTU tables"
+      contents:
+      - section: "Handling OTU tables"
+        file: otu-tables.qmd
+        contents:
+        - section: "Dealing with controls"
+          file: otu-tables/controls.qmd
+          contents:
+          - text: "Positive controls"
+            file: otu-tables/controls-positive.qmd
+          - text: "Negative controls"
+            file: otu-tables/controls-negative.qmd
+        - section: "Filtering OTU tables"
+          file: otu-tables/filter.qmd
+          contents:
+          - text: "Global filtering"
+            file: otu-tables/filter/global.qmd
+          - text: "BLAST quality check"
+            file: otu-tables/filter/BLAST.qmd
+        - text: "Rarefaction & Normalization"
+          file: otu-tables/rare-norm.qmd
+
+    - title: "Statistical Analyses"
+      contents:
+        - section: "Statistical Analyses"
+          file: stats.qmd
+          contents:
+          - text: "Alpha diversity"
+            file: stats/alpha-div.qmd
+          - text: "Beta diversity"
+            file: stats/beta-div.qmd
+          - text: "Differential abundance"
+            file: stats/diff-abund.qmd

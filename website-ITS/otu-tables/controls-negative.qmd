@@ -17,14 +17,14 @@ library(phyloseq)
 library(decontam)
 library(dplyr)
 library(microViz)
-load("../RData/16S/otu_table_raw.RData")
+load("../../RData/16S/otu_table_raw.RData")
 ```
 
 ```{r}
 #| layout: [[-10,35,-5,40,-10]]
 #| echo: false
 download_file(
-  path = "../scripts/ITS/003_negative_control.R",
+  path = "../../scripts/ITS/003_negative_control.R",
   output_name = "003_negative_control",
   button_label = "Download script",
   button_type = "success",
@@ -34,7 +34,7 @@ download_file(
 )
 
 download_file(
-  path = "../RData/16S/otu_table_raw.RData",
+  path = "../../RData/16S/otu_table_raw.RData",
   output_name = "16S_otu_table_raw",
   button_label = "Download example RData",
   button_type = "success",
