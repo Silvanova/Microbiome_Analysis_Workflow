@@ -112,8 +112,8 @@ ggsave("figures/ITS/005_BLAST_unknown_otus.png", p_unknown, width = 7, height = 
 
 # Now that we are confident about our OTU selection, it is time to clean the
 # taxonomy assignation. Rank-level confidence is based on pident.
-# See Table 3 online ()
-# for a summary of thresholds for each target gene and taxonomic rank found in the literature.
+# See Table 3 on the "BLAST quality check" page of the website for a summary
+# of thresholds for each target gene and taxonomic rank found in the literature.
 # Any taxonomic assignation below these thresholds is changed to NA.
 
 # For ITS, we use the rules of thumb of Tedersoo et al. (2014, 2019, 2021):
