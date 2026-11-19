@@ -54,7 +54,8 @@ jobs:
         run: |
           sudo apt-get update
           # libgsl-dev for RcppGSL, libuv1-dev for fs
-          sudo apt-get install -y libpng-dev libcairo2-dev libfontconfig1-dev             libgsl-dev libuv1-dev
+          sudo apt-get install -y libpng-dev libcairo2-dev libfontconfig1-dev \
+            libgsl-dev libuv1-dev
 
       - name: Install R Dependencies
         uses: r-lib/actions/setup-renv@v2
