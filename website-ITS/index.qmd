@@ -24,6 +24,7 @@ Decisions for each step of the workflow are supported by literature and R script
 3.  After taxonomy assignation, which taxa should be kept or removed? What are the quality threshold for species identification with BLAST?
 4.  When should we rarefy? What other normalization methods should be used?
 5.  Which diversity metrics (alpha and beta) can be used with microbiome data?
+6.  How do community composition and diversity respond to environmental variables?
 
 ## Structure
 
@@ -41,11 +42,13 @@ In the navigation menu of this webpage, you will find each step of the workflow:
   - [Filtering](otu-tables/filter.qmd): filter out OTUs based on abundance and prevalence, or based on taxonomy and BLAST quality
   - [Rarefaction and normalization](otu-tables/rare-norm.qmd): rarefy or transform data to control for variable sequencing depth
 
-- **Statistical analyzes**
+- **Statistical analyses**
 
   - [Alpha diversity](stats/alpha-div.qmd): choose the best alpha diversity metrics to answer your hypothesis
+  - [Taxonomic composition and guilds](stats/taxa-comp.qmd): visualize the taxonomic composition and the fungal guilds of the communities
   - [Beta diversity](stats/beta-div.qmd): choose the right transformation and the right distance matrix for beta diversity analyses
-  - [Differential abundance](stats/diff-abund.qmd): perform statistical tests to find differential abundance of taxa
+  - [Indicator species](stats/diff-abund.qmd): find the taxa associated with groups of samples
+  - [RDA and variation partitioning](stats/rda.qmd): relate community composition to environmental variables
 
 ## Download all scripts and data
 
