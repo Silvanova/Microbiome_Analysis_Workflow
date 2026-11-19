@@ -56,6 +56,14 @@ if (!require("ggpubr", quietly = TRUE))
   install.packages("ggpubr")
 library(ggpubr)
 
+if (!require("iNEXT", quietly = TRUE))
+  install.packages("iNEXT")
+library(iNEXT)
+
+if (!require("multcompView", quietly = TRUE))
+  install.packages("multcompView")
+library(multcompView)
+
 if (!require("dplyr", quietly = TRUE))
   install.packages("dplyr")
 library(dplyr) # always load dplyr last to avoid conflicts between packages
