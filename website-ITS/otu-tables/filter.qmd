@@ -67,13 +67,15 @@ Scarce (low-prevalence) OTUs are features detected in only a small fraction of s
 
 In certain studies, higher thresholds for prevalence (\>25% of samples) may be used to define, for instance, the core microbiome [@simonin2020].
 
+In the ITS example of this workflow, the thresholds are compared, but all fungal OTUs are kept: rare OTUs and singletons are needed to estimate the extrapolated richness (alpha diversity), and the low sequencing depth of the data set makes even the lowest thresholds remove a large proportion of the OTUs.
+
 ## [BLAST quality check](filter/BLAST.qmd)
 
 Filtering based on BLAST accuracy is applied to remove OTUs with low-confidence taxonomic assignments, typically indicated by low sequence similarity (`pident`), poor alignment coverage (`qcovs`), or poor fit of the rank resolution (`evalue`) [@tedersoo2022]. Such features are frequently artefactual or biologically uninterpretable and can bias ecological inference if retained.
 
 ### BLAST filtering
 
-Filtering out OTUs based on BLAST results is normally done during bioinformatic processing, but if it was not the case for your OTU table, simple filters can be used to further remove artefacts. For instance, sequences that are too short (e.g., \<250 bp, depending on primers) to be a proper amplicon, or sequences with less than 15% query coverage (`qcovs`), which are assumed to be fully synthetic [@kunjapur2018].
+Filtering out OTUs based on BLAST results is normally done during bioinformatic processing, but if it was not the case for your OTU table, simple filters can be used to further remove artefacts. For instance, sequences that are too short (e.g., \<100 bp for ITS or \<250 bp for 16S, depending on primers) to be a proper amplicon, or sequences with less than 15% query coverage (`qcovs`), which are assumed to be fully synthetic [@kunjapur2018].
 
 ### BLAST cleaning
 

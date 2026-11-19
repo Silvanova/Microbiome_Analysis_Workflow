@@ -46,7 +46,7 @@ Filtering based on BLAST accuracy is applied to remove OTUs with low-confidence 
 
 : Table 1. Definitions of BLAST results
 
-This section documents how to filter OTUs based on BLAST results (see table above), and clean the taxonomy assignations based on BLAST accuracy, in `phyloseq` objects. To follow the example presented on this page directly on your computer, download the script `005_BLAST_filter.R` and the example raw data by clicking the buttons below. Alternatively, you may copy the codes below into your own script, and use your own data.
+This section documents how to filter OTUs based on BLAST results (see table above), and clean the taxonomy assignations based on BLAST accuracy, in `phyloseq` objects. To follow the example presented on this page directly on your computer, download the script `005_BLAST_filter.R` and the example data by clicking the buttons below. Alternatively, you may copy the codes below into your own script, and use your own data.
 
 ```{r}
 #| echo: false
@@ -56,7 +56,7 @@ library(dplyr)
 library(phyloseq)
 library(ggplot2)
 library(DT)
-load("../../../RData/16S/otu_rare_clean.RData")
+load("../../../RData/ITS/otu_rare_clean.RData")
 ```
 
 ```{r}
@@ -73,8 +73,8 @@ download_file(
 )
 
 download_file(
-  path = "../../../RData/16S/otu_rare_clean.RData",
-  output_name = "otu_rare_clean",
+  path = "../../../RData/ITS/otu_rare_clean.RData",
+  output_name = "ITS_otu_rare_clean",
   button_label = "Download example RData",
   button_type = "success",
   has_icon = TRUE,
@@ -83,22 +83,22 @@ download_file(
 )
 ```
 
-To get started on this demonstration, load the necessary data and source the script `001_required_packages.R` to load the homemade function `remove_taxa`.
+To get started on this demonstration, load the OTU table from the [global filtering](global.qmd) and source the script `001_required_packages.R` to load the homemade function `remove_taxa`.
 
 ```{r}
 #| eval: false
-# Load OTU table
-load("RData/16S/otu_rare_clean.RData")
-
 # Load packages and homemade functions
-source("001_required_packages.R")
+source("scripts/001_required_packages.R")
+
+# Load the cleaned OTU table from previous scripts
+load("RData/ITS/otu_rare_clean.RData")
 ```
 
 ## BLAST filtering
 
 Filtering out OTUs based on BLAST results is normally done during bioinformatic processing, but if it was not the case for your OTU table, simple filters can be used to further remove artefacts.
 
-Depending on primers, the expected length of amplicons varies greatly, thus it is impossible to determine a universal threshold for sequence length. However, most studies set this threshold to rougly half of the expected length (see table below).
+Depending on primers, the expected length of amplicons varies greatly, thus it is impossible to determine a universal threshold for sequence length. However, most studies set this threshold to roughly half of the expected length (see table below).
 
 +--------+------------------------------------+-----------------------------------------+-----------+--------------+------------------------+---------------------------+
 | Name   | Target                             | Primers (sequence 5’-3’)                | Regions   | Length\      | Threshold query length | References                |
@@ -116,16 +116,16 @@ Depending on primers, the expected length of amplicons varies greatly, thus it i
 
 : Table 2. Primer sets used for this data set
 
-Alternatively, some studies also suggest to filter out sequences with less than 15% query coverage (`qcovs`), which are assumed to be fully synthetic [@kunjapur2018]. In these cases, even tough the query sequence may be large, if it has such a low alignment with the sequences in the database, it cannot be considered natural.
-
-This demonstration is done with the 16S data, and we choose to remove sequences with a length (`qlen`) shorter than 250 bp or a query cover (`qcovs`) smaller than 15%.
+Alternatively, some studies also suggest to filter out sequences with less than 15% query coverage (`qcovs`), which are assumed to be fully synthetic [@kunjapur2018]. In these cases, even though the query sequence may be long, if it has such a low alignment with the sequences in the database, it cannot be considered natural.
 
 Note that the threshold at a query cover of 15% was determined arbitrarily. The authors denote: "This was guided by not wanting to pick too high a level, lest we exclude natural sequences \[...\]. Similarly, we did not want to pick too low a level, since BLASTn searches preferentially for highly identical regions, and thus might cut off the end of a synthetic sequence yielding a maximal-scoring segment pair with lower query coverage and higher percentage identity (thus falsely classified as natural)" [@kunjapur2018].
+
+This demonstration is done with the ITS data, and we choose to remove sequences with a length (`qlen`) shorter than 100 bp or a query cover (`qcovs`) smaller than 15%.
 
 ::: callout-tip
 ## remove_taxa
 
-Homemade function `remove_taxa`: a simplified way of removing a selection of OTU from a `phyloseq` object.
+Homemade function `remove_taxa` (loaded with `001_required_packages.R`): a simplified way of removing a selection of OTU from a `phyloseq` object.
 
 ```{r}
 remove_taxa <- function(badTaxa, physeq){
@@ -143,22 +143,36 @@ BLAST_rare <- as.data.frame(otu_table_rare@tax_table) %>%
   # Convert column class automatically
   type.convert(as.is = TRUE)
 
-# Identify synthetic sequences based on BLAST results
-otu_qlen <- filter(BLAST_rare, qlen < 250)[["taxa_OTU"]] # no sequence identified
-otu_qcovs <- filter(BLAST_rare, qcovs < 15)[["taxa_OTU"]] # no sequence identified
+# Identify artefacts based on BLAST results
+otu_qlen <- filter(BLAST_rare, qlen < 100)[["taxa_OTU"]] # no sequence identified
+otu_qcovs <- filter(BLAST_rare, qcovs < 15)[["taxa_OTU"]] # 3 sequences identified
+```
 
-# Filter synthetic sequences
+With your own data, if you identify potential artefacts this way, inspect them before removing them to make sure that they are indeed artefacts.
+
+```{r}
+# Inspect the sequences with a low query cover
+filter(BLAST_rare, taxa_OTU %in% otu_qcovs) %>%
+  select(phylum, genus, qlen, qcovs, pident, evalue)
+
+# Number of reads of these OTUs
+taxa_sums(otu_table_rare)[otu_qcovs]
+```
+
+These 3 OTUs are much longer (1147 to 1638 bp) than the expected length of the amplicon (\~280 bp, see Table 2), only a small part of them matches a reference sequence (14%), and they are represented by only 1 or 2 reads. They are most likely artefacts (e.g., chimeras) and can be removed.
+
+```{r}
+#| output: false
+# Filter artefacts
 BLAST_filter <- filter(BLAST_rare, !taxa_OTU %in% c(otu_qlen, otu_qcovs))
 otu_BLAST_filter <- remove_taxa(c(otu_qlen, otu_qcovs), otu_table_rare)
 
 # Count OTUs before and after filtering
-ntaxa(otu_table_rare) # 8064
-ntaxa(otu_BLAST_filter) # 8064
+ntaxa(otu_table_rare) # 9039
+ntaxa(otu_BLAST_filter) # 9036
 ```
 
-In this demonstration, we found no sequences that were either too short or had a poor alignment. These were either previously removed during bioinformatic processing or while filtering out singletons or rare OTUs.
-
-With your own data, if you identify potential artefacts this way, inspect them before removing them to make sure that they are indeed artefacts.
+In this demonstration, most artefacts were removed in prior steps (bioinformatic processing).
 
 ## BLAST cleaning
 
@@ -176,22 +190,26 @@ There are a few exceptions to this rule. As a rule of thumb (arbitrary threshold
 These OTUs should be further investigated to determine if they should be removed or preserved.
 
 ```{r}
-#| eval: false
+#| output: false
 # Identify unknown OTUs
 BLAST_unknown <- filter(BLAST_filter, pident < 70 | evalue > 1e-50 | qcovs < 50)
-View(BLAST_unknown)
+nrow(BLAST_unknown) # 1078 OTUs
+
+# How many reads do they represent?
+sum(taxa_sums(otu_BLAST_filter)[BLAST_unknown$taxa_OTU]) # 5474 reads (~1.5%)
 ```
 
 ```{r}
-#| include: false
-BLAST_unknown <- filter(BLAST_filter, pident < 70 | evalue > 1e-50 | qcovs < 50)
+#| eval: false
+# Look at the unknown OTUs
+View(BLAST_unknown)
 ```
 
 ```{r}
 #| echo: false
 BLAST_unknown_vis <- select(BLAST_unknown, kingdom:species, query_seq:pident)
 
-truncate_cols <- c("query_seq", "taxa_OTU")
+truncate_cols <- c("query_seq", "taxa_OTU", "BLAST_ID")
 idx <- match(truncate_cols, names(BLAST_unknown_vis)) - 1  # DT uses 0-based indices
 
 datatable(
@@ -218,11 +236,20 @@ datatable(
 )
 ```
 
-To do a manual BLAST of these sequences, make sure to use the same database as the one used to generate your OTU table in the first place. For example, the OTU tables for each target gene were generated using the following databases:
+To which phyla were these OTUs assigned?
+
+```{r}
+# Number of unknown OTUs per phylum ("." = no assignation)
+sort(table(BLAST_unknown$phylum), decreasing = TRUE)
+```
+
+In a smaller data set, these OTUs could be investigated one by one: a manual check against the 10 best BLAST matches allows for an accurate assignment. To do so, make sure to use the same database as the one used to generate your OTU table in the first place. For example, the OTU tables for each target gene were generated using the following databases:
 
 - [SILVA](https://www.arb-silva.de) for Bacteria and Archaea (16S)
 - [UNITE](https://unite.ut.ee/analysis.php) for the eukaryotic nuclear ribosomal ITS region
 - [BOLD](https://id.boldsystems.org/) identification engine for animal identification (CO1)
+
+OTUs that cannot be confidently identified as Fungi could then be removed.
 
 ::: callout-tip
 **Create a FASTA file**
@@ -242,46 +269,34 @@ writeXStringSet(fasta_seqs, "BLAST_unknown.fasta")
 ```
 :::
 
-A [manual BLASTn search](https://www.arb-silva.de/aligner) of these 44 OTUs revealed that some of them could not be confidently identified as Bacteria and should be removed. The rest of the OTUs could not be assigned a higher taxonomic level than kingdom.
+Here, more than 1000 OTUs fall in this category, which makes a manual check impractical. Many of them belong to groups of fungi that are poorly represented in reference databases, such as Rozellomycota and Zoopagomycota, which explains why their BLAST matches are weak. Together, they represent only \~1.5% of the reads. We therefore keep these OTUs, but we do not trust their taxonomy below the kingdom level: their assignation at all ranks below kingdom will be removed (see below).
 
 ```{r}
-# Identify OTUs to remove after manual BLASTn
-otu_BLAST_remove <- c("1d27c83d9692aab8c80bf374e70e6bd36ab107db",
-                      "97fd840ad5b43b3e40763cb0f286c7f12482b5aa",
-                      "a247774bebc7f5d0d55919174fa28717fde309c0",
-                      "b32bc6dc7e56daabd7cbb16d6e64d75f5bbf1be7",
-                      "c2273056078eeba2d2a2efc1cb351e5290d7bb91",
-                      "fc6386fb30284b857e60f04b2101e43d368f60a1",
-                      "501c4d4b723af4468417d493ca4fadbb1d6bfe4c",
-                      "8767164c7b5703151beba4829286c69a6124f4e4")
-
 # Identify OTUs that should only be assigned to the kingdom level
-otu_BLAST_assign <- setdiff(BLAST_unknown[["taxa_OTU"]], otu_BLAST_remove)
+otu_BLAST_assign <- BLAST_unknown[["taxa_OTU"]]
 ```
 
-Before removing OTUs, let's check their abundance and prevalence across samples:
+Before keeping them, let's check that these OTUs do not dominate any sample, by visualizing the proportion of their reads in each sample:
 
 ```{r}
-#| warning: false
-# Filter OTU table to keep manually BLASTed OTUs to remove
-otu_table_BLAST_remove <- prune_taxa(otu_BLAST_remove, otu_BLAST_filter)
+# Proportion of reads belonging to these OTUs in each sample
+unknown_prop <- data.frame(
+  sample_data(otu_BLAST_filter),
+  prop_unknown = sample_sums(prune_taxa(otu_BLAST_assign, otu_BLAST_filter)) /
+    sample_sums(otu_BLAST_filter) * 100)
 
-# Visualize the abundance and prevalence of these OTUs across samples
-plot_bar(otu_table_BLAST_remove, fill = "OTU") +
-  theme(legend.position = "none")
+ggplot(unknown_prop, aes(x = SiteID, y = prop_unknown)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_jitter(width = 0.1, height = 0, size = 1) +
+  labs(x = "Site", y = "Reads of OTUs with uncertain BLAST matches (%)") +
+  theme_bw()
 ```
 
-All OTUs identified are both scarce (low prevalence) and rare (low abundance), thus removing them will not affect community analyses.
-
-```{r}
-# Remove remaining non-bacterial OTUs
-BLAST_filter2 <- filter(BLAST_filter, !taxa_OTU %in% otu_BLAST_remove)
-otu_BLAST_filter2 <- remove_taxa(otu_BLAST_remove, otu_BLAST_filter)
-```
+In all samples, these OTUs represent a small proportion of the reads, thus keeping them will not affect community analyses.
 
 ### Rank-level confidence
 
-Now that we are confident about our OTU selection, it is time to clean the taxonomy assignation. BLASTn searches preferentially for highly identical regions, and thus might cut off the ends of a synthetic sequence (not a real 16S fragment) yielding a maximal-scoring segment pair with lower query coverage and higher percentage identity, thus falsely classifying it as a real 16S match. Therefore, we must verify the `pident` to decide if we can trust the BLAST results. The table below summarizes thresholds for each target gene and taxonomic rank found in the literature.
+Now that we are confident about our OTU selection, it is time to clean the taxonomy assignation. BLASTn searches preferentially for highly identical regions, and thus might cut off the ends of a synthetic sequence (not a real ITS fragment) yielding a maximal-scoring segment pair with lower query coverage and higher percentage identity, thus falsely classifying it as a real ITS match. Therefore, we must verify the `pident` to decide if we can trust the BLAST results. The table below summarizes thresholds for each target gene and taxonomic rank found in the literature.
 
 +----------------+----------------+--------------------+-------------------+-------------------------+--------------------+
 | Taxonomic rank | ITS\           | ITS\               | 16S\              | CO1\                    | CO1\               |
@@ -306,38 +321,53 @@ Now that we are confident about our OTU selection, it is time to clean the taxon
 
 Based on the thresholds identified in Table 3, any taxonomic assignation below these thresholds will be changed to `NA`. For example, for an OTU identified to the species level, but that only has a `pident` of 95%, there is no certainty on the taxonomic assignation up to that rank. However, a `pident` of 95% allows for certainty up to the genus level. Thus, for this OTU, we would simply remove the assignation at the species level (replace it with `NA`) and preserve the other ranks.
 
+For ITS, we use the rules of thumb of Tedersoo et al. ("ITS (rot)" in Table 3): species 98%, genus 90%, family 85%, order 80%, class 75% and phylum 75% [@tedersoo2014; @tedersoo2019; @tedersoo2021]. In the ITS reference database, ranks without assignation are written as `.`: we first replace them with `NA`, so that all missing assignations are written the same way.
+
 ```{r}
 #| output: false
 # Clean the OTU table based on taxonomy thresholds
 # (remove assignation if confidence is too low).
-BLAST_clean <- BLAST_filter2 %>%
-  mutate(species = if_else(pident < 98.7, "NA", species),
-         genus = if_else(pident < 94.5, "NA", genus),
-         family = if_else(pident < 86.5, "NA", family),
-         order = if_else(pident < 82.0, "NA", order),
-         class = if_else(pident < 78.5, "NA", class),
-         phylum = if_else(pident < 75.0, "NA", phylum)) %>%
+BLAST_clean <- BLAST_filter %>%
+  # Replace missing assignations (".") with "NA"
+  mutate(across(phylum:species, ~ if_else(.x == ".", "NA", .x))) %>%
+  mutate(species = if_else(pident < 98, "NA", species),
+         genus = if_else(pident < 90, "NA", genus),
+         family = if_else(pident < 85, "NA", family),
+         order = if_else(pident < 80, "NA", order),
+         class = if_else(pident < 75, "NA", class),
+         phylum = if_else(pident < 75, "NA", phylum)) %>%
   # Remove uncultured assignation
   mutate(across(phylum:species, ~ gsub(".*uncultured.*", "NA", .x))) %>%
   # Remove metagenome assignation
   mutate(across(phylum:species, ~ gsub(".*metagenome.*", "NA", .x))) %>%
-  # Remove assignation above kingdom for previously identified OTUs
-  mutate(across(phylum:species, 
-                ~ if_else(taxa_OTU %in% otu_BLAST_assign, "NA", .x)))
+  # Remove assignation below kingdom for previously identified OTUs
+  mutate(across(phylum:species, ~ if_else(taxa_OTU %in% otu_BLAST_assign, "NA", .x)))
 ```
+
+How many OTUs are assigned to each rank, before and after cleaning?
+
+```{r}
+# Before cleaning
+colSums(BLAST_filter[, c("phylum", "class", "order", "family", "genus", "species")] != ".")
+
+# After cleaning
+colSums(BLAST_clean[, c("phylum", "class", "order", "family", "genus", "species")] != "NA")
+```
+
+The cleaning mostly affects the lowest ranks: about one third of the species assignations are removed, as well as the phylum assignation of the uncertain OTUs identified above.
 
 The cleaned taxonomy table (`BLAST_clean`) should now be put back into the OTU table (`phyloseq` object).
 
 ```{r}
 # Replace taxonomy table in the phyloseq object
-otu_BLAST_clean <- otu_BLAST_filter2
+otu_BLAST_clean <- otu_BLAST_filter
 otu_BLAST_clean@tax_table <- tax_table(as.matrix(BLAST_clean))
 ```
 
-### Clean and save OTU table
+### Save the OTU table
 
 ```{r}
 #| eval: false
 # OTU table with cleaned taxonomy, based on BLAST accuracy
-save(otu_BLAST_clean, file = "RData/16S/otu_BLAST_clean.RData")
+save(otu_BLAST_clean, file = "RData/ITS/otu_BLAST_clean.RData")
 ```
