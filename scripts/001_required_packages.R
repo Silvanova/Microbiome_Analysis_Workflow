@@ -2,7 +2,9 @@
 #                                                                              #
 #  Install and load packages                                                   #
 #                                                                              #
-#  Written by Karelle Rheault: karh@ign.ku.dk                                  #
+#  Modified from Karelle Rheault: karh@ign.ku.dk                               #
+#  Modified from Sofia Gomes: s.i.gomes@biology.leidenuniv.nl                  #
+#  Modified by Davide Barsotti: db@ign.ku.dk                                   #
 #                                                                              #
 #==============================================================================#
 

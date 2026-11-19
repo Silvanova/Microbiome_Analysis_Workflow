@@ -2,7 +2,8 @@
 #                                                                              #
 #  Prepare OTU tables, manage auxiliary data, and convert raw files to .RData  #
 #                                                                              #
-#  Written by Karelle Rheault: karh@ign.ku.dk                                  #
+#  Modified from Karelle Rheault: karh@ign.ku.dk                               #
+#  Modified by Davide Barsotti: db@ign.ku.dk                                   #
 #                                                                              #
 #==============================================================================#
 

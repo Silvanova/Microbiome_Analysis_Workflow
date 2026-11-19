@@ -2,7 +2,8 @@
 #                                                                              #
 #  BLAST quality check: cleaning OTU table based on BLAST accuracy             #
 #                                                                              #
-#  Written by Karelle Rheault: karh@ign.ku.dk                                  #
+#  Modified from Karelle Rheault: karh@ign.ku.dk                               #
+#  Modified by Davide Barsotti: db@ign.ku.dk                                   #
 #                                                                              #
 #==============================================================================#
 

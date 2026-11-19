@@ -3,8 +3,8 @@
 #  Alpha diversity: rarefied and extrapolated richness, Shannon and Simpson    #
 #  diversity, and comparisons between sites                                    #
 #                                                                              #
-#  Written by Davide Barsotti: db@ign.ku.dk                                    #
 #  Modified from Sofia Gomes: s.i.gomes@biology.leidenuniv.nl                  #
+#  Modified by Davide Barsotti: db@ign.ku.dk                                   #
 #                                                                              #
 #==============================================================================#
 
