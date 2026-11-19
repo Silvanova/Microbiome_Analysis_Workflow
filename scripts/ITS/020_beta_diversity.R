@@ -60,14 +60,17 @@ summary(sample_sums(otu_table_rarefy))
 otu_table_hel <- transform_sample_counts(otu_table_rarefy,
                                          function(x) sqrt(x / sum(x)))
 
-## Non-rarefied data for the Aitchison distance ####
+## CLR transformation of the non-rarefied data ####
 
 # The Aitchison distance is calculated on the non-rarefied data (all 89
-# samples). vegan::vegdist() needs a matrix with the samples as rows, so we
-# extract the OTU table from the phyloseq object.
-otu_mat <- as(otu_table(otu_BLAST_clean), "matrix")
-if (taxa_are_rows(otu_BLAST_clean)) otu_mat <- t(otu_mat) # samples = rows
-dim(otu_mat) # 89 samples, 9036 OTUs
+# samples), after a centred log-ratio (CLR) transformation: the log of each
+# count minus the mean of the logs of the sample. The log of 0 is not
+# defined, so a pseudocount of 1 is added to all counts (as in
+# 006_normalization.R).
+otu_table_clr <- transform_sample_counts(otu_BLAST_clean, function(x) {
+  lx <- log(x + 1)
+  lx - mean(lx)
+})
 
 # Metadata of the samples, for the plots and tests below
 meta_rare <- data.frame(sample_data(otu_table_rarefy)) # 87 samples
@@ -93,14 +96,24 @@ meta_all  <- data.frame(sample_data(otu_BLAST_clean))  # 89 samples
 dist_bray <- phyloseq::distance(otu_table_hel, method = "bray")
 head(dist_bray)
 
-# Aitchison distances on the non-rarefied data, with a pseudocount of 1
-dist_ait <- vegdist(otu_mat, method = "aitchison", pseudocount = 1)
+# Aitchison distances: the Euclidean distances between the CLR-transformed
+# samples
+dist_ait <- phyloseq::distance(otu_table_clr, method = "euclidean")
 head(dist_ait)
 
-# NOTE: the tutorial uses the "robust.aitchison" distance, which only uses the
-# non-zero counts instead of adding a pseudocount (see 006_normalization.R).
-# Both are valid. With a pseudocount, absent OTUs and OTUs with very few reads
-# get similar values, which is important to interpret the PCoA below.
+# NOTE: phyloseq has no Aitchison distance, but the Euclidean distance on CLR
+# data computed above gives exactly the same result as vegan's version,
+# vegdist(otu_mat, method = "aitchison", pseudocount = 1), where otu_mat is
+# the OTU matrix with the samples as rows. The tutorial uses the robust
+# Aitchison distance instead, which only uses the non-zero counts, without
+# adding a pseudocount (see 006_normalization.R). Both are valid. The robust
+# version is NOT available in phyloseq: it is calculated with vegan, e.g.
+# vegdist(otu_mat, method = "robust.aitchison"), on the OTU matrix extracted
+# from the phyloseq object. From that step on, the analysis would continue
+# outside phyloseq.
+#
+# With a pseudocount, absent OTUs and OTUs with very few reads get similar
+# values, which is important to interpret the PCoA below.
 
 # Jaccard distances on the rarefied data (presence-absence)
 dist_jac <- phyloseq::distance(otu_table_rarefy, method = "jaccard",
@@ -116,7 +129,7 @@ head(dist_jac)
 # similar samples are close to each other in the plot. phyloseq::ordinate()
 # runs the PCoA with ape::pcoa().
 pcoa_bray <- ordinate(otu_table_hel, method = "PCoA", distance = dist_bray)
-pcoa_ait  <- ordinate(otu_BLAST_clean, method = "PCoA", distance = dist_ait)
+pcoa_ait  <- ordinate(otu_table_clr, method = "PCoA", distance = dist_ait)
 pcoa_jac  <- ordinate(otu_table_rarefy, method = "PCoA", distance = dist_jac)
 
 # Proportion of the variation explained by the first axes
@@ -170,7 +183,7 @@ p_pcoa_bray <- plot_pcoa(otu_table_hel, pcoa_bray,
 p_pcoa_bray
 ggsave("figures/ITS/020_pcoa_bray.png", p_pcoa_bray, width = 8, height = 6)
 
-p_pcoa_ait <- plot_pcoa(otu_BLAST_clean, pcoa_ait,
+p_pcoa_ait <- plot_pcoa(otu_table_clr, pcoa_ait,
                         "Aitchison (CLR, non-rarefied)")
 p_pcoa_ait
 ggsave("figures/ITS/020_pcoa_aitchison.png", p_pcoa_ait, width = 8, height = 6)
