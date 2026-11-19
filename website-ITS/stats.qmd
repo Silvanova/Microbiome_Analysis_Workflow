@@ -1,7 +1,29 @@
 ---
 title: "Statistical Analyses"
-format: html
 editor: visual
+format: 
+  html: 
+    toc: false
 ---
 
-Statistical Analyses
+Once the OTU tables are cleaned and normalized (see [Handling OTU tables](otu-tables.qmd)), the communities can be described and compared. Each script in this section loads the `phyloseq` objects saved at the end of [Rarefaction and normalization](otu-tables/rare-norm.qmd).
+
+### [Alpha diversity](stats/alpha-div.qmd)
+
+Compare the diversity within samples (richness, Shannon and Simpson diversity) between groups, using rarefied data or rarefaction/extrapolation curves (`iNEXT`).
+
+### [Taxonomic composition and guilds](stats/taxa-comp.qmd)
+
+Visualize the relative abundance of the main taxa and fungal guilds in each group of samples.
+
+### [Beta diversity](stats/beta-div.qmd)
+
+Compare the composition of communities between samples: transformations and distances (Hellinger and Bray-Curtis, Aitchison, Jaccard), ordinations (PCoA), and tests (PERMANOVA, homogeneity of dispersions).
+
+### [Indicator species](stats/diff-abund.qmd)
+
+Find the taxa that are associated with groups of samples (indicator species analysis).
+
+### [RDA and variation partitioning](stats/rda.qmd)
+
+Relate community composition to environmental variables with redundancy analysis (RDA), and quantify the variation explained by groups of variables.

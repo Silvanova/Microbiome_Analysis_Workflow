@@ -1,5 +1,5 @@
 ---
-title: "Differential abundance"
+title: "Indicator species"
 format: html
 editor: visual
 ---
