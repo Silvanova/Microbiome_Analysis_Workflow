@@ -18,7 +18,7 @@ source("scripts/001_required_packages.R")
 dir.create("figures/ITS", showWarnings = FALSE)
 
 # Load the cleaned OTU table from previous scripts
-load("RData/16S/otu_BLAST_clean.RData")
+load("RData/ITS/otu_BLAST_clean.RData")
 
 # Set seeds: for reproducibility, set seeds (random number generation) at the
 # start of this script to always obtain the same results with rarefaction
@@ -34,11 +34,11 @@ set.seed(100)
 # randomly subsampled to the same number of reads.
 
 # How to choose the rarefaction depth, and how many reads and OTUs are lost by
-# rarefying, is explained in 006_normalization.R. In this example, the lowest
-# sequencing depth (24663 reads) is high enough to keep all samples.
+# rarefying, is explained in 006_normalization.R. In this example, we rarefy to
+# 1011 reads: the two samples with fewer reads (120 and 487 reads) are removed.
 
 # Save the chosen rarefaction depth (you can change it, see Exercise 1)
-rare_depth <- 24663
+rare_depth <- 1011
 
 # phyloseq::rarefy_even_depth() subsamples all samples to the same depth.
 #   - sample.size: the rarefaction depth. Samples with fewer reads are removed.
@@ -51,11 +51,11 @@ otu_table_rarefy <- rarefy_even_depth(otu_BLAST_clean, sample.size = rare_depth,
                                       replace = FALSE, rngseed = 100)
 
 # Check the number of samples, reads per sample, and OTUs after rarefaction
-nsamples(otu_table_rarefy) # 90 samples
+nsamples(otu_table_rarefy) # 87 samples (89 before rarefaction)
 sample_sums(otu_table_rarefy)
-ntaxa(otu_table_rarefy)    # 7681 OTUs (8056 before rarefaction)
+ntaxa(otu_table_rarefy)    # 5153 OTUs (9036 before rarefaction)
 
-# Rarefying discards more than 80% of the reads, from the samples with a high
+# Rarefying discards ~75% of the reads, from the samples with a high
 # sequencing depth. An alternative to rarefying is to extrapolate alpha
 # diversity based on the accumulation of OTUs with increasing numbers of reads
 # (see below).
@@ -89,20 +89,23 @@ if (!taxa_are_rows(otu_BLAST_clean)) otu_df <- as.data.frame(t(otu_df))
 #   - datatype = "abundance": the data are read counts per OTU
 #   - endpoint: the number of reads up to which the curves are drawn. Beyond
 #     the library size of a sample, the curve is extrapolated. Extrapolation is
-#     only reliable up to about twice the library size of the sample.
+#     only reliable up to about twice the library size of the sample. Here, we
+#     draw the curves up to 10000 reads, slightly more than the largest library
+#     size (8506 reads).
 #   - knots: the number of points calculated along each curve. Fewer knots make
 #     the calculation faster.
-# NOTE: iNEXT takes a long time to run on a full dataset (possibly hours for
-# the 90 samples of this example), because it calculates the curves and their
-# confidence intervals (by bootstrapping) for each sample and each order q. Run this line before
-# a long break or overnight, and save the result (see below) so that you do
-# not have to run it again.
+# NOTE: iNEXT takes a long time to run, because it calculates the curves and
+# their confidence intervals (by bootstrapping) for each sample and each order
+# q. For this dataset, it takes about 10 minutes, but it can take hours for
+# larger or more deeply sequenced datasets. In that case, run this line before
+# a long break or overnight. Save the result (see below) so that you do not
+# have to run it again.
 inext_res <- iNEXT(otu_df, q = c(0, 1, 2), datatype = "abundance",
-                   endpoint = 2 * rare_depth, knots = 20)
+                   endpoint = 10000, knots = 20)
 
 # Save the iNEXT results, and load them next time instead of running iNEXT
-save(inext_res, file = "RData/16S/inext_res.RData")
-# load("RData/16S/inext_res.RData")
+save(inext_res, file = "RData/ITS/inext_res.RData")
+# load("RData/ITS/inext_res.RData")
 
 ## Plot the curves ####
 
@@ -115,12 +118,18 @@ p_inext <- ggiNEXT(inext_res, type = 1, facet.var = "Order.q", grey = TRUE) +
 p_inext
 ggsave("figures/ITS/010_inext_curves.png", p_inext, width = 12, height = 5)
 
-# For Shannon and Simpson diversity (q = 1 and q = 2), the curves reach a
-# plateau before the rarefaction depth: the rarefied data capture the diversity
-# of the samples. For richness (q = 0), the curves are still increasing, which
-# means that more OTUs would be found with more sequencing. Richness is very
-# sensitive to rare OTUs and to sequencing depth, and therefore requires the
-# most caution.
+# Compare the three panels. If the curves reach a plateau before the
+# rarefaction depth (vertical line), the rarefied data capture the diversity of
+# the samples for this order q. If the curves are still increasing at the
+# rarefaction depth, more OTUs would be found with more sequencing, and the
+# rarefied diversity underestimates the diversity of the samples.
+
+# Shannon and Simpson diversity (q = 1 and q = 2) give less weight to rare OTUs
+# and usually level off at a lower number of reads than richness (q = 0).
+# Richness is very sensitive to rare OTUs and to sequencing depth, and
+# therefore requires the most caution: with the low rarefaction depth of this
+# dataset (1011 reads), the rarefaction curves in 006_normalization.R showed
+# that richness is far from a plateau.
 
 ## Estimated (asymptotic) diversity ####
 
@@ -131,11 +140,10 @@ inext_div <- inext_res$AsyEst
 head(inext_div)
 
 # Note: Chao1 estimates the number of undetected OTUs from the number of OTUs
-# that occur only once (singletons) or twice (doubletons) in a sample. In
-# 004_global_filter.R, we removed singletons and rare OTUs (< 7 reads in the
-# whole dataset). This removes many of the singletons and doubletons the
-# estimator relies on, so the estimated richness is likely underestimated.
-# Keep this in mind when interpreting estimated richness on filtered data.
+# that occur only once (singletons) or twice (doubletons) in a sample. This is
+# why we did not remove singletons and rare OTUs in 004_global_filter.R:
+# removing them would remove the information the estimator relies on, and the
+# estimated richness would be underestimated.
 
 
 # Rarefied vs estimated richness -----------------------------------------------
