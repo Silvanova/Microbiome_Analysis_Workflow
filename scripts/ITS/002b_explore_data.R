@@ -2,8 +2,8 @@
 #                                                                              #
 #  Explore the data: OTU table, taxonomy table and metadata                    #
 #                                                                              #
-#  Written by Davide Barsotti: db@ign.ku.dk                                    #
 #  Modified from Sofia Gomes: s.i.gomes@biology.leidenuniv.nl                  #
+#  Modified by Davide Barsotti: db@ign.ku.dk                                   #
 #                                                                              #
 #==============================================================================#
 

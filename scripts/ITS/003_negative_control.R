@@ -2,7 +2,8 @@
 #                                                                              #
 #  Dealing with negative controls (and blanks)                                 #
 #                                                                              #
-#  Written by Karelle Rheault: karh@ign.ku.dk                                  #
+#  Modified from Karelle Rheault: karh@ign.ku.dk                               #
+#  Modified by Davide Barsotti: db@ign.ku.dk                                   #
 #                                                                              #
 #==============================================================================#
 
