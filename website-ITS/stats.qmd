@@ -6,7 +6,7 @@ format:
     toc: false
 ---
 
-Once the OTU tables are cleaned and normalized (see [Handling OTU tables](otu-tables.qmd)), the communities can be described and compared. Each script in this section loads the `phyloseq` objects saved at the end of [Rarefaction and normalization](otu-tables/rare-norm.qmd).
+Once the OTU tables are cleaned and normalized (see [Handling OTU tables](otu-tables.qmd)), the communities can be described and compared. Each script in this section loads the OTU table filtered with BLAST (`otu_BLAST_clean.RData`) and standardizes it as shown in [Rarefaction and normalization](otu-tables/rare-norm.qmd).
 
 ### [Alpha diversity](stats/alpha-div.qmd)
 
