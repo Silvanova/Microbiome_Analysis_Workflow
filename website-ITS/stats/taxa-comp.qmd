@@ -391,6 +391,10 @@ tax_traits %>%
 
 Only 2044 of the 5153 OTUs (40%) could be assigned to a lifestyle: the others are not assigned to a genus, or the lifestyle of their genus is unknown. An OTU can be counted in two trophic modes (primary and secondary lifestyles).
 
+::: callout-note
+In the course tutorial, a pre-processed traits table assigns traits to slightly more OTUs (43%), because the OTUs were matched to FungalTraits differently. More generally, the low proportion of OTUs with traits is due to the few OTUs identified at the genus level. It could be improved by revising the BLAST results, e.g., by checking the uncertain OTUs manually (see [BLAST filtering](../otu-tables/filter/BLAST.qmd)).
+:::
+
 ### Relative abundance of the trophic modes and lifestyles
 
 We join the traits to the long format table. OTUs without traits are labelled "No traits", so that the bars show which part of the community could be assigned.
