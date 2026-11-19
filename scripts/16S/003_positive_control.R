@@ -12,6 +12,9 @@ setwd("some_folder_path/my_working_directory")
 # Load packages and homemade functions
 source("scripts/001_required_packages.R")
 
+# The figures of the 16S scripts are saved in a separate folder
+dir.create("figures/16S", showWarnings = FALSE)
+
 # Load raw OTU table
 load("RData/16S/otu_table_raw.RData")
 
@@ -40,7 +43,7 @@ otu_table_pos <- prune_taxa(otu_pos, otu_table.rel)
 p_pos_otus <- plot_bar(otu_table_pos, fill = "kingdom") +
   facet_grid(~sample_type, scales = "free", space = "free")
 p_pos_otus
-ggsave("figures/003_pos_control_otus_relative_abundance.png", p_pos_otus,
+ggsave("figures/16S/003_pos_control_otus_relative_abundance.png", p_pos_otus,
        width = 12, height = 6)
 
 ## Compare community profiles ####
@@ -55,7 +58,7 @@ otu_table.rel.pos <- prune_samples(
 # Visualize the community profiles of these samples
 p_pos_profiles <- plot_bar(otu_table.rel.pos, fill = "kingdom")
 p_pos_profiles
-ggsave("figures/003_pos_control_profiles.png", p_pos_profiles, width = 7, height = 5)
+ggsave("figures/16S/003_pos_control_profiles.png", p_pos_profiles, width = 7, height = 5)
 
 # Clean and save OTU table -----------------------------------------------------
 

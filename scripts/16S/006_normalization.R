@@ -13,6 +13,9 @@ setwd("some_folder_path/my_working_directory")
 # Load packages and homemade functions
 source("scripts/001_required_packages.R")
 
+# The figures of the 16S scripts are saved in a separate folder
+dir.create("figures/16S", showWarnings = FALSE)
+
 # Load the cleaned OTU table from previous scripts
 load("RData/16S/otu_BLAST_clean.RData")
 
@@ -89,7 +92,7 @@ p_accum <- ggplot(accum_data, aes(x = Samples, y = Richness,
        title = "Species accumulation curves per site") +
   theme_classic()
 p_accum
-ggsave("figures/006_species_accumulation_curves.png", p_accum, width = 7, height = 5)
+ggsave("figures/16S/006_species_accumulation_curves.png", p_accum, width = 7, height = 5)
 
 # The number of OTUs keeps increasing with the number of samples, and the
 # curves do not reach a plateau: the OTU communities of the sites are not
@@ -129,7 +132,7 @@ p_rarecurve <- ggplot(rare_curves, aes(x = Sample, y = Species,
        title = "Rarefaction curves") +
   theme_classic()
 p_rarecurve
-ggsave("figures/006_rarefaction_curves.png", p_rarecurve, width = 10, height = 6)
+ggsave("figures/16S/006_rarefaction_curves.png", p_rarecurve, width = 10, height = 6)
 
 # Each line is a sample. The samples have very different sequencing depths
 # (from about 25,000 to 300,000 reads). In this example, the curves start to
@@ -162,7 +165,7 @@ p_depth_rich <- ggplot(seq_rich, aes(x = reads, y = Observed)) +
        subtitle = paste("R2 =", round(r2_depth, 3))) +
   theme_bw()
 p_depth_rich
-ggsave("figures/006_sequencing_depth_vs_richness.png", p_depth_rich, width = 6, height = 5)
+ggsave("figures/16S/006_sequencing_depth_vs_richness.png", p_depth_rich, width = 6, height = 5)
 
 # In microbiome data, the number of reads and the number of OTUs are generally
 # correlated: samples with more reads inevitably contain more OTUs. In this
@@ -186,7 +189,7 @@ p_depth_hist <- ggplot(depth_df, aes(x = depth)) +
   labs(x = "Sequencing depth (number of reads)", y = "Number of samples") +
   theme_minimal()
 p_depth_hist
-ggsave("figures/006_sequencing_depth_histogram.png", p_depth_hist, width = 7, height = 5)
+ggsave("figures/16S/006_sequencing_depth_histogram.png", p_depth_hist, width = 7, height = 5)
 
 # Check the number of reads of each sample, from smallest to largest
 sort(sample_sums(otu_BLAST_clean))
@@ -250,7 +253,7 @@ p_libsize <- ggplot(meta, aes(x = SiteID, y = library_size)) +
   geom_boxplot() +
   theme_bw()
 p_libsize
-ggsave("figures/006_library_size_per_site.png", p_libsize, width = 7, height = 5)
+ggsave("figures/16S/006_library_size_per_site.png", p_libsize, width = 7, height = 5)
 
 # Test for homogeneity of variances
 bartlett.test(library_size ~ SiteID, data = meta)
@@ -485,7 +488,7 @@ p_rclr <- plot_nmds(otu_table_rclr,   nmds_rclr, "RCLR + Euclidean (robust Aitch
 p_nmds_all <- ggarrange(p_rare, p_rel, p_hel, p_rclr,
                         ncol = 2, nrow = 2, common.legend = TRUE, legend = "right")
 p_nmds_all
-ggsave("figures/006_nmds_normalization_methods.png", p_nmds_all,
+ggsave("figures/16S/006_nmds_normalization_methods.png", p_nmds_all,
        width = 11, height = 9, bg = "white")
 
 # When comparing the plots, keep in mind that the orientation of NMDS axes is
@@ -583,7 +586,7 @@ p_rclr_libsize <- plot_ordination(otu_table_rclr, nmds_rclr, color = "log_librar
   labs(title = "RCLR + Euclidean, coloured by library size") +
   theme_bw()
 p_rclr_libsize
-ggsave("figures/006_nmds_rclr_library_size.png", p_rclr_libsize, width = 7, height = 5)
+ggsave("figures/16S/006_nmds_rclr_library_size.png", p_rclr_libsize, width = 7, height = 5)
 
 
 

@@ -20,7 +20,7 @@ library(downloadthis)
 #| layout: [[-15,25,-15,25,-15]]
 #| echo: false
 download_file(
-  path = "../scripts/003_positive_control.R",
+  path = "../scripts/ITS/003_positive_control.R",
   output_name = "003_positive_control",
   button_label = "Download script 003_positive_control",
   button_type = "success",
@@ -30,7 +30,7 @@ download_file(
 )
 
 download_file(
-  path = "../scripts/003_negative_control.R",
+  path = "../scripts/ITS/003_negative_control.R",
   output_name = "003_negative_control",
   button_label = "Download script 003_negative_control",
   button_type = "success",

@@ -63,7 +63,7 @@ load("../../RData/16S/otu_rare_clean.RData")
 #| layout: [[-10,35,-5,40,-10]]
 #| echo: false
 download_file(
-  path = "../../scripts/005_BLAST_filter.R",
+  path = "../../scripts/ITS/005_BLAST_filter.R",
   output_name = "005_BLAST_filter",
   button_label = "Download script",
   button_type = "success",

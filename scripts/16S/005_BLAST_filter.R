@@ -12,6 +12,9 @@ setwd("some_folder_path/my_working_directory")
 # Load packages and homemade functions
 source("scripts/001_required_packages.R")
 
+# The figures of the 16S scripts are saved in a separate folder
+dir.create("figures/16S", showWarnings = FALSE)
+
 # Load the cleaned OTU table from previous scripts
 load("RData/16S/otu_rare_clean.RData")
 
@@ -79,7 +82,7 @@ otu_table_BLAST_remove <- prune_taxa(otu_BLAST_remove, otu_BLAST_filter)
 # Visualize the abundance and prevalence of these OTUs across samples
 p_BLAST_remove <- plot_bar(otu_table_BLAST_remove, fill = "OTU")
 p_BLAST_remove
-ggsave("figures/005_BLAST_removed_otus.png", p_BLAST_remove, width = 12, height = 6)
+ggsave("figures/16S/005_BLAST_removed_otus.png", p_BLAST_remove, width = 12, height = 6)
 
 # All OTUs identified are both scarce (low prevalence) and rare (low abundance),
 # thus they can be removed.

@@ -24,7 +24,7 @@ load("../../RData/16S/otu_ctrl_clean.RData")
 #| layout: [[-10,35,-5,40,-10]]
 #| echo: false
 download_file(
-  path = "../../scripts/004_global_filter.R",
+  path = "../../scripts/ITS/004_global_filter.R",
   output_name = "004_global_filter",
   button_label = "Download script",
   button_type = "success",
