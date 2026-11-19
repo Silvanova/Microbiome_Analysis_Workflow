@@ -69,6 +69,8 @@ website:
               file: get-started/install.qmd
             - text: "Data preparation"
               file: get-started/data-prep.qmd
+            - text: "Explore the data"
+              file: get-started/explore.qmd
 
     - title: "Handling OTU tables"
       contents:

@@ -13,7 +13,7 @@ To follow the example presented on this page directly on your computer, download
 #| output: false
 library(downloadthis)
 library(DT)
-BLAST_raw <- read.delim("../../raw data/16S_BLAST.txt")
+BLAST_raw <- read.delim("../../raw data/ITS_BLAST.txt")
 ```
 
 ```{r}
@@ -55,16 +55,16 @@ aux <- read.csv("raw data/aux_data.csv")
 
 ### Construct a phyloseq object from BLAST results {#phyloseq}
 
-The procedure demonstrated below for 16S can be applied similarly for the other target genes (ITS and CO1). A complete procedure for each target gene can also be found in the downloadable script `002_data_preparation.R`.
+The procedure demonstrated below for ITS (fungi), the marker used in the examples of this website, can be applied similarly for the other target genes (16S and CO1). A complete procedure for each target gene can also be found in the downloadable script `002_data_preparation.R`.
 
 #### Taxonomy table
 
-Our 16S taxonomy table was generated using BLASTn search against SILVA v138.1 database [@quast2012]. Make sure your taxonomy table looks similar to this one before continuing to the next steps. The BLAST results should contain BLAST quality measures (evalue, length, qcov, pident, etc.) for each OTU, and a taxonomy assignment. In this example, the taxonomy assignment is all contained in the same column "X1st_hit" and needs to be divided into BLAST_ID, Kingdom, Phylum, Class, Order, etc. If the example shown here in R does not work with your raw file, you can try to do it in Excel (prone to errors). You may also find other example procedures to convert your raw data into a `phyloseq` object. More information about phyloseq can be found [here](https://joey711.github.io/phyloseq/https://joey711.github.io/phyloseq/).
+Our ITS taxonomy table was generated using BLASTn search against the UNITE database for fungi and other eukaryotes [@abarenkov2024]. Make sure your taxonomy table looks similar to this one before continuing to the next steps. The BLAST results should contain BLAST quality measures (evalue, length, qcov, pident, etc.) for each OTU, and a taxonomy assignment. In this example, the taxonomy assignment is all contained in the same column "X1st_hit" and needs to be divided into BLAST_ID, kingdom, phylum, class, order, etc. After the species, the ITS taxonomy contains extra columns (x1, x2, ...): for example, x1 tells whether the matched species is ectomycorrhizal (EcM) or not, and x3 gives the UNITE species hypothesis (SH) of the reference sequence. If the example shown here in R does not work with your raw file, you can try to do it in Excel (prone to errors). You may also find other example procedures to convert your raw data into a `phyloseq` object. More information about phyloseq can be found [here](https://joey711.github.io/phyloseq/https://joey711.github.io/phyloseq/).
 
 ```{r}
 #| eval: false
 # Load BLAST results
-BLAST_raw <- read.delim("raw data/16S_BLAST.txt")
+BLAST_raw <- read.delim("raw data/ITS_BLAST.txt")
 
 # Verify that the data loaded properly: e.g., check that numeric value should 
 # have class numeric or integer
@@ -101,7 +101,7 @@ datatable(
 )
 ```
 
-To extract taxonomy from BLAST results, transform the column "X1st_hit" into multiple columns, one per taxonomy level (Kingdom, Phylum, Class, etc.), extract the BLAST ID and clean the resulting table.
+To extract taxonomy from BLAST results, transform the column "X1st_hit" into multiple columns: the BLAST ID (the identifier of the matched reference sequence), then one column per taxonomy level (kingdom, phylum, class, etc.), and clean the resulting table.
 
 ```{r}
 #| eval: false
@@ -109,17 +109,11 @@ To extract taxonomy from BLAST results, transform the column "X1st_hit" into mul
 taxonomy_raw <- BLAST_raw %>%
   # Split columns based on delimiter (;)
   separate_wider_delim(cols = X1st_hit, delim = ";",
-                       names = c("kingdom", "phylum", "class", "order", 
-                                 "family", "genus", "species", "x1", "x2", 
-                                 "x3", "x4", "x5", "x6", "x7", "x8", "x9", 
+                       names = c("BLAST_ID","kingdom", "phylum", "class",
+                                 "order", "family", "genus", "species", "x1",
+                                 "x2", "x3", "x4", "x5", "x6", "x7", "x8", "x9",
                                  "x10", "x11", "x12"),
                        too_few = "align_start") %>%
-  # Split kingdom column containing a BLAST ID, based on delimiter (space)
-  separate_wider_delim(cols = kingdom, delim = " ",
-                       names = c("BLAST_ID", "kingdom"),
-                       too_few = "align_end") %>%
-  # Filter out OTUs without significant similarity found
-  filter(kingdom != "No_significant_similarity_found" & !is.na(kingdom)) %>%
   # Rename qseqid column to taxa_OTU
   as.data.frame() %>% dplyr::rename(taxa_OTU = qseqid) %>%
   # taxa_OTU names must be moved to row names
@@ -141,12 +135,12 @@ First load your OTU table and remove samples absent from your auxiliary data. Re
 ```{r}
 #| eval: false
 # Load OTU table
-otu_table_raw <- read.delim("raw data/16S_table.txt")
+otu_table_raw <- read.delim("raw data/ITS_table.txt")
 
 # The first column contains OTU names, the rest are the count data per sample.
 
-# Add sample identifier (Soil_ID) as row names to aux data
-row.names(aux) <- aux$Soil_ID
+# Add sample identifier (Library_ID) as row names to aux data
+row.names(aux) <- aux$Library_ID
 
 # Clean the otu_table_raw to keep only relevant samples.
 otu_table_raw <- otu_table_raw %>%
@@ -175,12 +169,12 @@ Were your samples part of a larger sequencing run containing other samples? Filt
 ```{r}
 #| eval: false
 # Remove all OTUs with sum == 0
-ntaxa(otu_table_raw) # 38500 before filtering
+ntaxa(otu_table_raw) # 27701 before filtering
 otu_table_raw <- prune_taxa(taxa_sums(otu_table_raw) > 0, otu_table_raw)
-ntaxa(otu_table_raw) # 25461 after filtering 
+ntaxa(otu_table_raw) # 16691 after filtering
 ```
 
-34% of the OTUs were absent from this subset of samples.
+40% of the OTUs were absent from this subset of samples.
 
 ### Save as .RData {#save}
 
@@ -188,8 +182,10 @@ Save all newly created files as RData for usage with other scripts.
 
 ```{r}
 #| eval: false
-save(BLAST_raw, file = "RData/16S/BLAST_raw.RData")
-save(taxonomy_raw, file = "RData/16S/taxonomy_raw.RData")
-save(otu_table_raw, file = "RData/16S/otu_table_raw.RData")
+save(BLAST_raw, file = "RData/ITS/BLAST_raw.RData")
+save(taxonomy_raw, file = "RData/ITS/taxonomy_raw.RData")
+save(otu_table_raw, file = "RData/ITS/otu_table_raw.RData")
 save(aux, file = "RData/auxfile.RData")
 ```
+
+Now that the data is ready, take a first look at it: [Explore the data](explore.qmd).
