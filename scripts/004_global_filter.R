@@ -32,6 +32,88 @@ otu_table_tax <- subset_taxa(otu_table_tax, order != "Chloroplast" &
 ntaxa(otu_ctrl_clean) # 25390
 ntaxa(otu_table_tax) # 22046 (~13% of the OTUs were not Bacteria)
 
+# Explore the abundance and prevalence of OTUs ---------------------------------
+
+# Sequencing datasets are characterized by a long tail of rare OTUs, i.e., OTUs
+# represented by a low number of reads. Some of them may be products of
+# sequencing errors that were not removed by the bioinformatic pipeline. Are
+# they real? Is their presence meaningful in our analysis? It is often hard to
+# decide which cutoff to use for an OTU to be considered "real", and the choice
+# is often a bit arbitrary. It is therefore important to explore the data
+# before deciding.
+
+## Number of reads per OTU ####
+
+# Some OTUs have 0 reads at this stage: they were only present in the control
+# samples, which were removed in 003_negative_control.R. Exclude them from the
+# exploration.
+otu_table_explore <- prune_taxa(taxa_sums(otu_table_tax) > 0, otu_table_tax)
+
+# Total number of reads per OTU
+reads_otu <- data.frame(reads = taxa_sums(otu_table_explore))
+
+min(reads_otu$reads) # 1 read
+max(reads_otu$reads) # 546118 reads
+
+# Plot the distribution of the number of reads per OTU (log scale)
+p_reads_otu <- ggplot(reads_otu, aes(x = reads)) +
+  geom_histogram(bins = 20, fill = "steelblue") +
+  scale_x_log10(labels = scales::comma) +
+  labs(x = "Number of reads per OTU (log10 scale)", y = "Number of OTUs") +
+  theme_minimal()
+p_reads_otu
+ggsave("figures/004_reads_per_otu_histogram.png", p_reads_otu, width = 7, height = 5)
+
+# How many OTUs have more than 1000 reads?
+sum(reads_otu$reads > 1000) # 1178 OTUs
+
+# Most OTUs have a low number of reads, and only a few OTUs are very abundant.
+
+## Prevalence of OTUs ####
+
+# The prevalence of an OTU is the number of samples in which it is present.
+
+# Convert the OTU table to presence-absence (1 = present, 0 = absent)
+otu_table_pa <- transform_sample_counts(otu_table_explore, function(x) 1 * (x > 0))
+
+# Number of OTUs per sample
+sample_sums(otu_table_pa)
+
+# Number of samples in which each OTU is present (prevalence)
+prev_otu <- data.frame(prevalence = taxa_sums(otu_table_pa))
+
+# How many OTUs are present in only one or two samples?
+sum(prev_otu$prevalence == 1) # 13703 OTUs
+sum(prev_otu$prevalence == 2) # 2369 OTUs
+
+# Plot the distribution of the prevalence of OTUs
+p_prev_otu <- ggplot(prev_otu, aes(x = prevalence)) +
+  geom_histogram(bins = 60, fill = "steelblue") +
+  labs(x = "Prevalence of OTUs (number of samples)", y = "Number of OTUs") +
+  theme_minimal()
+p_prev_otu
+ggsave("figures/004_otu_prevalence_histogram.png", p_prev_otu, width = 7, height = 5)
+
+# Most OTUs occur in a very low number of samples. Filtering OTUs based on
+# their prevalence would therefore lead to the loss of a large number of OTUs.
+
+# What if we remove the OTUs present in less than 10 samples?
+prev_otu10 <- filter(prev_otu, prevalence >= 10)
+
+p_prev_otu10 <- ggplot(prev_otu10, aes(x = prevalence)) +
+  geom_histogram(bins = 60, fill = "steelblue") +
+  labs(x = "Prevalence of OTUs (number of samples)", y = "Number of OTUs") +
+  theme_minimal()
+p_prev_otu10
+ggsave("figures/004_otu_prevalence_histogram_min10.png", p_prev_otu10,
+       width = 7, height = 5)
+
+# Even after removing the OTUs present in less than 10 samples, the same
+# pattern is observed: OTUs with a low prevalence are the most frequent. It is
+# hard to choose a cutoff based on prevalence only. In this workflow, we
+# therefore filter OTUs based on their abundance (see below).
+
+
 # Singletons -------------------------------------------------------------------
 
 # Remove singletons
