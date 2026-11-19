@@ -1,0 +1,128 @@
+---
+title: "Install R and required packages"
+editor: visual
+format: html
+---
+
+## R and RStudio
+
+To work in R, you'll need to install R and RStudio. Both programs are free and easy to download. For an easy step by step, follow the procedure described [here](https://rstudio-education.github.io/hopr/starting.html#using-r).
+
+::: callout-tip
+### Set working directory
+
+In each of your script, always start with setting the working directory to avoid issues with folder structure and ensure that your RData is saved in the proper location.
+
+```{r}
+#| eval: false
+setwd("some_folder_path/my_working_directory")
+```
+:::
+
+## Required packages
+
+Some packages from the CRAN are required to run the examples on this website.
+
+Download the script `001_required_packages.R`, or copy the codes below into your own script.
+
+```{r}
+#| echo: false
+#| output: false
+library(downloadthis)
+```
+
+```{r}
+#| echo: false
+download_file(
+  path = "../../scripts/001_required_packages.R",
+  output_name = "001_required_packages",
+  button_label = "Download script",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```
+
+#### Install packages
+
+```{r}
+#| eval: false
+# Install packages
+# installed from BiocManager ---------------------------------------------------
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+# decontam
+if (!require("decontam", quietly = TRUE))
+  BiocManager::install("decontam")
+
+# phyloseq
+if (!require("phyloseq", quietly = TRUE))
+  BiocManager::install("phyloseq")
+
+# installed from R Universe ----------------------------------------------------
+
+if (!require("microViz", quietly = TRUE))
+  install.packages(
+    "microViz",
+    repos = c(davidbarnett = "https://david-barnett.r-universe.dev", getOption("repos"))
+  )
+
+# CRAN packages ----------------------------------------------------------------
+
+if (!require("vegan", quietly = TRUE))
+  install.packages("vegan")
+
+if (!require("openxlsx", quietly = TRUE))
+  install.packages("openxlsx")
+
+if (!require("tidyr", quietly = TRUE))
+  install.packages("tidyr")
+
+if (!require("plyr", quietly = TRUE))
+  install.packages("plyr")
+
+if (!require("ggplot2", quietly = TRUE))
+  install.packages("ggplot2")
+
+if (!require("ggpubr", quietly = TRUE))
+  install.packages("ggpubr")
+
+if (!require("dplyr", quietly = TRUE))
+  install.packages("dplyr")
+```
+
+#### Load packages
+
+```{r}
+#| eval: false
+# Load packages
+library(vegan)
+library(decontam)
+library(phyloseq)
+library(microViz)
+library(openxlsx)
+library(tidyr)
+library(plyr)
+library(ggplot2)
+library(ggpubr)
+library(dplyr)  # always load dplyr last to avoid conflicts between packages
+```
+
+#### Homemade functions
+
+Some additional functions used in this workflow are not part of any R package. These functions are listed below. Make sure to add them to your scripts!
+
+```{r}
+#| eval: false
+# Homemade functions -----------------------------------------------------------
+
+# Remove taxa from phyloseq objects
+remove_taxa <- function(badTaxa, physeq){
+  allTaxa <- taxa_names(physeq)
+  cleanTaxa <- allTaxa[!(allTaxa %in% badTaxa)]
+  return(prune_taxa(cleanTaxa, physeq))
+}
+```
