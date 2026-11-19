@@ -12,6 +12,9 @@ setwd("some_folder_path/my_working_directory")
 # Load packages and homemade functions
 source("scripts/001_required_packages.R")
 
+# The figures of the ITS scripts are saved in a separate folder
+dir.create("figures/ITS", showWarnings = FALSE)
+
 # Load the cleaned OTU table from previous scripts
 load("RData/ITS/otu_ctrl_clean.RData")
 
@@ -73,7 +76,7 @@ p_reads_otu <- ggplot(reads_otu, aes(x = reads)) +
   labs(x = "Number of reads per OTU (log10 scale)", y = "Number of OTUs") +
   theme_minimal()
 p_reads_otu
-ggsave("figures/004_reads_per_otu_histogram.png", p_reads_otu, width = 7, height = 5)
+ggsave("figures/ITS/004_reads_per_otu_histogram.png", p_reads_otu, width = 7, height = 5)
 
 # How many OTUs have more than 1000 reads?
 sum(reads_otu$reads > 1000) # 58 OTUs
@@ -103,7 +106,7 @@ p_prev_otu <- ggplot(prev_otu, aes(x = prevalence)) +
   labs(x = "Prevalence of OTUs (number of samples)", y = "Number of OTUs") +
   theme_minimal()
 p_prev_otu
-ggsave("figures/004_otu_prevalence_histogram.png", p_prev_otu, width = 7, height = 5)
+ggsave("figures/ITS/004_otu_prevalence_histogram.png", p_prev_otu, width = 7, height = 5)
 
 # Most OTUs occur in a very low number of samples. Filtering OTUs based on
 # their prevalence would therefore lead to the loss of a large number of OTUs.
@@ -116,7 +119,7 @@ p_prev_otu10 <- ggplot(prev_otu10, aes(x = prevalence)) +
   labs(x = "Prevalence of OTUs (number of samples)", y = "Number of OTUs") +
   theme_minimal()
 p_prev_otu10
-ggsave("figures/004_otu_prevalence_histogram_min10.png", p_prev_otu10,
+ggsave("figures/ITS/004_otu_prevalence_histogram_min10.png", p_prev_otu10,
        width = 7, height = 5)
 
 # Even after removing the OTUs present in less than 10 samples, the same
@@ -230,14 +233,14 @@ seq_depth_all <- seq_depth_raw %>% rbind(seq_depth_single) %>%
 p_libsize <- ggplot(data = seq_depth_all, aes(x = Index, y = LibrarySize, color = seq_depth)) +
   geom_point() + geom_line()
 p_libsize
-ggsave("figures/004_filter_library_size.png", p_libsize, width = 7, height = 5)
+ggsave("figures/ITS/004_filter_library_size.png", p_libsize, width = 7, height = 5)
 
 # Zoom in on the large library size part
 p_libsize_zoom <- seq_depth_all %>% filter(Index > 80) %>%
   ggplot(aes(x = Index, y = LibrarySize, color = seq_depth)) +
   geom_point() + geom_line()
 p_libsize_zoom
-ggsave("figures/004_filter_library_size_zoom.png", p_libsize_zoom, width = 7, height = 5)
+ggsave("figures/ITS/004_filter_library_size_zoom.png", p_libsize_zoom, width = 7, height = 5)
 
 # With this analysis, we can see that removing singletons barely affects
 # LibrarySize (pink vs blue), even though we lost ~36% of the OTUs.
@@ -255,7 +258,7 @@ ggsave("figures/004_filter_library_size_zoom.png", p_libsize_zoom, width = 7, he
 p_richness <- ggplot(data = seq_depth_all, aes(x = Index, y = Observed, color = seq_depth)) +
   geom_point() + geom_line()
 p_richness
-ggsave("figures/004_filter_richness.png", p_richness, width = 7, height = 5)
+ggsave("figures/ITS/004_filter_richness.png", p_richness, width = 7, height = 5)
 
 # This plot shows that every filtering step lowers the OTU richness of the
 # samples, especially in the samples with a large library size. The thresholds
@@ -318,7 +321,7 @@ p_beta_div_all <- ggarrange(
   ncol = 3, nrow = 2, common.legend = TRUE,
   hjust = 0, label.x = 0.2, font.label = list(size = 10))
 p_beta_div_all
-ggsave("figures/004_filter_thresholds_pcoa.png", p_beta_div_all,
+ggsave("figures/ITS/004_filter_thresholds_pcoa.png", p_beta_div_all,
        width = 14, height = 9, bg = "white")
 
 # With this analysis, we can see that the overall patterns are the same with

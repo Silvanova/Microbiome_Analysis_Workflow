@@ -13,8 +13,11 @@ setwd("some_folder_path/my_working_directory")
 # Load packages and homemade functions
 source("scripts/001_required_packages.R")
 
+# The figures of the ITS scripts are saved in a separate folder
+dir.create("figures/ITS", showWarnings = FALSE)
+
 # Load the cleaned OTU table from previous scripts
-load("RData/16S/otu_BLAST_clean.RData")
+load("RData/ITS/otu_BLAST_clean.RData")
 
 # Set seeds: for reproducibility, set seeds (random number generation) at the
 # start of this script to always obtain the same results with rarefaction
@@ -84,12 +87,12 @@ p_accum <- ggplot(accum_data, aes(x = Samples, y = Richness,
               alpha = 0.15, color = NA) +
   scale_color_viridis_d() +
   scale_fill_viridis_d() +
-  scale_x_continuous(breaks = 1:9) +
+  scale_x_continuous(breaks = 1:max(accum_data$Samples)) +
   labs(x = "Number of samples", y = "Accumulated number of OTUs",
        title = "Species accumulation curves per site") +
   theme_classic()
 p_accum
-ggsave("figures/006_species_accumulation_curves.png", p_accum, width = 7, height = 5)
+ggsave("figures/ITS/006_species_accumulation_curves.png", p_accum, width = 7, height = 5)
 
 # The number of OTUs keeps increasing with the number of samples, and the
 # curves do not reach a plateau: the OTU communities of the sites are not
@@ -115,11 +118,11 @@ meta_rare <- as(sample_data(otu_BLAST_clean), "data.frame")
 rare_curves$Land_use <- meta_rare[as.character(rare_curves$Site), "Land_use"]
 
 # Plot the rarefaction curves, one panel per land use. The vertical line shows
-# the smallest library size across samples.
+# the rarefaction depth that we will choose below (1011 reads).
 p_rarecurve <- ggplot(rare_curves, aes(x = Sample, y = Species,
                                        group = Site, color = Land_use)) +
   geom_line(linewidth = 0.8) +
-  geom_vline(xintercept = min(sample_sums(otu_BLAST_clean)), linetype = "dashed") +
+  geom_vline(xintercept = 1011, linetype = "dashed") +
   facet_wrap(~ Land_use) +
   scale_color_brewer(palette = "Set2") +
   scale_x_continuous(labels = scales::comma) +
@@ -129,14 +132,12 @@ p_rarecurve <- ggplot(rare_curves, aes(x = Sample, y = Species,
        title = "Rarefaction curves") +
   theme_classic()
 p_rarecurve
-ggsave("figures/006_rarefaction_curves.png", p_rarecurve, width = 10, height = 6)
+ggsave("figures/ITS/006_rarefaction_curves.png", p_rarecurve, width = 10, height = 6)
 
 # Each line is a sample. The samples have very different sequencing depths
-# (from about 25,000 to 300,000 reads). In this example, the curves start to
-# level off (approach a plateau) at the smallest library size (dashed line),
-# but most of them are still slowly increasing: samples sequenced more deeply
-# keep discovering new OTUs. Let's check how the number of OTUs relates to the
-# number of reads.
+# (from 120 to about 8,500 reads), and the majority of the samples are far
+# from reaching a plateau: the more reads in a sample, the more OTUs are
+# discovered. Let's check if this is the case.
 
 ## Sequencing depth and richness ####
 
@@ -148,9 +149,9 @@ seq_rich <- estimate_richness(otu_BLAST_clean, measures = "Observed")
 # Add the number of reads per sample (sequencing depth)
 seq_rich$reads <- sample_sums(otu_BLAST_clean)
 
-min(seq_rich$Observed)  # sample with the lowest number of OTUs (387)
-max(seq_rich$Observed)  # sample with the highest number of OTUs (1962)
-mean(seq_rich$Observed) # mean number of OTUs per sample (1212)
+min(seq_rich$Observed)  # sample with the lowest number of OTUs (36)
+max(seq_rich$Observed)  # sample with the highest number of OTUs (738)
+mean(seq_rich$Observed) # mean number of OTUs per sample (381)
 
 # R2 of the linear regression between number of reads and number of OTUs
 r2_depth <- summary(lm(Observed ~ reads, data = seq_rich))$r.squared
@@ -162,13 +163,12 @@ p_depth_rich <- ggplot(seq_rich, aes(x = reads, y = Observed)) +
        subtitle = paste("R2 =", round(r2_depth, 3))) +
   theme_bw()
 p_depth_rich
-ggsave("figures/006_sequencing_depth_vs_richness.png", p_depth_rich, width = 6, height = 5)
+ggsave("figures/ITS/006_sequencing_depth_vs_richness.png", p_depth_rich, width = 6, height = 5)
 
 # In microbiome data, the number of reads and the number of OTUs are generally
 # correlated: samples with more reads inevitably contain more OTUs. In this
-# example, the number of reads explains ~80% of the variation in the number of
-# OTUs (R2 = 0.79). Ignoring
-# this introduces a bias in alpha diversity estimates. This is why it is
+# example, the number of reads explains ~50% of the variation in the number of
+# OTUs (R2 = 0.48). Ignoring this introduces a bias in alpha diversity estimates. This is why it is
 # important to standardize the data!
 
 ## Choose the rarefaction depth ####
@@ -186,49 +186,52 @@ p_depth_hist <- ggplot(depth_df, aes(x = depth)) +
   labs(x = "Sequencing depth (number of reads)", y = "Number of samples") +
   theme_minimal()
 p_depth_hist
-ggsave("figures/006_sequencing_depth_histogram.png", p_depth_hist, width = 7, height = 5)
+ggsave("figures/ITS/006_sequencing_depth_histogram.png", p_depth_hist, width = 7, height = 5)
 
 # Check the number of reads of each sample, from smallest to largest
 sort(sample_sums(otu_BLAST_clean))
 
 # What is the smallest library size across samples? Is it sufficient?
-min(sample_sums(otu_BLAST_clean))
+min(sample_sums(otu_BLAST_clean)) # 120 reads
 
 # Identify the next lowest library sizes
-sort(sample_sums(otu_BLAST_clean))[1:5]
+min(sample_sums(otu_BLAST_clean)[sample_sums(otu_BLAST_clean) > 120]) # 487 reads
+min(sample_sums(otu_BLAST_clean)[sample_sums(otu_BLAST_clean) > 487]) # 1011 reads
 
-# In this example, the smallest library size is 24663, which is sufficient to
-# rarefy all samples at this depth. If some samples had a small library size,
-# you could choose to rarefy to the size of the second, third, etc. sample
-# until you find a sufficient depth. The samples below that depth are then
-# excluded.
+# The two samples with the smallest library sizes (120 and 487 reads) are the
+# low-depth samples identified in 003_negative_control.R. Rarefying all samples
+# to 120 reads would discard almost all the information of the other samples.
+# The next lowest library size is 1011 reads: if we choose this depth, we lose
+# these two samples, but keep a reasonable number of reads in all others.
 
 ## Rarefy ####
 
-# Rarefy to the library size of the sample with the lowest library size (default)
-otu_table_rarefy <- rarefy_even_depth(otu_BLAST_clean, replace = F)
+# Choose the rarefaction depth (you can change it)
+chosen_depth <- 1011
 
-# Rarefy to a chosen library size:
-# chosen_depth <- 24663
-#  otu_table_rarefy <- rarefy_even_depth(otu_BLAST_clean, replace = F,
-#                                      sample.size = chosen_depth)
+# Rarefy all samples to the chosen depth. Samples with fewer reads are removed.
+otu_table_rarefy <- rarefy_even_depth(otu_BLAST_clean, replace = F,
+                                      sample.size = chosen_depth)
+
+# Note: without the argument sample.size, rarefy_even_depth() rarefies to the
+# library size of the sample with the lowest library size.
 
 # Check the number of reads per sample: all samples should have the same depth
 sample_sums(otu_table_rarefy)
 
 # How many OTUs remained after rarefaction? OTUs that are no longer present in
 # any sample are removed automatically by rarefy_even_depth().
-ntaxa(otu_BLAST_clean)  # 8056 OTUs
-ntaxa(otu_table_rarefy) # 7672 OTUs
+ntaxa(otu_BLAST_clean)  # 9036 OTUs
+ntaxa(otu_table_rarefy) # 5116 OTUs
 
 # Was any sample discarded?
-nsamples(otu_BLAST_clean) - nsamples(otu_table_rarefy) # 0 samples
+nsamples(otu_BLAST_clean) - nsamples(otu_table_rarefy) # 2 samples
 
 # How many reads remain in the dataset, and what percentage of the reads is it?
-sum(sample_sums(otu_table_rarefy)) # 2219670 reads
-sum(sample_sums(otu_table_rarefy)) / sum(sample_sums(otu_BLAST_clean)) * 100 # 17.7%
+sum(sample_sums(otu_table_rarefy)) # 87957 reads
+sum(sample_sums(otu_table_rarefy)) / sum(sample_sums(otu_BLAST_clean)) * 100 # 24.4%
 
-# Rarefying leads to the loss of many reads (here, more than 80% of the reads),
+# Rarefying leads to the loss of many reads (here, ~75% of the reads),
 # because it discards data from the samples with a high sequencing depth. For
 # alpha diversity, an alternative is to extrapolate diversity based on the
 # accumulation of OTUs with increasing numbers of reads (see
@@ -250,7 +253,7 @@ p_libsize <- ggplot(meta, aes(x = SiteID, y = library_size)) +
   geom_boxplot() +
   theme_bw()
 p_libsize
-ggsave("figures/006_library_size_per_site.png", p_libsize, width = 7, height = 5)
+ggsave("figures/ITS/006_library_size_per_site.png", p_libsize, width = 7, height = 5)
 
 # Test for homogeneity of variances
 bartlett.test(library_size ~ SiteID, data = meta)
@@ -258,10 +261,18 @@ bartlett.test(library_size ~ SiteID, data = meta)
 # Test for analysis of variance
 kruskal.test(library_size ~ SiteID, data = meta)
 
-# These results show that each group contain equal variance and their mean are
-# not different. In addition, we previously found that sequencing depth is
-# sufficient (>1000 reads per sample), which means that other compositional
-# methods for normalization would be better suited than rarefaction.
+# These results show that the library sizes differ between sites, both in
+# their variance (Bartlett test, p = 0.006) and in their median (Kruskal-Wallis
+# test, p = 0.006): e.g., the samples of Oak_44 and Oak_54 have more reads than
+# those of the agricultural sites. Because the number of OTUs depends on the
+# number of reads, differences in library size between sites could be mistaken
+# for differences in diversity. In this case, it is important to either rarefy
+# the data, or to check that the results do not depend on library size (see
+# "Check for library size effects" below).
+
+# If the library sizes were balanced between groups and sufficient in all
+# samples, other compositional methods for normalization would be better suited
+# than rarefaction, as they do not discard any reads.
 
 
 # Other standardization methods ------------------------------------------------
@@ -389,6 +400,24 @@ otu_table(otu_table_rclr) <- otu_table(mat_rclr, taxa_are_rows = taxa_rows)
 # contain negative values.
 
 
+## Use the same samples for all methods ####
+
+# The rarefied data no longer contain the two samples with a low library size,
+# whereas the transformed data still contain them. To compare the methods, all
+# OTU tables must contain the same samples: remove these two samples from the
+# transformed data too.
+keep_samples <- sample_names(otu_table_rarefy)
+
+otu_table_rel  <- prune_samples(keep_samples, otu_table_rel)
+otu_table_hel  <- prune_samples(keep_samples, otu_table_hel)
+otu_table_rclr <- prune_samples(keep_samples, otu_table_rclr)
+
+# Note: the transformations are calculated for each sample separately, so
+# removing samples afterwards does not change the values of the other samples.
+# The only exception is the zero imputation of the RCLR transformation, which
+# uses the whole table; the effect of the two removed samples is negligible.
+
+
 ## Calculate the distance matrices ####
 
 # phyloseq::distance() calculates a distance matrix between samples from a
@@ -485,7 +514,7 @@ p_rclr <- plot_nmds(otu_table_rclr,   nmds_rclr, "RCLR + Euclidean (robust Aitch
 p_nmds_all <- ggarrange(p_rare, p_rel, p_hel, p_rclr,
                         ncol = 2, nrow = 2, common.legend = TRUE, legend = "right")
 p_nmds_all
-ggsave("figures/006_nmds_normalization_methods.png", p_nmds_all,
+ggsave("figures/ITS/006_nmds_normalization_methods.png", p_nmds_all,
        width = 11, height = 9, bg = "white")
 
 # When comparing the plots, keep in mind that the orientation of NMDS axes is
@@ -529,10 +558,12 @@ round(mantel_r, 2)
 # dominated by the most abundant taxa.
 
 # In this example, the rarefied, relative abundance and Hellinger distances are
-# almost identical (r >= 0.99), and the four NMDS plots show a similar overall
+# almost identical (r >= 0.97), and the four NMDS plots show a similar overall
 # pattern: the agricultural sites and the grassland separate from the oak
-# forests. The RCLR distances are less correlated with the others (r ~ 0.8),
-# and the separation between the oak forest sites looks different.
+# forests. The RCLR distances are less correlated with the others (r ~ 0.6):
+# with RCLR, the grassland separates more strongly from the agricultural sites,
+# whereas the old oak forest (Oak_ref) is less distinct from the other oak
+# forests. Note also the much lower stress of the RCLR ordination.
 
 
 ## Check for library size effects ####
@@ -547,8 +578,10 @@ round(mantel_r, 2)
 # each method has removed the effect of sequencing depth. Library sizes are
 # log-transformed because they vary over an order of magnitude.
 
-# Library sizes are in the same sample order as the ordinations
-log_lib <- data.frame(log_library_size = log10(sample_sums(otu_BLAST_clean)))
+# Original library sizes of the samples used in the ordinations, in the same
+# sample order as the ordinations
+log_lib <- data.frame(
+  log_library_size = log10(sample_sums(otu_BLAST_clean)[keep_samples]))
 
 ord_list <- list(Rarefied  = nmds_rare,
                  RelAbund  = nmds_rel,
@@ -568,12 +601,16 @@ round(lib_fit, 3)
 # using rarefied data. Note: if library size differs between groups (which we
 # tested above), its effect cannot be separated from the effect of the groups.
 
-# In this example, library size has no significant effect on the rarefied,
-# relative abundance and Hellinger ordinations (r2 < 0.03), but it explains
-# about 14% of the variation in the RCLR ordination (p < 0.01). A likely reason
-# is that deeper sequenced samples detect more rare taxa (fewer zeros), and the
-# RCLR transformation gives more weight to rare taxa. This shows why it is
-# important to check for library size effects when the data are not rarefied.
+# In this example, library size has no significant effect on the rarefied
+# ordination (r2 = 0.07, p > 0.05), but it explains a small and significant
+# part of the variation in the relative abundance, Hellinger and RCLR
+# ordinations (r2 = 0.07 to 0.11, p < 0.05). A likely reason is that deeper
+# sequenced samples detect more rare taxa (fewer zeros), which affects the
+# transformations that do not discard reads. However, we saw above that library
+# sizes also differ between sites: part of this effect may be due to the sites
+# themselves. This shows why it is important to check for library size effects
+# when the data are not rarefied. With the low and uneven sequencing depth of
+# this ITS dataset, rarefied data are a safe choice.
 
 # For a visual check, the ordinations can also be coloured by library size:
 sample_data(otu_table_rclr)$log_library_size <- log_lib$log_library_size
@@ -583,7 +620,7 @@ p_rclr_libsize <- plot_ordination(otu_table_rclr, nmds_rclr, color = "log_librar
   labs(title = "RCLR + Euclidean, coloured by library size") +
   theme_bw()
 p_rclr_libsize
-ggsave("figures/006_nmds_rclr_library_size.png", p_rclr_libsize, width = 7, height = 5)
+ggsave("figures/ITS/006_nmds_rclr_library_size.png", p_rclr_libsize, width = 7, height = 5)
 
 
 

@@ -14,6 +14,9 @@ setwd("some_folder_path/my_working_directory")
 # Load packages and homemade functions
 source("scripts/001_required_packages.R")
 
+# The figures of the ITS scripts are saved in a separate folder
+dir.create("figures/ITS", showWarnings = FALSE)
+
 # Load the cleaned OTU table from previous scripts
 load("RData/16S/otu_BLAST_clean.RData")
 
@@ -110,7 +113,7 @@ p_inext <- ggiNEXT(inext_res, type = 1, facet.var = "Order.q", grey = TRUE) +
   geom_vline(xintercept = rare_depth) +
   theme(legend.position = "none")
 p_inext
-ggsave("figures/010_inext_curves.png", p_inext, width = 12, height = 5)
+ggsave("figures/ITS/010_inext_curves.png", p_inext, width = 12, height = 5)
 
 # For Shannon and Simpson diversity (q = 1 and q = 2), the curves reach a
 # plateau before the rarefaction depth: the rarefied data capture the diversity
@@ -177,7 +180,7 @@ p_rare_vs_est <- ggplot(SR, aes(x = SRrare, y = Estimator)) +
        subtitle = paste("R2 =", round(r2, 3))) +
   theme_bw()
 p_rare_vs_est
-ggsave("figures/010_richness_rarefied_vs_estimated.png", p_rare_vs_est,
+ggsave("figures/ITS/010_richness_rarefied_vs_estimated.png", p_rare_vs_est,
        width = 6, height = 5)
 
 # Both measures are correlated. This is good, because we can use one or the
@@ -275,14 +278,14 @@ p2 <- ggplot(SR, aes(x = SiteID, y = Estimator)) +
         axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
 
 p1
-ggsave("figures/010_richness_rarefied_per_site.png", p1, width = 8, height = 5)
+ggsave("figures/ITS/010_richness_rarefied_per_site.png", p1, width = 8, height = 5)
 p2
-ggsave("figures/010_richness_estimated_per_site.png", p2, width = 8, height = 5)
+ggsave("figures/ITS/010_richness_estimated_per_site.png", p2, width = 8, height = 5)
 
 # Plot both side by side
 p_richness_sites <- ggarrange(p1, p2, nrow = 1, common.legend = TRUE, legend = "bottom")
 p_richness_sites
-ggsave("figures/010_richness_rarefied_vs_estimated_per_site.png", p_richness_sites,
+ggsave("figures/ITS/010_richness_rarefied_vs_estimated_per_site.png", p_richness_sites,
        width = 12, height = 6, bg = "white")
 
 # Compare the letters of both plots. The results are slightly different: be

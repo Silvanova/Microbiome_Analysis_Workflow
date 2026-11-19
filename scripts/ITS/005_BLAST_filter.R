@@ -12,6 +12,9 @@ setwd("some_folder_path/my_working_directory")
 # Load packages and homemade functions
 source("scripts/001_required_packages.R")
 
+# The figures of the ITS scripts are saved in a separate folder
+dir.create("figures/ITS", showWarnings = FALSE)
+
 # Load the cleaned OTU table from previous scripts
 load("RData/ITS/otu_rare_clean.RData")
 
@@ -100,7 +103,7 @@ p_unknown <- ggplot(unknown_prop, aes(x = SiteID, y = prop_unknown)) +
   labs(x = "Site", y = "Reads of OTUs with uncertain BLAST matches (%)") +
   theme_bw()
 p_unknown
-ggsave("figures/005_BLAST_unknown_otus.png", p_unknown, width = 7, height = 5)
+ggsave("figures/ITS/005_BLAST_unknown_otus.png", p_unknown, width = 7, height = 5)
 
 # In all samples, these OTUs represent a small proportion of the reads (less
 # than 5%).

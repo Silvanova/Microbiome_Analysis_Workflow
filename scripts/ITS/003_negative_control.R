@@ -12,6 +12,9 @@ setwd("some_folder_path/my_working_directory")
 # Load packages
 source("scripts/001_required_packages.R")
 
+# The figures of the ITS scripts are saved in a separate folder
+dir.create("figures/ITS", showWarnings = FALSE)
+
 # Load files
 load("RData/ITS/otu_table_raw.RData")
 
@@ -36,13 +39,13 @@ p_libsize
 
 # Save the plot in the figures folder. ggsave() saves a ggplot object; the file
 # type is given by the extension (.png, .pdf, ...) and the size is in inches.
-ggsave("figures/003_neg_library_size.png", p_libsize, width = 7, height = 5)
+ggsave("figures/ITS/003_neg_library_size.png", p_libsize, width = 7, height = 5)
 
 # Zoom in on the lower part of the plot
 p_libsize_zoom <- ggplot(data = seq_depth, aes(x = Index, y = LibrarySize, color = sample_type)) +
   geom_point() + ylim(0,2000) + xlim(0,12)
 p_libsize_zoom
-ggsave("figures/003_neg_library_size_zoom.png", p_libsize_zoom, width = 7, height = 5)
+ggsave("figures/ITS/003_neg_library_size_zoom.png", p_libsize_zoom, width = 7, height = 5)
 
 # We can see that, compared to the rest of the samples, all controls have a
 # small library size. The negative controls contain very few reads (1 to 19
@@ -72,7 +75,7 @@ p_low_depth_pcoa <- otu_table_raw %>%
   ord_plot(color = "SiteID", shape = "low_depth", auto_caption = NA) +
   stat_ellipse(aes(colour = SiteID))
 p_low_depth_pcoa
-ggsave("figures/003_neg_low_depth_sample_pcoa.png", p_low_depth_pcoa, width = 7, height = 5)
+ggsave("figures/ITS/003_neg_low_depth_sample_pcoa.png", p_low_depth_pcoa, width = 7, height = 5)
 
 # These samples (shown with triangles) are located among the other samples of
 # their site (Oak_20 and Oak_33) and the other oak forests. Their community
@@ -107,7 +110,7 @@ otu_table.pa <- data.frame(pa.sam = taxa_sums(otu_table.pa.sam),
 p_prev <- ggplot(data=otu_table.pa, aes(x=pa.neg, y=pa.sam)) + geom_point() +
   xlab("Prevalence (Negative Controls)") + ylab("Prevalence (True Samples)")
 p_prev
-ggsave("figures/003_neg_prevalence_controls_vs_samples.png", p_prev, width = 7, height = 5)
+ggsave("figures/ITS/003_neg_prevalence_controls_vs_samples.png", p_prev, width = 7, height = 5)
 # 37 OTUs are present in at least one negative control
 # ('Prevalence (Negative Controls)' >= 1). Most of them are present in only
 # one control, but in many true samples.
@@ -128,7 +131,7 @@ otu_table_neg <- prune_taxa(otu_neg, otu_table_rel)
 p_neg_rel <- plot_bar(otu_table_neg, fill = "phylum") +
   facet_grid(~sample_type, scales = "free", space = "free")
 p_neg_rel
-ggsave("figures/003_neg_control_otus_relative_abundance.png", p_neg_rel,
+ggsave("figures/ITS/003_neg_control_otus_relative_abundance.png", p_neg_rel,
        width = 12, height = 6)
 
 # A commonly recommended practice with negative controls is to remove any
@@ -150,7 +153,7 @@ otu_table_neg <- prune_taxa(otu_neg, otu_table_raw.noPos)
 p_neg_counts <- plot_bar(otu_table_neg, fill = "phylum") +
   facet_grid(~sample_type, scales = "free", space = "free")
 p_neg_counts
-ggsave("figures/003_neg_control_otus_counts.png", p_neg_counts,
+ggsave("figures/ITS/003_neg_control_otus_counts.png", p_neg_counts,
        width = 12, height = 6)
 
 # Here we can see that the abundance of these OTUs in the negative controls
@@ -204,7 +207,7 @@ otu_table.pa <- mutate(otu_table.pa,
 p_prev_contam <- ggplot(data=otu_table.pa, aes(x=pa.neg, y=pa.sam, color=contaminant)) + geom_point() +
   xlab("Prevalence (Negative Controls)") + ylab("Prevalence (True Samples)")
 p_prev_contam
-ggsave("figures/003_neg_prevalence_contaminants.png", p_prev_contam, width = 7, height = 5)
+ggsave("figures/ITS/003_neg_prevalence_contaminants.png", p_prev_contam, width = 7, height = 5)
 
 # The negative controls contain so few reads that every OTU is present in at
 # most 2 controls. With the threshold of 0.5, decontam also flags OTUs that are
@@ -247,7 +250,7 @@ p_contam <- plot_bar(otu_table_contam, fill = "OTU") +
   facet_grid(~sample_type, scales = "free", space = "free") +
   theme(legend.position = "none")
 p_contam
-ggsave("figures/003_neg_contaminants_relative_abundance.png", p_contam,
+ggsave("figures/ITS/003_neg_contaminants_relative_abundance.png", p_contam,
        width = 12, height = 6)
 
 # These OTUs make up a large part of the reads in the negative controls, and a
