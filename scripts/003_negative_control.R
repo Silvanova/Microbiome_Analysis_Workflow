@@ -30,12 +30,19 @@ seq_depth <- cbind.data.frame(sample_data(otu_table_raw)) %>%
   arrange(LibrarySize) %>% mutate(Index = row_number())
 
 # Visualize LibrarySize as a function of Index
-ggplot(data = seq_depth, aes(x = Index, y = LibrarySize, color = sample_type)) +
+p_libsize <- ggplot(data = seq_depth, aes(x = Index, y = LibrarySize, color = sample_type)) +
   geom_point()
+p_libsize
+
+# Save the plot in the figures folder. ggsave() saves a ggplot object; the file
+# type is given by the extension (.png, .pdf, ...) and the size is in inches.
+ggsave("figures/003_neg_library_size.png", p_libsize, width = 7, height = 5)
 
 # Zoom in on the lower part of the plot
-ggplot(data = seq_depth, aes(x = Index, y = LibrarySize, color = sample_type)) +
+p_libsize_zoom <- ggplot(data = seq_depth, aes(x = Index, y = LibrarySize, color = sample_type)) +
   geom_point() + ylim(0,27000) + xlim(0,11)
+p_libsize_zoom
+ggsave("figures/003_neg_library_size_zoom.png", p_libsize_zoom, width = 7, height = 5)
 
 # We can see that, compared to the rest of the samples, all controls have a
 # small library size. Nevertheless, all negative controls have a library size
@@ -56,12 +63,14 @@ subset(seq_depth, sample_type == "sample" & LibrarySize < 10000)
 sample_data(otu_table_raw)$low_depth <- sample_data(otu_table_raw)$Soil_ID=="X29239"
 
 # Plot an ordination of all samples to compare the low seq sample to replicates
-otu_table_raw %>%
+p_low_depth_pcoa <- otu_table_raw %>%
   tax_transform("identity", rank = "taxa_OTU") %>%
   dist_calc("aitchison") %>%
   ord_calc("PCoA") %>%
   ord_plot(color = "SiteID", shape = "low_depth", auto_caption = NA) +
   stat_ellipse(aes(colour = SiteID))
+p_low_depth_pcoa
+ggsave("figures/003_neg_low_depth_sample_pcoa.png", p_low_depth_pcoa, width = 7, height = 5)
 
 # This sample (shown with a triangle) is located far away from samples of the
 # same site (Oak_51, in light blue), and close to the controls (NA, in gray)
@@ -89,8 +98,10 @@ otu_table.pa <- data.frame(pa.sam = taxa_sums(otu_table.pa.sam),
                            pa.neg = taxa_sums(otu_table.pa.neg))
 
 # Plot the prevalence of OTU in negative controls vs true samples
-ggplot(data=otu_table.pa, aes(x=pa.neg, y=pa.sam)) + geom_point() +
+p_prev <- ggplot(data=otu_table.pa, aes(x=pa.neg, y=pa.sam)) + geom_point() +
   xlab("Prevalence (Negative Controls)") + ylab("Prevalence (True Samples)")
+p_prev
+ggsave("figures/003_neg_prevalence_controls_vs_samples.png", p_prev, width = 7, height = 5)
 # Many OTUs are present in at least one negative control
 # ('Prevalence (Negative Controls)' >= 1).
 
@@ -107,8 +118,11 @@ otu_neg <- filter(otu_table.pa, pa.neg > 0) %>% rownames()
 otu_table_neg <- prune_taxa(otu_neg, otu_table_rel)
 
 # Visualize the abundance of these OTUs in all samples
-plot_bar(otu_table_neg, fill = "phylum") +
+p_neg_rel <- plot_bar(otu_table_neg, fill = "phylum") +
   facet_grid(~sample_type, scales = "free", space = "free")
+p_neg_rel
+ggsave("figures/003_neg_control_otus_relative_abundance.png", p_neg_rel,
+       width = 12, height = 6)
 
 # A commonly recommended practice with negative controls is to remove any
 # OTU found in negative controls from the rest of the data set. However, as
@@ -125,8 +139,11 @@ plot_bar(otu_table_neg, fill = "phylum") +
 otu_table_neg <- prune_taxa(otu_neg, otu_table_raw.noPos)
 
 # Visualize the abundance of these OTUs in all samples
-plot_bar(otu_table_neg, fill = "phylum") +
+p_neg_counts <- plot_bar(otu_table_neg, fill = "phylum") +
   facet_grid(~sample_type, scales = "free", space = "free")
+p_neg_counts
+ggsave("figures/003_neg_control_otus_counts.png", p_neg_counts,
+       width = 12, height = 6)
 
 # Here we can see that the abundance of these contaminants in the
 # negative controls is very small compared to true samples.
@@ -171,8 +188,10 @@ table(contam.prev$contaminant)
 otu_table.pa <- mutate(otu_table.pa, contaminant = contam.prev$contaminant)
 
 # Plot the prevalence of OTU in negative controls vs true samples
-ggplot(data=otu_table.pa, aes(x=pa.neg, y=pa.sam, color=contaminant)) + geom_point() +
+p_prev_contam <- ggplot(data=otu_table.pa, aes(x=pa.neg, y=pa.sam, color=contaminant)) + geom_point() +
   xlab("Prevalence (Negative Controls)") + ylab("Prevalence (True Samples)")
+p_prev_contam
+ggsave("figures/003_neg_prevalence_contaminants.png", p_prev_contam, width = 7, height = 5)
 # The method identified OTUs that were mostly present in negative controls
 # and few true samples
 
@@ -181,9 +200,12 @@ contaminants <- filter(contam.prev, contaminant == TRUE) %>% rownames()
 otu_table_contam <- prune_taxa(contaminants, otu_table_rel)
 
 # Visualize the abundance of these OTUs in all samples
-plot_bar(otu_table_contam, fill = "OTU") +
+p_contam <- plot_bar(otu_table_contam, fill = "OTU") +
   facet_grid(~sample_type, scales = "free", space = "free") +
   theme(legend.position = "none")
+p_contam
+ggsave("figures/003_neg_contaminants_relative_abundance.png", p_contam,
+       width = 12, height = 6)
 
 # After inspection of these OTUs, it is safe to consider them as contaminants
 # and remove them from the data set. The other OTUs present in the negative

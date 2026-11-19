@@ -77,7 +77,9 @@ otu_BLAST_assign <- setdiff(BLAST_unknown[["taxa_OTU"]], otu_BLAST_remove)
 otu_table_BLAST_remove <- prune_taxa(otu_BLAST_remove, otu_BLAST_filter)
 
 # Visualize the abundance and prevalence of these OTUs across samples
-plot_bar(otu_table_BLAST_remove, fill = "OTU")
+p_BLAST_remove <- plot_bar(otu_table_BLAST_remove, fill = "OTU")
+p_BLAST_remove
+ggsave("figures/005_BLAST_removed_otus.png", p_BLAST_remove, width = 12, height = 6)
 
 # All OTUs identified are both scarce (low prevalence) and rare (low abundance),
 # thus they can be removed.

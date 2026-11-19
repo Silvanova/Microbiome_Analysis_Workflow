@@ -68,6 +68,12 @@ if (!require("dplyr", quietly = TRUE))
   install.packages("dplyr")
 library(dplyr) # always load dplyr last to avoid conflicts between packages
 
+# Figures folder ---------------------------------------------------------------
+
+# All scripts save their figures in the folder "figures" of the working
+# directory. Create it if it does not exist yet.
+dir.create("figures", showWarnings = FALSE)
+
 # Homemade functions -----------------------------------------------------------
 
 # Remove taxa from phyloseq objects
