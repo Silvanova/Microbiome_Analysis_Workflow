@@ -25,7 +25,7 @@ This section documents how to apply either method to your data and in which case
 #| layout: [[-10,40,-5,35,-10]]
 #| echo: false
 download_file(
-  path = "../scripts/006_normalization.R",
+  path = "../scripts/ITS/006_normalization.R",
   output_name = "006_normalization",
   button_label = "Download normalization script",
   button_type = "success",

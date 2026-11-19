@@ -24,7 +24,7 @@ load("../RData/16S/otu_BLAST_clean.RData")
 #| layout: [[-10,35,-5,40,-10]]
 #| echo: false
 download_file(
-  path = "../scripts/010_alpha_diversity.R",
+  path = "../scripts/ITS/010_alpha_diversity.R",
   output_name = "010_alpha_diversity",
   button_label = "Download script",
   button_type = "success",
