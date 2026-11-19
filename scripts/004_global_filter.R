@@ -145,13 +145,17 @@ seq_depth_all <- seq_depth_raw %>% rbind(seq_depth_single) %>%
 #### Effect on LibrarySize ####
 
 # Plot the library size of all samples
-ggplot(data = seq_depth_all, aes(x = Index, y = LibrarySize, color = seq_depth)) +
+p_libsize <- ggplot(data = seq_depth_all, aes(x = Index, y = LibrarySize, color = seq_depth)) +
   geom_point() + geom_line()
+p_libsize
+ggsave("figures/004_filter_library_size.png", p_libsize, width = 7, height = 5)
 
 # Zoom in on the large library size part
-seq_depth_all %>% filter(Index > 85) %>%
+p_libsize_zoom <- seq_depth_all %>% filter(Index > 85) %>%
   ggplot(aes(x = Index, y = LibrarySize, color = seq_depth)) +
   geom_point() + geom_line()
+p_libsize_zoom
+ggsave("figures/004_filter_library_size_zoom.png", p_libsize_zoom, width = 7, height = 5)
 
 # With this analysis, we can see that the first filtering step (singletons)
 # does not affect LibrarySize, as the points completely overlap (purple vs pink).
@@ -165,8 +169,10 @@ seq_depth_all %>% filter(Index > 85) %>%
 # of filtering on OTU richness.
 
 # Plot the OTU richness of all samples
-ggplot(data = seq_depth_all, aes(x = Index, y = Observed, color = seq_depth)) +
+p_richness <- ggplot(data = seq_depth_all, aes(x = Index, y = Observed, color = seq_depth)) +
   geom_point() + geom_line()
+p_richness
+ggsave("figures/004_filter_richness.png", p_richness, width = 7, height = 5)
 
 # This plot shows that these different filtering thresholds return the same
 # pattern of OTU richness as a function of library size.
@@ -233,15 +239,19 @@ beta_div_rare10 <- otu_table_rare10 %>%
   stat_ellipse(aes(colour = Land_use))
 
 # Visualize all plots together
-ggarrange(beta_div_raw, beta_div_single, beta_div_rare005, beta_div_rare01,
-          beta_div_rare05, beta_div_rare1, beta_div_rare10,
-          labels = c(
-            "Non-filtered (22046 OTUs)", "Singletons (21632 OTUs)",
-            "0.005% (<7 reads; 8064 OTUs)", "0.01% (<14 reads; 6183 OTUs)",
-            "0.05% (<70 reads; 3467 OTUs)", "0.1% (<140 reads; 2710 OTUs)",
-            "1% (<1399 reads; 979 OTUs)"),
-          ncol = 3, nrow = 3, common.legend = TRUE,
-          hjust = 0, label.x = 0.2, font.label = list(size = 10))
+p_beta_div_all <- ggarrange(
+  beta_div_raw, beta_div_single, beta_div_rare005, beta_div_rare01,
+  beta_div_rare05, beta_div_rare1, beta_div_rare10,
+  labels = c(
+    "Non-filtered (22046 OTUs)", "Singletons (21632 OTUs)",
+    "0.005% (<7 reads; 8064 OTUs)", "0.01% (<14 reads; 6183 OTUs)",
+    "0.05% (<70 reads; 3467 OTUs)", "0.1% (<140 reads; 2710 OTUs)",
+    "1% (<1399 reads; 979 OTUs)"),
+  ncol = 3, nrow = 3, common.legend = TRUE,
+  hjust = 0, label.x = 0.2, font.label = list(size = 10))
+p_beta_div_all
+ggsave("figures/004_filter_thresholds_pcoa.png", p_beta_div_all,
+       width = 14, height = 14, bg = "white")
 
 # With this analysis, we can see that removing rare OTUs reduces the variance
 # within treatment a little bit, but does not affect overall patterns.

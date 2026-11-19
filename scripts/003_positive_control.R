@@ -37,8 +37,11 @@ otu_pos <- filter(table.pa.pos, pa.pos > 0) %>% rownames()
 otu_table_pos <- prune_taxa(otu_pos, otu_table.rel)
 
 # Visualize the abundance of these OTUs in all samples
-plot_bar(otu_table_pos, fill = "kingdom") +
+p_pos_otus <- plot_bar(otu_table_pos, fill = "kingdom") +
   facet_grid(~sample_type, scales = "free", space = "free")
+p_pos_otus
+ggsave("figures/003_pos_control_otus_relative_abundance.png", p_pos_otus,
+       width = 12, height = 6)
 
 ## Compare community profiles ####
 
@@ -50,7 +53,9 @@ otu_table.rel.pos <- prune_samples(
   sample_data(otu_table.rel)$sample_type == "positive control", otu_table.rel)
 
 # Visualize the community profiles of these samples
-plot_bar(otu_table.rel.pos, fill = "kingdom")
+p_pos_profiles <- plot_bar(otu_table.rel.pos, fill = "kingdom")
+p_pos_profiles
+ggsave("figures/003_pos_control_profiles.png", p_pos_profiles, width = 7, height = 5)
 
 # Clean and save OTU table -----------------------------------------------------
 

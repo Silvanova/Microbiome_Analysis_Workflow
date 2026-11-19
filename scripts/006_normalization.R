@@ -39,6 +39,14 @@ if (taxa_are_rows(otu_BLAST_clean)) otu_mat <- t(otu_mat)
 
 rarecurve(otu_mat, step = 100, label = FALSE)
 
+# rarecurve() draws a base R plot, not a ggplot, so it cannot be saved with
+# ggsave(). Instead, open a png file, draw the plot into it, and close the file
+# with dev.off().
+png("figures/006_rarefaction_curves.png", width = 7, height = 5,
+    units = "in", res = 300)
+rarecurve(otu_mat, step = 100, label = FALSE)
+dev.off()
+
 # What is the smallest library size across samples? Is it sufficient?
 min(sample_sums(otu_BLAST_clean))
 
@@ -66,9 +74,11 @@ meta <- as(sample_data(otu_BLAST_clean), "data.frame")
 meta$library_size <- sample_sums(otu_BLAST_clean)
 
 # Plot results
-ggplot(meta, aes(x = SiteID, y = library_size)) +
+p_libsize <- ggplot(meta, aes(x = SiteID, y = library_size)) +
   geom_boxplot() +
   theme_bw()
+p_libsize
+ggsave("figures/006_library_size_per_site.png", p_libsize, width = 7, height = 5)
 
 # Test for homogeneity of variances
 bartlett.test(library_size ~ SiteID, data = meta)
@@ -300,8 +310,11 @@ p_rel  <- plot_nmds(otu_table_rel,    nmds_rel,  "Relative abundance + Bray-Curt
 p_hel  <- plot_nmds(otu_table_hel,    nmds_hel,  "Hellinger + Euclidean")
 p_rclr <- plot_nmds(otu_table_rclr,   nmds_rclr, "RCLR + Euclidean (robust Aitchison)")
 
-ggarrange(p_rare, p_rel, p_hel, p_rclr,
-          ncol = 2, nrow = 2, common.legend = TRUE, legend = "right")
+p_nmds_all <- ggarrange(p_rare, p_rel, p_hel, p_rclr,
+                        ncol = 2, nrow = 2, common.legend = TRUE, legend = "right")
+p_nmds_all
+ggsave("figures/006_nmds_normalization_methods.png", p_nmds_all,
+       width = 11, height = 9, bg = "white")
 
 # When comparing the plots, keep in mind that the orientation of NMDS axes is
 # arbitrary: an ordination can be rotated or mirrored without changing its
@@ -392,11 +405,13 @@ round(lib_fit, 3)
 
 # For a visual check, the ordinations can also be coloured by library size:
 sample_data(otu_table_rclr)$log_library_size <- log_lib$log_library_size
-plot_ordination(otu_table_rclr, nmds_rclr, color = "log_library_size") +
+p_rclr_libsize <- plot_ordination(otu_table_rclr, nmds_rclr, color = "log_library_size") +
   geom_point(size = 2) +
   scale_color_viridis_c() +
   labs(title = "RCLR + Euclidean, coloured by library size") +
   theme_bw()
+p_rclr_libsize
+ggsave("figures/006_nmds_rclr_library_size.png", p_rclr_libsize, width = 7, height = 5)
 
 
 
