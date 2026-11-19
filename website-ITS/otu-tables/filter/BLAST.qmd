@@ -56,14 +56,14 @@ library(dplyr)
 library(phyloseq)
 library(ggplot2)
 library(DT)
-load("../../RData/16S/otu_rare_clean.RData")
+load("../../../RData/16S/otu_rare_clean.RData")
 ```
 
 ```{r}
 #| layout: [[-10,35,-5,40,-10]]
 #| echo: false
 download_file(
-  path = "../../scripts/ITS/005_BLAST_filter.R",
+  path = "../../../scripts/ITS/005_BLAST_filter.R",
   output_name = "005_BLAST_filter",
   button_label = "Download script",
   button_type = "success",
@@ -73,7 +73,7 @@ download_file(
 )
 
 download_file(
-  path = "../../RData/16S/otu_rare_clean.RData",
+  path = "../../../RData/16S/otu_rare_clean.RData",
   output_name = "otu_rare_clean",
   button_label = "Download example RData",
   button_type = "success",

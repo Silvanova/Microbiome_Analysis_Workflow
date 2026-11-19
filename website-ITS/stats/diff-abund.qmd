@@ -15,7 +15,7 @@ library(downloadthis)
 ```{r}
 #| echo: false
 download_file(
-  path = "../scripts/030_diff_abund.R",
+  path = "../../scripts/030_diff_abund.R",
   output_name = "030_diff_abund",
   button_label = "Download script",
   button_type = "success",

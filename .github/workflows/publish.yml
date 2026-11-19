@@ -46,5 +46,7 @@ jobs:
         uses: quarto-dev/quarto-actions/publish@v2
         with:
           target: gh-pages
+          # Only the ITS website (folder website-ITS) is published
+          path: website-ITS
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

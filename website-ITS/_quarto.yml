@@ -1,3 +1,6 @@
+# ITS version of the website (the one published for the course).
+# Render from this folder: quarto render  (output in website-ITS/_site)
+
 project:
   type: website
   render:
@@ -8,7 +11,6 @@ project:
     - otu-tables/**/*.qmd
     - stats.qmd
     - stats/**/*.qmd
-    - 16S/**/*.qmd
 
 format:
   html:
@@ -44,15 +46,6 @@ website:
 
       - text: "Statistical Analyses"
         href: stats.qmd
-
-      - text: "16S version (archive)"
-        menu:
-          - text: "Get started"
-            href: 16S/get-started.qmd
-          - text: "Handling OTU tables"
-            href: 16S/otu-tables.qmd
-          - text: "Statistical Analyses"
-            href: 16S/stats.qmd
 
 # TABS IN SIDEBAR
 
@@ -115,47 +108,3 @@ website:
             file: stats/beta-div.qmd
           - text: "Differential abundance"
             file: stats/diff-abund.qmd
-
-
-    - title: "16S version (archive)"
-      contents:
-        - section: "Get started (16S)"
-          file: 16S/get-started.qmd
-          contents:
-            - text: "Install R and packages"
-              file: 16S/get-started/install.qmd
-            - text: "Data preparation"
-              file: 16S/get-started/data-prep.qmd
-
-        - section: "Handling OTU tables (16S)"
-          file: 16S/otu-tables.qmd
-          contents:
-
-          - section: "Dealing with controls"
-            file: 16S/otu-tables/controls.qmd
-            contents:
-            - text: "Positive controls"
-              file: 16S/otu-tables/controls-positive.qmd
-            - text: "Negative controls"
-              file: 16S/otu-tables/controls-negative.qmd
-
-          - section: "Filtering OTU tables"
-            file: 16S/otu-tables/filter.qmd
-            contents:
-            - text: "Global filtering"
-              file: 16S/otu-tables/filter/global.qmd
-            - text: "BLAST quality check"
-              file: 16S/otu-tables/filter/BLAST.qmd
-
-          - text: "Rarefaction & Normalization"
-            file: 16S/otu-tables/rare-norm.qmd
-
-        - section: "Statistical Analyses (16S)"
-          file: 16S/stats.qmd
-          contents:
-          - text: "Alpha diversity"
-            file: 16S/stats/alpha-div.qmd
-          - text: "Beta diversity"
-            file: 16S/stats/beta-div.qmd
-          - text: "Differential abundance"
-            file: 16S/stats/diff-abund.qmd
