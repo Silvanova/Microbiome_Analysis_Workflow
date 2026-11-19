@@ -1,0 +1,80 @@
+---
+title: "Filtering OTU tables"
+format: html
+editor: visual
+bibliography: references.bib
+---
+
+This section presents three important ways of cleaning the OTU tables:
+
+- First, by doing a simple taxonomy filtering, to keep only relevant taxonomic assignations.
+- Then, by going through a global filtering to remove singletons, rare or scarce OTUs, which are most often artifacts [@sgarbi2020; @nikodemova2023; @brown2015]. These also usually coincide with the OTUs with lowest BLAST accuracy [@tedersoo2022].
+- Finally, by filtering based on BLAST quality thresholds, and cleaning the taxonomic assignations.
+
+The two downloadable scripts below (`004_global_filter.R` and `005_BLAST_filter.R`) implement a standard approach for cleaning OTU tables based on taxonomy, abundance and prevalence, or based on BLAST quality, in a `phyloseq` object.
+
+```{r}
+#| echo: false
+#| output: false
+library(downloadthis)
+```
+
+```{r}
+#| layout: [[-10,30,-15,30,-10]]
+#| echo: false
+download_file(
+  path = "../../scripts/16S/004_global_filter.R",
+  output_name = "004_global_filter",
+  button_label = "Download script 004_global_filter",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+download_file(
+  path = "../../scripts/16S/005_BLAST_filter.R",
+  output_name = "005_BLAST_filter",
+  button_label = "Download script 005_BLAST_filter",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```
+
+For a step-by-step explanation of each filtering procedure, see the sections below:
+
+## [Global filtering](filter/global.qmd)
+
+A global filtering - based on taxonomic assignations, abundance of OTUs across all samples (singletons and rare features), or based on the prevalence of OTUs across samples (scarcity) - is typically applied early to remove very low-count and low-prevalence features that are disproportionately driven by sequencing/PCR error and index misassignment, thereby reducing noise and improving downstream compositional and multivariate analyses.
+
+### Taxonomy filtering
+
+This first simple step serves to target only the relevant OTUs that were targeted with each primer sets: i.e., Bacteria for 16S, Fungi for ITS and Metazoa for CO1.
+
+### Singletons and rare OTUs
+
+Singleton OTUs have been shown to be overwhelmingly composed of artefacts arising from PCR and sequencing errors, including chimeric molecules that are typically low-abundance and sample-restricted [@tedersoo2021; @sze2019]. Their removal has repeatedly been shown to have negligible effects on hypothesis-driven community comparisons while substantially reducing noise [@edgar2016; @nikodemova2023; @sgarbi2020]. On the other hand, retaining them is justifiable in studies explicitly targeting rare biosphere diversity, but requires careful manual curation [@brown2015].
+
+Rare OTUs (beyond singletons) can hardly be distinguished from artefacts, thus, low-abundance OTUs are often excluded from the analysis. However, filtering approaches vary among studies, and there is no agreed-upon consensus as to what filtering thresholds should be employed [@yu2017; @poos2012; @nikodemova2023]. Nevertheless, rare OTUs, just like singletons, often represent residual artefacts, and removing them has minimal influence on community comparisons. Thus, filtering reduces the complexity of microbiome data while preserving their integrity in downstream analysis [@edgar2016; @nikodemova2023; @sgarbi2020; @cao2021]. Although rare taxa may in some contexts carry information on beta diversity, their retention is mainly justified in studies explicitly focused on rare biosphere ecology, where careful validation is required [@brown2015].
+
+Rare OTUs are frequently removed using absolute abundance thresholds (e.g. \<5 or \<10 reads) [@edgar2016; @brown2015], or based on relative abundance thresholds (e.g. \<0.01%) [@nikodemova2023], while others filter rare OTUs based on statistical methods [@smirnova2018].
+
+### Scarce OTUs
+
+Scarce (low-prevalence) OTUs are features detected in only a small fraction of samples (\<5%). The extreme sparsity of microbiome data sets poses a major analytical challenge and is largely attributable to sequencing artefacts, contamination, and/or sequencing errors [@cao2021]. Thus, scarce OTUs are commonly filtered using simple rule-of-thumb criteria (e.g. presence in at least k samples or k% of samples), which reduces noise and improves statistical stability [@cao2021]. This criterion does not relate to the relative abundance of the OTUs, and as such, rare OTUs may be prevalent microbial taxa.
+
+In certain studies, higher thresholds for prevalence (\>25% of samples) may be used to define, for instance, the core microbiome [@simonin2020].
+
+## [BLAST quality check](filter/BLAST.qmd)
+
+Filtering based on BLAST accuracy is applied to remove OTUs with low-confidence taxonomic assignments, typically indicated by low sequence similarity (`pident`), poor alignment coverage (`qcovs`), or poor fit of the rank resolution (`evalue`) [@tedersoo2022]. Such features are frequently artefactual or biologically uninterpretable and can bias ecological inference if retained.
+
+### BLAST filtering
+
+Filtering out OTUs based on BLAST results is normally done during bioinformatic processing, but if it was not the case for your OTU table, simple filters can be used to further remove artefacts. For instance, sequences that are too short (e.g., \<250 bp, depending on primers) to be a proper amplicon, or sequences with less than 15% query coverage (`qcovs`), which are assumed to be fully synthetic [@kunjapur2018].
+
+### BLAST cleaning
+
+After filtering out any remaining potential artefacts, BLAST statistics (such as `pident` and `evalue`) can also be used to confirm taxonomic assignments. There is a lack of objective criteria (such as numerical thresholds) for taxonomic assignations of uncultured microorganisms, which are identified only by sequence data. Few studies have attempted to determine universal thresholds for each taxonomic group: some have determined some completely arbitrary rule of thumb [@tedersoo2014], and others have identified thresholds that can be applied in specific cases [@yarza2014; @vu2019; @tedersoo2021; @pappalardo2025; @ransome2017].

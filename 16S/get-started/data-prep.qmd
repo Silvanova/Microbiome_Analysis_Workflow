@@ -1,0 +1,195 @@
+---
+title: "Data preparation"
+format: html
+editor: visual
+---
+
+To get started with the data analysis, you must first ensure that the raw data is in the right format. This script shows an example on how to convert the raw data into a `phyloseq` object and produces the .RData files used in the next steps. More information about phyloseq can be found [here](https://joey711.github.io/phyloseq/).
+
+To follow the example presented on this page directly on your computer, download the script `002_data_preparation.R` and the example raw data by clicking the buttons below. Alternatively, you may copy the codes below into your own script, and use your own data.
+
+```{r}
+#| echo: false
+#| output: false
+library(downloadthis)
+library(DT)
+BLAST_raw <- read.delim("../../raw data/16S_BLAST.txt")
+```
+
+```{r}
+#| layout: [[-10,40,-5,35,-10]]
+#| echo: false
+download_file(
+  path = "../../scripts/002_data_preparation.R",
+  output_name = "002_data_preparation",
+  button_label = "Download script",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+download_dir(
+  path = "../../raw data",
+  output_name = "Silva Nova MAW raw data",
+  button_label = "Download example raw data",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```
+
+### Load auxiliary data {#auxfile}
+
+Auxiliary data files contain information about the samples and other types of environmental data. This example auxiliary data file contains site metadata and soil physicochemical analyses. Environmental data can be used in later analyses, such as db-RDA, while metadata can be used to filter samples in the `phyloseq` object.
+
+```{r}
+#| eval: false
+# Load an Excel sheet (.xlsx)
+aux <- read.xlsx("raw data/aux_data.xlsx")
+
+# Load a text file (.txt or .csv)
+aux <- read.csv("raw data/aux_data.csv")
+```
+
+### Construct a phyloseq object from BLAST results {#phyloseq}
+
+The procedure demonstrated below for 16S can be applied similarly for the other target genes (ITS and CO1). A complete procedure for each target gene can also be found in the downloadable script `002_data_preparation.R`.
+
+#### Taxonomy table
+
+Our 16S taxonomy table was generated using BLASTn search against SILVA v138.1 database [@quast2012]. Make sure your taxonomy table looks similar to this one before continuing to the next steps. The BLAST results should contain BLAST quality measures (evalue, length, qcov, pident, etc.) for each OTU, and a taxonomy assignment. In this example, the taxonomy assignment is all contained in the same column "X1st_hit" and needs to be divided into BLAST_ID, Kingdom, Phylum, Class, Order, etc. If the example shown here in R does not work with your raw file, you can try to do it in Excel (prone to errors). You may also find other example procedures to convert your raw data into a `phyloseq` object. More information about phyloseq can be found [here](https://joey711.github.io/phyloseq/https://joey711.github.io/phyloseq/).
+
+```{r}
+#| eval: false
+# Load BLAST results
+BLAST_raw <- read.delim("raw data/16S_BLAST.txt")
+
+# Verify that the data loaded properly: e.g., check that numeric value should 
+# have class numeric or integer
+summary(BLAST_raw)
+View(BLAST_raw)
+```
+
+```{r}
+#| echo: false
+truncate_cols <- c("qseqid", "query_seq", "X1st_hit")
+idx <- match(truncate_cols, names(BLAST_raw)) - 1  # DT uses 0-based indices
+
+datatable(
+  head(BLAST_raw, n=100),
+  options = list(
+    scrollX = TRUE,
+    pageLength = 5,
+    columnDefs = list(
+      list(
+        targets = idx,
+        render = JS(
+          "function(data, type, row, meta) {",
+          "  if (type !== 'display' || data === null) return data;",
+          "  data = data.toString();",
+          "  return data.length > 8 ?",
+          "    '<span title=\"' + data.replace(/\"/g, '&quot;') + '\">' + data.substr(0, 8) + '…</span>' :",
+          "    data;",
+          "}"
+        )
+      )
+    )
+  ),
+  rownames = FALSE
+)
+```
+
+To extract taxonomy from BLAST results, transform the column "X1st_hit" into multiple columns, one per taxonomy level (Kingdom, Phylum, Class, etc.), extract the BLAST ID and clean the resulting table.
+
+```{r}
+#| eval: false
+# Extract taxonomy from BLAST results
+taxonomy_raw <- BLAST_raw %>%
+  # Split columns based on delimiter (;)
+  separate_wider_delim(cols = X1st_hit, delim = ";",
+                       names = c("kingdom", "phylum", "class", "order", 
+                                 "family", "genus", "species", "x1", "x2", 
+                                 "x3", "x4", "x5", "x6", "x7", "x8", "x9", 
+                                 "x10", "x11", "x12"),
+                       too_few = "align_start") %>%
+  # Split kingdom column containing a BLAST ID, based on delimiter (space)
+  separate_wider_delim(cols = kingdom, delim = " ",
+                       names = c("BLAST_ID", "kingdom"),
+                       too_few = "align_end") %>%
+  # Filter out OTUs without significant similarity found
+  filter(kingdom != "No_significant_similarity_found" & !is.na(kingdom)) %>%
+  # Rename qseqid column to taxa_OTU
+  as.data.frame() %>% dplyr::rename(taxa_OTU = qseqid) %>%
+  # taxa_OTU names must be moved to row names
+  `row.names<-`(.$taxa_OTU) %>%
+  # Reorder columns: Make sure the largest grouping comes first (kingdom)
+  relocate(any_of(c("query_seq", "taxa_OTU", "BLAST_ID")), .after = x12)
+```
+
+#### OTU table
+
+::: callout-caution
+## Were your samples part of a larger sequencing run containing other samples?
+
+If your samples were mixed with multiple other samples in a larger library, you will need to filter your OTU table to keep only your own samples. You may then find OTUs present in none of your samples (they were present in the other samples you removed). Follow the procedure below to make sure to remove superfluous data before you proceed to the next scripts.
+:::
+
+First load your OTU table and remove samples absent from your auxiliary data. Remember to include blanks, or negative and positive controls in your auxiliary data. Before proceeding to the next steps, make sure that the sample identifiers in your auxiliary file match those in the OTU table (column names).
+
+```{r}
+#| eval: false
+# Load OTU table
+otu_table_raw <- read.delim("raw data/16S_table.txt")
+
+# The first column contains OTU names, the rest are the count data per sample.
+
+# Add sample identifier (Soil_ID) as row names to aux data
+row.names(aux) <- aux$Soil_ID
+
+# Clean the otu_table_raw to keep only relevant samples.
+otu_table_raw <- otu_table_raw %>%
+  # Keep only samples from aux data
+  select(OTU, contains(rownames(aux))) %>%
+  # OTU names must be moved to row names
+  as.data.frame() %>% `row.names<-`(.$OTU) %>% select(!OTU)
+```
+
+After cleaning the OTU table, make sure the selected columns match your auxiliary data. Potentially missing samples may have not amplified properly and were removed during bioinformatic processing. Ask your lab technician or the company providing your sequences for more information about missing samples.
+
+#### Format the data into a phyloseq-class object
+
+Combine your OTU table, auxiliary data and taxonomy table into a phyloseq-class object. For more information about phyloseq, look up [@mcmurdie2013], or their [GitHub pages](https://joey711.github.io/phyloseq/).
+
+```{r}
+#| eval: false
+# Combine data into a phyloseq-class object
+otu_table_raw <- phyloseq(otu_table(otu_table_raw, taxa_are_rows = T),
+                          sample_data(aux),
+                          tax_table(as.matrix(taxonomy_raw)))
+```
+
+Were your samples part of a larger sequencing run containing other samples? Filter out OTU absent from your data set.
+
+```{r}
+#| eval: false
+# Remove all OTUs with sum == 0
+ntaxa(otu_table_raw) # 38500 before filtering
+otu_table_raw <- prune_taxa(taxa_sums(otu_table_raw) > 0, otu_table_raw)
+ntaxa(otu_table_raw) # 25461 after filtering 
+```
+
+34% of the OTUs were absent from this subset of samples.
+
+### Save as .RData {#save}
+
+Save all newly created files as RData for usage with other scripts.
+
+```{r}
+#| eval: false
+save(BLAST_raw, file = "RData/16S/BLAST_raw.RData")
+save(taxonomy_raw, file = "RData/16S/taxonomy_raw.RData")
+save(otu_table_raw, file = "RData/16S/otu_table_raw.RData")
+save(aux, file = "RData/auxfile.RData")
+```
