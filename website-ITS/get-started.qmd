@@ -7,6 +7,8 @@ format:
 bibliography: references.bib
 ---
 
+The examples on this website use the **ITS (fungi)** data set of the Silva Nova project: soil samples from oak plantations of different ages, an old oak forest, agricultural fields and a grassland in Denmark. The same steps can be applied to other markers (16S, CO1).
+
 ### [Install R and packages](get-started/install.qmd)
 
 All data handling and analyses in this workflow are performed in R. Before you get started,
@@ -22,7 +24,7 @@ In this workflow, the first script is used to [install and load R packages](get-
 ```{r}
 #| eval: false
 # Load packages
-source("001_required_packages.R")
+source("scripts/001_required_packages.R")
 ```
 :::
 
@@ -35,3 +37,11 @@ For more information about phyloseq, look up @mcmurdie2013, or their [GitHub pag
 - [Load auxiliary data (e.g. Excel sheet)](get-started/data-prep.qmd#auxfile)
 - [Construct a phyloseq object from BLAST results](get-started/data-prep.qmd#phyloseq)
 - [Save data as .RData](get-started/data-prep.qmd#save)
+
+### [Explore the data](get-started/explore.qmd)
+
+Before cleaning the data, take a first look at it: count samples, OTUs and reads, check how samples are distributed between treatments, and which organisms were found.
+
+- [Inspect the OTU table, taxonomy table and metadata](get-started/explore.qmd#inspect-the-three-tables)
+- [Match samples and OTUs across tables](get-started/explore.qmd#match-samples-and-otus-across-tables)
+- [Summarize samples, reads and taxonomy](get-started/explore.qmd#lets-look-at-the-data)

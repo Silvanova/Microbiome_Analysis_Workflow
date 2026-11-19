@@ -33,6 +33,7 @@ In the navigation menu of this webpage, you will find each step of the workflow:
 
   - [Install R and required packages](get-started/install.qmd): get started with RStudio and install the packages required for the analyses in this workflow
   - [Data preparation](get-started/data-prep.qmd): prepare OTU tables, manage metadata, and convert raw files to .RData
+  - [Explore the data](get-started/explore.qmd): take a first look at samples, OTUs, reads and taxonomy
 
 - **Handling OTU tables**
 

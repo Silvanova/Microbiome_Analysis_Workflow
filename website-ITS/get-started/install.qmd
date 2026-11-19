@@ -21,7 +21,12 @@ setwd("some_folder_path/my_working_directory")
 
 ## Required packages
 
-Some packages from the CRAN are required to run the examples on this website.
+Several packages from Bioconductor, R-universe and CRAN are required to run the examples on this website:
+
+- data handling: `phyloseq` [@mcmurdie2013], `microViz`, `openxlsx`, `tidyr`, `plyr`, `dplyr`
+- controls: `decontam`
+- figures: `ggplot2`, `ggpubr`, `RColorBrewer`
+- diversity and community analyses: `vegan`, `iNEXT`, `multcompView`, `indicspecies`, `mvabund`
 
 Download the script `001_required_packages.R`, or copy the codes below into your own script.
 
@@ -90,6 +95,21 @@ if (!require("ggplot2", quietly = TRUE))
 if (!require("ggpubr", quietly = TRUE))
   install.packages("ggpubr")
 
+if (!require("iNEXT", quietly = TRUE))
+  install.packages("iNEXT")
+
+if (!require("multcompView", quietly = TRUE))
+  install.packages("multcompView")
+
+if (!require("RColorBrewer", quietly = TRUE))
+  install.packages("RColorBrewer")
+
+if (!require("indicspecies", quietly = TRUE))
+  install.packages("indicspecies")
+
+if (!require("mvabund", quietly = TRUE))
+  install.packages("mvabund")
+
 if (!require("dplyr", quietly = TRUE))
   install.packages("dplyr")
 ```
@@ -108,7 +128,22 @@ library(tidyr)
 library(plyr)
 library(ggplot2)
 library(ggpubr)
+library(iNEXT)
+library(multcompView)
+library(RColorBrewer)
+library(indicspecies)
+library(mvabund)
 library(dplyr)  # always load dplyr last to avoid conflicts between packages
+```
+
+#### Figures folder
+
+All scripts save their figures in the folder `figures/` of the working directory (in `figures/ITS/` for the ITS examples). The script `001_required_packages.R` creates this folder if it does not exist yet.
+
+```{r}
+#| eval: false
+# Figures folder
+dir.create("figures", showWarnings = FALSE)
 ```
 
 #### Homemade functions

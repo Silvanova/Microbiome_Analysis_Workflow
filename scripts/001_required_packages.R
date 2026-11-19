@@ -64,6 +64,18 @@ if (!require("multcompView", quietly = TRUE))
   install.packages("multcompView")
 library(multcompView)
 
+if (!require("RColorBrewer", quietly = TRUE))
+  install.packages("RColorBrewer")
+library(RColorBrewer)
+
+if (!require("indicspecies", quietly = TRUE))
+  install.packages("indicspecies")
+library(indicspecies)
+
+if (!require("mvabund", quietly = TRUE))
+  install.packages("mvabund")
+library(mvabund)
+
 if (!require("dplyr", quietly = TRUE))
   install.packages("dplyr")
 library(dplyr) # always load dplyr last to avoid conflicts between packages
