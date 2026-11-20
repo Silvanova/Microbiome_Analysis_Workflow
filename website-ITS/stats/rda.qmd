@@ -1,5 +1,6 @@
 ---
 title: "RDA and variation partitioning"
+description: "Redundancy analysis (RDA), model selection and variation partitioning of microbiome communities against soil variables in R with vegan."
 format: html
 editor: visual
 ---

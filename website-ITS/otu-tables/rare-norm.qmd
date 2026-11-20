@@ -1,5 +1,6 @@
 ---
 title: "Rarefaction and other normalization methods"
+description: "Rarefaction, rarefaction curves and normalization (relative abundance, Hellinger, CLR) of microbiome OTU tables in R with phyloseq and vegan."
 format: html
 editor: visual
 ---

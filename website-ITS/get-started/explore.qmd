@@ -1,5 +1,6 @@
 ---
 title: "Explore the data"
+description: "First look at a microbiome data set in R with phyloseq: samples, OTUs, reads, taxonomy and metadata of a soil fungal ITS data set."
 format: html
 editor: visual
 ---

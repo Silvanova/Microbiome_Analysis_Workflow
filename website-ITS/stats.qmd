@@ -1,5 +1,6 @@
 ---
 title: "Statistical Analyses"
+description: "Statistical analyses of microbiome communities in R with phyloseq and vegan: alpha and beta diversity, taxonomic composition, indicator species, RDA."
 editor: visual
 format: 
   html: 

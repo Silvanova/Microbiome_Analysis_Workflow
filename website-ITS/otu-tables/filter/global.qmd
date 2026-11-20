@@ -1,5 +1,6 @@
 ---
 title: "Global filtering"
+description: "Filter OTU tables by target taxon, singletons, read abundance and prevalence in R with phyloseq, and see how thresholds affect diversity."
 format: html
 editor: visual
 ---

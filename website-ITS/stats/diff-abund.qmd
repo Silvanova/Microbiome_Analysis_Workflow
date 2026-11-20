@@ -1,5 +1,6 @@
 ---
 title: "Indicator species"
+description: "Indicator species analysis (indicspecies multipatt) and differential abundance with mvabund for microbiome OTUs in R."
 format: html
 editor: visual
 ---

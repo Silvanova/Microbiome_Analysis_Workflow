@@ -1,5 +1,6 @@
 ---
 title: "BLAST quality check"
+description: "Quality check of BLAST taxonomy for metabarcoding OTUs in R: query length and coverage filters and identity thresholds per taxonomic rank."
 format: html
 editor: visual
 ---
