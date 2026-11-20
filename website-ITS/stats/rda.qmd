@@ -4,6 +4,372 @@ format: html
 editor: visual
 ---
 
+[Beta diversity](beta-div.qmd) showed that the fungal communities differ between land uses and sites. Which soil properties are related to these differences? A **redundancy analysis (RDA)** relates the community composition (many response variables: the OTUs) to a set of explanatory variables (here, the soil properties measured in each sample). **Variation partitioning** then divides the variation explained by the RDA between groups of explanatory variables.
+
+To follow the example presented on this page directly on your computer, download the script `050_rda.R` and the example data by clicking the buttons below. Alternatively, you may copy the codes below into your own script, and use your own data.
+
+```{r}
+#| echo: false
+#| output: false
+library(downloadthis)
+library(phyloseq)
+library(vegan)
+library(ggplot2)
+load("../../RData/ITS/otu_BLAST_clean.RData")
+```
+
+```{r}
+#| layout: [[-10,35,-5,40,-10]]
+#| echo: false
+download_file(
+  path = "../../scripts/ITS/050_rda.R",
+  output_name = "050_rda",
+  button_label = "Download script",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+
+download_file(
+  path = "../../RData/ITS/otu_BLAST_clean.RData",
+  output_name = "ITS_otu_BLAST_clean",
+  button_label = "Download example RData",
+  button_type = "success",
+  has_icon = TRUE,
+  icon = "fa fa-save",
+  self_contained = FALSE
+)
+```
+
+To get started, load the OTU table filtered with BLAST (see [BLAST filtering](../otu-tables/filter/BLAST.qmd)), and set the seed for the rarefaction and the permutation tests. We also order the land uses from agriculture to the old forest, and define the colours of the sites and land uses for the plots.
+
+```{r}
+#| eval: false
+# Load the cleaned OTU table from previous scripts
+load("RData/ITS/otu_BLAST_clean.RData")
+```
+
+```{r}
+set.seed(100)
+
+sample_data(otu_BLAST_clean)$Land_use <- factor(
+  sample_data(otu_BLAST_clean)$Land_use,
+  levels = c("Conventional agriculture", "Organic agriculture", "Grassland",
+             "Oak", "Old Ref"))
+
+site_col <- c("Conv_agri" = "bisque", "Org_agri" = "bisque3",
+              "Grass" = "orange",
+              "Oak_20" = "darkolivegreen1", "Oak_28" = "darkolivegreen2",
+              "Oak_33" = "darkolivegreen3", "Oak_44" = "palegreen3",
+              "Oak_51" = "darkolivegreen4", "Oak_54" = "darkolivegreen",
+              "Oak_ref" = "turquoise4")
+land_use_col <- c("Conventional agriculture" = "bisque",
+                  "Organic agriculture" = "bisque3",
+                  "Grassland" = "orange",
+                  "Oak" = "darkolivegreen2",
+                  "Old Ref" = "turquoise4")
+```
+
+## Data preparation
+
+As in [Alpha diversity](alpha-div.qmd#rarefaction) and [Beta diversity](beta-div.qmd), we start from the data rarefied to 1011 reads (same seed, so the same rarefied table).
+
+```{r}
+#| message: false
+otu_table_rarefy <- rarefy_even_depth(otu_BLAST_clean, sample.size = 1011,
+                                      replace = FALSE, rngseed = 100,
+                                      verbose = FALSE)
+nsamples(otu_table_rarefy)
+ntaxa(otu_table_rarefy)
+```
+
+The RDA is a linear method: it fits a linear regression of each OTU on the explanatory variables. It is not suited to raw counts with many zeros, so we use the **Hellinger transformation** (the square root of the relative abundances). An RDA on Hellinger-transformed data preserves the Hellinger distance between samples, and is a good choice for community data [@legendre2001].
+
+```{r}
+otu_table_hel <- transform_sample_counts(otu_table_rarefy,
+                                         function(x) sqrt(x / sum(x)))
+```
+
+vegan does not work with phyloseq objects: it needs the OTU table as a matrix with the samples as rows and the OTUs as columns. In our phyloseq object the OTUs are the rows (`taxa_are_rows = TRUE`), so the table is transposed. We also extract the metadata.
+
+```{r}
+taxa_are_rows(otu_table_hel)
+otu_hel <- t(as(otu_table(otu_table_hel), "matrix"))
+dim(otu_hel)
+
+meta_rare <- data.frame(sample_data(otu_table_hel))
+
+# Check that the samples are in the same order in the matrix and the metadata
+all(rownames(otu_hel) == rownames(meta_rare))
+```
+
 ::: callout-note
-This page is in preparation.
+`phyloseq::ordinate(otu_table_hel, method = "RDA", formula = ~ pH + ...)` also runs `vegan::rda()` on a phyloseq object. However, the model selection and some of the tests below need to refit the model, which only works reliably when vegan gets the matrix and the data frame directly.
 :::
+
+The metadata contain 18 soil properties: bulk density (`BD`), gravimetric water content (`SWCg`), `pH`, phosphate (`PO4`), the exchangeable elements `B`, `Na`, `Mg`, `Al`, `K`, `Ca`, `Mn` and `Fe`, total nitrogen (`TN`) and carbon (`TC`), the C/N ratio (`CN`), ammonium (`NH4`), nitrate (`NO3`) and phosphorus (`P`). There are no missing values (`rda()` would remove the samples with missing values).
+
+```{r}
+soil_vars <- c("BD", "SWCg", "pH", "PO4", "B", "Na", "Mg", "Al", "K", "Ca",
+               "Mn", "Fe", "TN", "TC", "CN", "NH4", "NO3", "P")
+meta_soil <- meta_rare[, soil_vars]
+sum(is.na(meta_soil))
+```
+
+## Redundancy analysis (RDA)
+
+### Full model
+
+The formula `otu_hel ~ .` uses all the columns of `meta_soil` as explanatory variables.
+
+```{r}
+mod_rda <- rda(otu_hel ~ ., data = meta_soil)
+mod_rda
+```
+
+The *Inertia* is the total variance of the OTU table. The constrained part (0.354 of 0.757, 47%) is the variance explained by the soil properties; the unconstrained part (53%) is the residual variance. The model has 18 constrained axes (RDA1 to RDA18, one per explanatory variable) and 68 unconstrained axes (PC1 to PC68). The first axis explains much more than the following ones:
+
+```{r}
+summary(mod_rda)$cont$importance[, 1:5]
+```
+
+::: callout-warning
+The tutorial adds `distance = "bray"` to `rda()`, but `rda()` has no `distance` argument and ignores it. An RDA always uses Euclidean distances, here between Hellinger-transformed samples (i.e. the Hellinger distance). To constrain the ordination of another distance (e.g. Bray-Curtis), use a distance-based RDA: `dbrda(otu_hel ~ ., data = meta_soil, distance = "bray")`.
+:::
+
+### Adjusted R^2^
+
+The R^2^ always increases when variables are added, even random ones. The adjusted R^2^ corrects for the number of explanatory variables [@peresneto2006]: it is the value to report and compare between models.
+
+```{r}
+RsquareAdj(mod_rda)
+```
+
+With 18 variables, R^2^ = 0.47, but the adjusted R^2^ is only 0.33.
+
+### Permutation tests
+
+Is the model significant? `anova.cca()` permutes the samples to test whether the soil properties explain more variance than expected by chance.
+
+```{r}
+set.seed(100)
+anova.cca(mod_rda, permutations = 999)
+```
+
+Which variables are significant? With `by = "term"`, the variables are tested in sequence: each variable only gets the variance not explained by the variables before it. As in the tutorial we use 99 permutations (the test takes about 30 seconds; the smallest possible p-value is then 0.01).
+
+```{r}
+set.seed(100)
+anova.cca(mod_rda, by = "term", permutations = 99)
+```
+
+Almost all the variables are significant. The results depend on the order of the variables in the formula: pH comes third and explains a large part of the variance (F = 13.7), while variables placed after correlated variables get little variance. The tutorial removes boron (`B`) and manganese (`Mn`), the variables that were not significant in its test.
+
+### Collinearity
+
+Many soil properties are correlated with each other, e.g. total carbon and total nitrogen:
+
+```{r}
+cor(meta_soil$TC, meta_soil$TN)
+```
+
+The **variance inflation factor** (VIF) measures how much each variable is explained by the others. Values above 10 indicate strong collinearity: the effects of these variables cannot be separated, and their arrows in the RDA plot are unreliable.
+
+```{r}
+sort(vif.cca(mod_rda))
+```
+
+TC and TN are almost redundant, and Ca, pH and SWCg also have high VIFs. Removing B and Mn does not solve this.
+
+### Model selection
+
+Instead of removing variables by hand, we select a smaller set of variables with a **forward selection** [@blanchet2008]. `ordiR2step()` starts from an empty model (`otu_hel ~ 1`) and adds, at each step, the variable that increases the adjusted R^2^ the most, if it is significant. It stops when no variable is significant, or when the adjusted R^2^ of the full model (0.33) is reached, to avoid selecting too many variables.
+
+::: callout-important
+## Run the selection only once
+
+With 999 permutations at each step, the selection takes about 10 minutes. Do not reduce the number of permutations: several variables have p-values close to 0.05, so with fewer permutations the selection becomes unstable and keeps adding collinear variables (with 199 permutations it even stops with an error from the singular value decomposition, `dgesdd`). Save the result so that you do not have to run it again.
+:::
+
+```{r}
+#| eval: false
+mod_rda0 <- rda(otu_hel ~ 1, data = meta_soil)
+
+set.seed(100)
+mod_sel <- ordiR2step(mod_rda0, scope = formula(mod_rda),
+                      permutations = 999, trace = FALSE)
+
+# Variables selected, in order, with the adjusted R2 after each step
+mod_sel$anova
+
+# Save the selection table, so that you do not have to run the selection again
+rda_selection <- mod_sel$anova
+save(rda_selection, file = "RData/ITS/rda_selection.RData")
+```
+
+```{r}
+#| echo: false
+# The selection table saved by 050_rda.R is loaded here instead of running
+# ordiR2step() at every render, and the selected model is refitted
+load("../../RData/ITS/rda_selection.RData")
+sel_vars <- sub("^\\+ ", "", rownames(rda_selection))
+sel_vars <- sel_vars[sel_vars != "<All variables>"]
+mod_sel <- rda(as.formula(paste("otu_hel ~", paste(sel_vars, collapse = " + "))),
+               data = meta_soil)
+rda_selection
+```
+
+pH is selected first: alone, it explains 11.5% of the variance (adjusted R^2^), as expected from the [PERMANOVA](beta-div.qmd#permanova). Then come the C/N ratio, nitrate, ammonium and phosphorus, and a few exchangeable elements. TC, TN and SWCg are not selected.
+
+```{r}
+mod_sel
+RsquareAdj(mod_sel)
+```
+
+The 11 selected variables explain less variance than the full model (adjusted R^2^ 0.29, instead of 0.33 with 18 variables), but the VIFs are now around 10 or below, and the model is significant:
+
+```{r}
+sort(vif.cca(mod_sel))
+
+set.seed(100)
+anova.cca(mod_sel, permutations = 999)
+```
+
+## Plot the RDA
+
+vegan can plot the RDA directly (`plot(mod_sel)`), but ggplot2 gives more control. We extract the scores of the samples (*sites* in vegan's vocabulary) and of the explanatory variables (*biplot* arrows) on the first two axes. With `scaling = 2`, the angles between the arrows reflect the correlations between the explanatory variables.
+
+```{r}
+site_scores <- as.data.frame(scores(mod_sel, display = "sites",
+                                    choices = c(1, 2), scaling = 2))
+# Add the metadata (same order of the samples)
+site_scores <- cbind(site_scores, meta_rare[, c("SiteID", "Land_use")])
+
+env_scores <- as.data.frame(scores(mod_sel, display = "bp",
+                                   choices = c(1, 2), scaling = 2))
+env_scores$Variable <- rownames(env_scores)
+
+# Variance explained by RDA1 and RDA2 (of the total variance), for the axis
+# labels
+rda_eig <- summary(mod_sel)$cont$importance
+rda1_pct <- round(rda_eig[2, 1] * 100, 1)
+rda2_pct <- round(rda_eig[2, 2] * 100, 1)
+```
+
+The two plots use the same code, so we write it in a function. `plot_rda()` draws the samples on the first two RDA axes, coloured by a column of the metadata, and the arrows of the explanatory variables.
+
+```{r}
+plot_rda <- function(colour_by, colours, legend) {
+  ggplot() +
+    geom_hline(yintercept = 0, linetype = "dashed", colour = "grey70") +
+    geom_vline(xintercept = 0, linetype = "dashed", colour = "grey70") +
+    geom_point(data = site_scores,
+               aes(x = RDA1, y = RDA2, colour = .data[[colour_by]]),
+               size = 3, alpha = 0.85) +
+    geom_segment(data = env_scores,
+                 aes(x = 0, y = 0, xend = RDA1, yend = RDA2),
+                 arrow = arrow(length = unit(0.25, "cm")),
+                 colour = "black", linewidth = 0.3) +
+    geom_text(data = env_scores,
+              aes(x = RDA1 * 1.1, y = RDA2 * 1.1, label = Variable),
+              colour = "black", size = 3.5) +
+    scale_colour_manual(values = colours, breaks = names(colours)) +
+    labs(x = paste0("RDA1 (", rda1_pct, "%)"),
+         y = paste0("RDA2 (", rda2_pct, "%)"),
+         colour = legend) +
+    theme_bw() +
+    theme(panel.grid = element_blank())
+}
+```
+
+::: panel-tabset
+### By land use
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+plot_rda("Land_use", land_use_col, "Land use")
+```
+
+### By site
+
+```{r}
+#| fig-width: 8
+#| fig-height: 6
+plot_rda("SiteID", site_col, "Site")
+```
+:::
+
+The first axis (RDA1, 14.6% of the total variance) separates the agricultural sites (left) from the forests (right), as the first axis of the [PCoA](beta-div.qmd). The agricultural soils have a higher pH and bulk density, the forest soils more ammonium and a higher C/N ratio. The second axis (RDA2, 5.6%) separates the grassland, the reference forest (Oak_ref) and some plantations (top, with more magnesium, nitrate and sodium) from the other plantations, mainly Oak_20, Oak_28 and Oak_44 (bottom). The grassland is also associated with calcium. The plantations do not line up by age along the axes.
+
+::: callout-tip
+## Reading an RDA biplot
+
+An arrow points in the direction in which the variable increases, and its length shows how strongly it is correlated with the axes. Samples far along an arrow have high values of that variable. Correlation is not causation: land use changes many soil properties at the same time, so the RDA cannot tell which of them actually affect the fungi.
+:::
+
+## Variation partitioning
+
+Variation partitioning divides the variation explained by an RDA into the parts explained by groups of explanatory variables: the part explained uniquely by each group, and the parts shared between groups [@borcard1992; @peresneto2006]. As in the tutorial, we divide the variables into:
+
+-   **X1, organic matter properties**: water content, total C and N, C/N ratio, bulk density;
+-   **X2, soil chemistry**: pH, phosphate and the exchangeable elements;
+-   **X3, the age** of the forest (0 for the agricultural sites).
+
+```{r}
+mod_varpart <- varpart(otu_hel,
+                       ~ SWCg + TC + TN + CN + BD,
+                       ~ pH + PO4 + Na + Mg + Al + K + Ca + Fe + NH4 + NO3 + P,
+                       ~ Age,
+                       data = meta_rare)
+mod_varpart
+```
+
+The fractions are adjusted R^2^:
+
+-   **\[a\], \[b\], \[c\]**: variation explained uniquely by X1, X2 and X3;
+-   **\[d\], \[e\], \[f\], \[g\]**: variation shared between groups (it cannot be attributed to one of them because the groups are correlated);
+-   **\[h\]**: residuals, the variation not explained.
+
+```{r}
+#| fig-width: 6
+#| fig-height: 6
+plot(mod_varpart, Xnames = c("Organic matter", "Chemistry", "Age"),
+     bg = c("tan", "skyblue", "darkolivegreen3"), alpha = 100, digits = 2,
+     id.size = 0.8)
+```
+
+Together, the three groups explain 33% of the variation (adjusted R^2^ of "All"), and 67% remains unexplained. Soil chemistry explains the largest unique part (15.5%), organic matter 4.8% and age only 1.4%; 8.3% is shared between organic matter and chemistry. Negative fractions (if any) are not shown in the plot: they can occur with adjusted R^2^ and are interpreted as zero.
+
+`summary()` allocates the shared fractions equally to the groups:
+
+```{r}
+summary(mod_varpart)
+```
+
+### Test the unique fractions
+
+Only the *testable* fractions can be tested, with an RDA in which the other groups are partialled out with `Condition()`. Is the unique effect of age (\[c\]) significant?
+
+```{r}
+set.seed(100)
+anova.cca(rda(otu_hel ~ Age +
+                Condition(SWCg + TC + TN + CN + BD +
+                            pH + PO4 + Na + Mg + Al + K + Ca + Fe + NH4 +
+                            NO3 + P),
+              data = meta_rare),
+          permutations = 999)
+```
+
+Age explains a small but significant part of the variation once the soil properties are accounted for (F = 2.46, p = 0.001).
+
+## Exercise
+
+Run the [PCoA](beta-div.qmd) and the RDA only for the oak plantations and the old reference forest. Do the same soil properties explain the composition of the forest communities?
+
+Hints:
+
+-   Keep only the samples of the land uses "Oak" and "Old Ref", e.g. with `subset_samples()` on `otu_table_hel`, then extract the OTU matrix and the metadata again.
+-   Remove the OTUs with no reads in the remaining samples with `prune_taxa(taxa_sums(x) > 0, x)`.
+-   Are the soil properties still collinear? Is `Age` selected by `ordiR2step()` if you add it to the scope?
