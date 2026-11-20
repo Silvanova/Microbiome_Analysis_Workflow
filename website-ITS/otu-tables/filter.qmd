@@ -1,5 +1,6 @@
 ---
 title: "Filtering OTU tables"
+description: "Filter metabarcoding OTU tables by taxonomy, abundance, prevalence and BLAST quality in R with phyloseq."
 format: html
 editor: visual
 bibliography: references.bib

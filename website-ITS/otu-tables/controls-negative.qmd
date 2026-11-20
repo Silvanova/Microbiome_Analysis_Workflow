@@ -1,5 +1,6 @@
 ---
 title: "Dealing with negative controls"
+description: "Remove contaminants found in negative controls from metabarcoding OTU tables in R with phyloseq and decontam, with a fungal ITS example."
 format: html
 editor: visual
 ---

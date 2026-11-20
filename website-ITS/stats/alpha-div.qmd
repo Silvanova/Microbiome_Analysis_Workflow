@@ -1,5 +1,6 @@
 ---
 title: "Alpha diversity"
+description: "Alpha diversity of microbiome data in R: rarefied richness, iNEXT diversity estimates, Hill numbers and ANOVA, with a soil fungal ITS example."
 format: html
 editor: visual
 ---

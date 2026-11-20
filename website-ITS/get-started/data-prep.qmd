@@ -1,5 +1,6 @@
 ---
 title: "Data preparation"
+description: "Convert raw OTU tables, BLAST taxonomy and sample metadata into a phyloseq object in R, with a fungal ITS metabarcoding example."
 format: html
 editor: visual
 ---

@@ -1,5 +1,6 @@
 ---
 title: "Dealing with positive controls"
+description: "Check positive controls (mock community or spike-in) in metabarcoding data in R with phyloseq, with a fungal ITS example."
 format: html
 editor: visual
 ---

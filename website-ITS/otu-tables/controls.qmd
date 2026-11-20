@@ -1,5 +1,6 @@
 ---
 title: "Dealing with controls"
+description: "Use positive and negative controls to check and clean metabarcoding OTU tables in R with phyloseq."
 format: html
 editor: visual
 ---

@@ -1,5 +1,6 @@
 ---
 title: "Taxonomic composition and guilds"
+description: "Taxonomic composition bar plots and fungal guilds (FungalTraits trophic modes, mycorrhiza) of ITS metabarcoding data in R with phyloseq."
 format: html
 editor: visual
 ---

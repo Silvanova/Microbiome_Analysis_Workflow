@@ -1,5 +1,6 @@
 ---
 title: "Install R and required packages"
+description: "Install R, RStudio and the R packages (phyloseq, vegan, microViz, iNEXT, indicspecies...) needed for microbiome and eDNA metabarcoding analyses."
 editor: visual
 format: html
 ---

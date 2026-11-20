@@ -1,5 +1,6 @@
 ---
 title: "Handling OTU tables"
+description: "How to clean OTU tables from metabarcoding before analysis: controls, contaminants, taxonomic and BLAST filtering, rarefaction and normalization."
 editor: visual
 format: 
   html: 

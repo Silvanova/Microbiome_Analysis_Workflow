@@ -15,6 +15,9 @@ project:
 format:
   html:
     theme: minty
+    # page descriptions are for search engines only: hide them in the title block
+    include-in-header:
+      text: "<style>.quarto-title-block .description { display: none; }</style>"
     toc: true
     toc-expand: 4
     toc-depth: 4
@@ -23,6 +26,9 @@ format:
 
 website:
   title: "Silva Nova MAW"
+  description: "Free R tutorial for microbiome and eDNA metabarcoding analysis with phyloseq, using soil fungal ITS data."
+  site-url: "https://silvanova.github.io/Microbiome_Analysis_Workflow/"
+  open-graph: true
   page-navigation: true
   # bread-crumbs: false
   navbar:

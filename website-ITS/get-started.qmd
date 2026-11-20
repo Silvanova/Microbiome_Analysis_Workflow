@@ -1,5 +1,6 @@
 ---
 title: "Get started"
+description: "Get started with the microbiome analysis workflow: install R and packages, prepare ITS metabarcoding data as a phyloseq object and explore it."
 editor: visual
 format: 
   html: 

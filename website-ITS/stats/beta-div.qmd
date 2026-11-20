@@ -1,5 +1,6 @@
 ---
 title: "Beta diversity"
+description: "Beta diversity of microbiome data in R: Bray-Curtis, Aitchison and Jaccard distances, PCoA, PERMANOVA (adonis2) and betadisper."
 format: html
 editor: visual
 ---

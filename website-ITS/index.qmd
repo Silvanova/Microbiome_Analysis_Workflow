@@ -1,5 +1,6 @@
 ---
 title: "Microbiome analysis workflow"
+description: "Free R tutorial for microbiome and eDNA metabarcoding analysis with phyloseq: from raw OTU tables to diversity statistics, using soil fungal ITS data."
 editor: visual
 format:
   html:
